@@ -12,7 +12,7 @@
 	/* the Free Software Foundation; either version 2 of the License.       */
 	/************************************************************************/
 	# thanks to the following for help on v6.0:
-	# Mariano Montañez Ureta, from Argentina; twitter: @nanomo
+	# Mariano Montaï¿½ez Ureta, from Argentina; twitter: @nanomo
 	# Jing Ling, New Hampshire
 
 	#thanks to Francisco Campos of WebLemurs.com for helping with other misc core updates for v7.2
@@ -1511,7 +1511,7 @@ class ajaxCRUD{
                                     else{
 										//updated logic in 7.1 to enable a textarea to be 'forced' if desired [thanks to dpruitt for code revision]
 										$field_length = strlen($row[$field]);
-										if($this->textarea_height[$field] != '' || field_length > 51){
+										if($this->textarea_height[$field] != '' || $field_length > 51){
 											$textarea_height = '';
 											if ($this->textarea_height[$field] != '') $textarea_height = $this->textarea_height[$field];
 											$table_html .= $this->makeAjaxEditor($id, $field, $cell_value, 'textarea', $textarea_height, $cell_data, $field_onKeyPress);
