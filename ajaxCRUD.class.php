@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v7.8                                            */
+	/* ajaxCRUD.class.php	v7.9                                            */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -185,7 +185,8 @@ class ajaxCRUD{
     var $uneditable_fields = array();
 
 	var $sql_where_clause;
-    var $sql_where_clauses = array(); //array for IF there is more than one where clause
+    var $sql_where_clauses = array(); //array used IF there is more than one where clause
+
 	var $sql_order_by;
     var $num_where_clauses;
 
@@ -361,34 +362,6 @@ class ajaxCRUD{
 			exit();
 		}
 
-		//for filtering if there is a request parameter
-		$count_filtered = 0;
-		$action = $_REQUEST['action'];
-        foreach ($this->fields as $field){
-			if ($_REQUEST[$field] != '' && ($action != 'add' && $action != 'delete' && $action != 'update' && $action != 'upload' && $action != 'delete_file')){
-				$filter_field = $field;
-				$filter_value = $_REQUEST[$field];
-				if ($this->exactSearchField[$filter_field]){
-					//exact search (is set by
-					$filter_where_clause = "WHERE $filter_field = \"$filter_value\"";
-				}
-				else{
-					//approximate search (default)
-					$filter_where_clause = "WHERE $filter_field LIKE \"%" . $filter_value . "%\"";
-				}
-				$this->addWhereClause($filter_where_clause);
-				$this->filtered_table = true;
-                $count_filtered++;
-			}
-		}
-        if ($count_filtered > 0){
-            $this->filtered_table;
-        }
-        else{
-            $this->filtered_table = false;
-        }
-
-
 		return true;
 	}
 
@@ -441,11 +414,14 @@ class ajaxCRUD{
         $this->border = 1;
     }
 
-    function addAjaxFilterBox($field_name, $textboxSize = 10){
+    function addAjaxFilterBox($field_name, $textboxSize = 10, $exactSearch = FALSE){
         $this->ajaxFilter_fields[] = $field_name;
 
         //defaults to size of "10" (unless changed via setAjaxFilterBoxSize)
         $this->setAjaxFilterBoxSize($field_name, $textboxSize);
+        if ($exactSearch === TRUE){
+        	$this->setExactSearchField($field_name);
+        }
     }
 
     function setAjaxFilterBoxSize($field_name, $size){
@@ -465,7 +441,6 @@ class ajaxCRUD{
 
     function addWhereClause($sql_where_clause){
         $this->num_where_clauses++;
-
         $this->sql_where_clauses[] = $sql_where_clause;
 
         if ($this->num_where_clauses <= 1){
@@ -473,13 +448,19 @@ class ajaxCRUD{
         }
         else{
             //chain multiple together
+            $whereClause = ""; //start the clause now chain to it
+            $count = 0;
             foreach($this->sql_where_clauses as $where_clause){
-				//$new_where = str_replace("WHERE", "AND", $where_clause);
-				$new_where = preg_replace('/WHERE/', 'AND', $where_clause, 1); // Only replace the FIRST instance; the magic is in the optional fourth parameter [Limit]
-                $this->sql_where_clause .= " $new_where ";
+				if ($count > 0){
+					//$where_clause = str_replace("WHERE", "AND", $where_clause);
+					$where_clause = preg_replace('/WHERE/', 'AND', $where_clause, 1); // Only replace the FIRST instance; the magic is in the optional fourth parameter [Limit] (this is important because of sub queries which uses a second WHERE statement)
+				}
+				$whereClause .= " $where_clause";
+				$count++;
             }
-        }
 
+            $this->sql_where_clause = " $whereClause";
+        }
 	}
 
 	function addOrderBy($sql_order_by){
@@ -1122,10 +1103,39 @@ class ajaxCRUD{
 
         $num_ajaxCRUD_tables_instantiated++;
 
+
+        /* Filter Table (if there are request parameters)
+        */
+		$count_filtered = 0;
+		$action = $_REQUEST['action'];
+        //print_r($this->exactSearchField);
+        foreach ($this->fields as $field){
+			if ($_REQUEST[$field] != '' && ($action != 'add' && $action != 'delete' && $action != 'update' && $action != 'upload' && $action != 'delete_file')){
+				$filter_field = $field;
+				$filter_value = $_REQUEST[$field];
+				if ($this->exactSearchField[$filter_field]){
+					//exact search (is set by
+					$filter_where_clause = "WHERE $filter_field = \"$filter_value\"";
+				}
+				else{
+					//approximate search (default)
+					$filter_where_clause = "WHERE $filter_field LIKE \"%" . $filter_value . "%\"";
+				}
+				$this->addWhereClause($filter_where_clause);
+				$this->filtered_table = true;
+                $count_filtered++;
+			}
+		}
+        if ($count_filtered > 0){
+            $this->filtered_table;
+        }
+        else{
+            $this->filtered_table = false;
+        }
+
         /* Sort Table
            Note: this cancels out default sorting set by addOrderBy()
         */
-
         if ($this->db_table == $_REQUEST['table'] && $_REQUEST['sort_field'] != ''){
             $sort_field = $_REQUEST['sort_field'];
             $user_sort_order_direction = $_REQUEST['sort_direction'];
@@ -1294,6 +1304,7 @@ class ajaxCRUD{
         else{
             $rows = q($sql . $this->sql_limit);
         }
+        //echo $sql;
 
 		//$row_count = count($rows); //count should NOT consider paging
 		$row_count = $this->getNumRows();
