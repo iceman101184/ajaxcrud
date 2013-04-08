@@ -405,8 +405,11 @@ function fn_validateNumeric(evento, elemento, dec) {
 //added 2-3-2013, to fix the issue with # characters not being encoded properly by encodeURI function
 function cleanseStrForURIEncode(str){
 	str = encodeURI(str);
-	//str = str.replace('#','%23');
 	str = str.replace(/#/g, '%23');
+	str = str.replace(/&/g, '%26');
+	str = str.replace(/>/g, "&gt;");
+	str = str.replace(/</g, "&lt;");
+	str = str.replace(/"/g, "&quot;");
 	return str;
 }
 
