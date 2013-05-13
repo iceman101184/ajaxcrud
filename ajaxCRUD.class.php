@@ -2000,13 +2000,13 @@ class ajaxCRUD{
 		//for getting rid of the html space, replace with actual no text
 		if ($field_value == "&nbsp;&nbsp;") $field_value = "";
 
-		$field_value = htmlspecialchars($field_value);
+		$field_value = stripslashes(htmlspecialchars($field_value));
 
         $return_html .= "<span class=\"editable hand_cursor\" id=\"" . $prefield ."_show\" onClick=\"
 			document.getElementById('" . $prefield . "_edit').style.display = '';
 			document.getElementById('" . $prefield . "_show').style.display = 'none';
 			document.getElementById('" . $input_name . "').focus();
-            \">" . $field_text . "</span>
+            \">" . stripslashes($field_text) . "</span>
         <span id=\"" . $prefield ."_edit\" style=\"display: none;\">
             <form style=\"display: inline;\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\" onsubmit=\"
 				document.getElementById('" . $prefield . "_edit').style.display='none';

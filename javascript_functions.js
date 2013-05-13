@@ -318,7 +318,7 @@ function getFormValues(fobj,valFunc) {
 			}
 
 			//str += fobj.elements[i].name + "=" + escape(fobj.elements[i].value) + "&";
-			str += fobj.elements[i].name + "=" + cleanseStrForURIEncode(fobj.elements[i].value) + "&";
+			str += fobj.elements[i].name + "=" + cleanseStrForURIEncode(myAddSlashes(fobj.elements[i].value)) + "&";
 		}
 		else if(element_type == 'select-one'){
 			str += fobj.elements[i].name + "=" + fobj.elements[i].options[fobj.elements[i].selectedIndex].value + "&";
