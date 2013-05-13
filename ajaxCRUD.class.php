@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v7.91                                           */
+	/* ajaxCRUD.class.php	v8.0                                            */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -285,13 +285,18 @@ class ajaxCRUD{
     //height of the textarea for certain fields. the index is the field and the value is the height
     var $textarea_height = array();
 
+    var $textboxWidth = array(); //if defined for regular text input boxes, this will alter how ADD fields are displayed
+
     //any 'notes' to display next to a field when adding a row
     var $fieldNote = array();
+
+    //a placeholder text to give to the field when ADDing a new row
+    var $placeholderText = array();
 
     //variable used to capture which search fields should be EXACT matches vs approximate match (using LIKE %search%)
     var $exactSearchField = array(); //set by setExactSearchField (and automatically set for fields using defineRelationship and defineAllowableValues)
 
-    //any initial values for a field (when adding a row)
+    //set manually - initial value for a field (when adding a row)
     var $initialFieldValue = array();
 
 	// Array to include css style classes in specified fields
@@ -554,8 +559,17 @@ class ajaxCRUD{
         $this->textarea_height[$field] = $height;
     }
 
+    function setTextboxWidth($field, $width){
+        $this->textboxWidth[$field] = $width;
+    }
+
     function setAddFieldNote($field, $caption){
         $this->fieldNote[$field] = $caption;
+    }
+
+    /* added in R8.0 */
+    function setAddPlaceholderText($field, $placeholder){
+        $this->placeholderText[$field] = $placeholder;
     }
 
 	/* added in R7.2.1 */
@@ -1528,6 +1542,11 @@ class ajaxCRUD{
 											$table_html .= $this->makeAjaxEditor($id, $field, $cell_value, 'textarea', $textarea_height, $cell_data, $field_onKeyPress);
 										}
 										else{
+                                            //if the textbox width was set manually with function setTextboxWidth
+                                            if ($this->textboxWidth[$field] != ''){
+                                            	$field_length = $this->textboxWidth[$field];
+                                            }
+
 											$table_html .= $this->makeAjaxEditor($id, $field, $cell_value, 'text', $field_length, $cell_data, $field_onKeyPress);
 										}
                                     }
@@ -1683,7 +1702,8 @@ class ajaxCRUD{
             $add_html .= "</center>\n";
 
             $add_html .= "<form action=\"" . $_SERVER['PHP_SELF'] ."#ajaxCRUD\" id=\"add_form_$this->db_table\" method=\"POST\" ENCTYPE=\"multipart/form-data\" style=\"display:none;\">\n";
-            $add_html .= "<br /><h3 align='center'>New <b>$item</b></h3>\n";
+            //$add_html .= "<br /><h3 align='center'>New <b>$item</b></h3>\n";
+            $add_html .= "<br />\n";
             $add_html .= "<table align='center' name='form'>\n";
 
             //for here display ALL 'addable' fields
@@ -1695,10 +1715,8 @@ class ajaxCRUD{
 					$hideOnClick = "";
 					//if a date field, show helping text
 					if ($this->fieldIsDate($this->getFieldDataType($field))){
-						if ($field_value == ""){
-							$field_value = "YYYY-mm-dd";
-							//$hideOnClick = TRUE;
-						}
+						$placeholder = "YYYY-mm-dd";
+						//$hideOnClick = TRUE;
 					}
 
                     //if initial field value for field is set
@@ -1727,6 +1745,11 @@ class ajaxCRUD{
                     $note = "";
                     if ($this->fieldNote[$field] != ""){
                     	$note = "&nbsp;&nbsp;<i>" . $this->fieldNote[$field] . "</i>";
+                    }
+
+                    $placeholder  = "";
+                    if ($this->placeholderText[$field] != ""){
+                    	$placeholder = $this->placeholderText[$field];
                     }
 
                     //if a checkbox
@@ -1789,10 +1812,16 @@ class ajaxCRUD{
                                             $add_html .= "<th>$display_field</th><td><textarea $hideOnClick onKeyPress=\"$field_onKeyPress\" class=\"editingSize\" name=\"$field\" style='width: 97%; height: " . $this->textarea_height[$field] . "px;'>$field_value</textarea>$note</td></tr>\n";
                                         }
                                         else{
-                                            //any ol' data will do
+                                            //any ol' text data (generic text box)
                                             $field_size = "";
+
                                             if ($this->fieldIsInt($this->getFieldDataType($field)) || $this->fieldIsDecimal($this->getFieldDataType($field))){
                                                 $field_size = 7;
+                                            }
+
+                                            //if the textbox width was set manually with function setTextboxWidth
+                                            if ($this->textboxWidth[$field] != ''){
+                                            	$field_size = $this->textboxWidth[$field];
                                             }
 
 											$custom_class = "";
@@ -1800,7 +1829,7 @@ class ajaxCRUD{
 											if ($this->display_field_with_class_style[$field] != '') {
 												$custom_class = $this->display_field_with_class_style[$field];
 											}
-											$add_html .= "<th>$display_field</th><td><input $hideOnBlur onKeyPress=\"$field_onKeyPress\" class=\"editingSize $custom_class\" type=\"text\" id=\"$field\" name=\"$field\" size=\"$field_size\" value=\"$field_value\" maxlength=\"150\">$note</td></tr>\n";
+											$add_html .= "<th>$display_field</th><td><input $hideOnBlur onKeyPress=\"$field_onKeyPress\" class=\"editingSize $custom_class\" type=\"text\" id=\"$field\" name=\"$field\" size=\"$field_size\" maxlength=\"150\" value=\"$field_value\" placeholder=\"$placeholder\" >$note</td></tr>\n";
                                         }
                                     }//else not enum field
                                 }//not an uploaded file
@@ -1961,7 +1990,12 @@ class ajaxCRUD{
         $return_html = "";
 
 		if ($field_text == "") $field_text = $field_value;
-		if ($field_value == "") $field_text = "--";
+
+		if ($this->format_field_with_function[$field_name] != ''){
+			$cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
+		}
+
+		if ($cell_data == "" && field_value == "") $field_text = "--";
 
 		//for getting rid of the html space, replace with actual no text
 		if ($field_value == "&nbsp;&nbsp;") $field_value = "";
