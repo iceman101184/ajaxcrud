@@ -80,7 +80,7 @@
     //$tblDemo->addButtonToRow("Add", "add_item.php", "all");
 
     #set the number of rows to display (per page)
-    $tblDemo->setLimit(3);
+    $tblDemo->setLimit(30);
 
 	#set a filter box at the top of the table
     //$tblDemo->addAjaxFilterBox('fldField1');
