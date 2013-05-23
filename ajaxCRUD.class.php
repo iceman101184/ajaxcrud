@@ -752,6 +752,22 @@ class ajaxCRUD{
 				});
 
             </script>\n";
+		echo "
+			<style>
+				/* this will only work when your HTML doctype is in \"strict\" mode.
+					In other words - put this in your header:
+				   <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
+				*/
+
+				.hand_cursor{
+					cursor: pointer; /* hand-shaped cursor */
+					cursor: hand; /* for IE 5.x */
+				}
+
+				.editable:hover, p.editable:hover{
+					background-color: #FFFF99;
+				}
+			</style>\n";
 
 		return true;
 	}
@@ -1590,7 +1606,7 @@ class ajaxCRUD{
                     $table_html .= "<td>\n";
 
                     if ($this->delete){
-                        $table_html .= "<input type=\"button\" class=\"editingSize\" onClick=\"confirmDelete('$id', '" . $this->db_table . "', '" . $this->db_table_pk ."');\" value=\"delete\" />\n";
+                        $table_html .= "<input type=\"button\" class=\"btn editingSize\" onClick=\"confirmDelete('$id', '" . $this->db_table . "', '" . $this->db_table_pk ."');\" value=\"delete\" />\n";
                     }
 
                     if (count($this->row_button) > 0){
@@ -1872,7 +1888,7 @@ class ajaxCRUD{
 			$add_html .= "<input class=\"editingSize\" type=\"button\" onClick=\"validateAddForm('$this->db_table', $postForm);\" value=\"Save $item\">";
 
 
-            $add_html .= "</td><td><input style='float: right;' class=\"editingSize\" type=\"button\" onClick=\"this.form.reset();$('#add_form_$this->db_table').slideUp('slow');\" value=\"Cancel\"></td></tr>\n</table>\n";
+            $add_html .= "</td><td><input style='float: right;' class=\"btn editingSize\" type=\"button\" onClick=\"this.form.reset();$('#add_form_$this->db_table').slideUp('slow');\" value=\"Cancel\"></td></tr>\n</table>\n";
             $add_html .= "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
             $add_html .= "<input type=\"hidden\" name=\"table\" value=\"$this->db_table\">\n";
 
@@ -1995,7 +2011,7 @@ class ajaxCRUD{
 			$cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
 		}
 
-		if ($cell_data == "" && field_value == "") $field_text = "--";
+		if ($cell_data == "" && $field_value == "") $field_text = "--";
 
 		//for getting rid of the html space, replace with actual no text
 		if ($field_value == "&nbsp;&nbsp;") $field_value = "";
