@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.1                                            */
+	/* ajaxCRUD.class.php	v8.2                                            */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -785,7 +785,7 @@ class ajaxCRUD{
     }
 
     function addButton($value, $url, $tags = ""){
-        $this->bottom_button = array(0 => $value, 1 => $url, 2 => $tags);
+        $this->bottom_button[] = array(0 => $value, 1 => $url, 2 => $tags);
     }
 
     function addButtonToRow($value, $url, $attach_params = "", $javascript_tags = ""){
@@ -1701,17 +1701,19 @@ class ajaxCRUD{
             $add_html .= "   <input type=\"button\" value=\"Add $item\" class=\"btn editingSize\" onClick=\"$('#add_form_$this->db_table').slideDown('slow');\">\n";
 
             if (count($this->bottom_button) > 0){
-                $button_value = $this->bottom_button[0];
-                $button_url = $this->bottom_button[1];
-                $button_tags = $this->bottom_button[2];
+                foreach($this->bottom_button as $button){
+					$button_value = $button[0];
+					$button_url = $button[1];
+					$button_tags = $button[2];
 
-                if ($button_tags == ''){
-                    $tag_stuff = "onClick=\"location.href = '$button_url';\"";
-                }
-                else{
-                    $tag_stuff = $button_tags;
-                }
-                $add_html .= "  <input type=\"button\" value=\"$button_value\" href=\"$button_url\" class=\"btn\" $tag_stuff>\n";
+					if ($button_tags == ''){
+						$tag_stuff = "onClick=\"location.href = '$button_url';\"";
+					}
+					else{
+						$tag_stuff = $button_tags;
+					}
+					$add_html .= "  <input type=\"button\" value=\"$button_value\" href=\"$button_url\" class=\"btn\" $tag_stuff>\n";
+				}
             }
 
             //$add_html .= "  <input type=\"button\" value=\"Go Back\" class=\"btn\" onClick=\"history.back();\">\n";
