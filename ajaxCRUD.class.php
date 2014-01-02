@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.2                                            */
+	/* ajaxCRUD.class.php	v8.3                                            */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -1695,27 +1695,29 @@ class ajaxCRUD{
 			$add_html .= "</center>\n";
 		}
 
+        $add_html .= "<center>\n";
         //now we come to the "add" fields
         if ($this->add){
-            $add_html .= "<center>\n";
             $add_html .= "   <input type=\"button\" value=\"Add $item\" class=\"btn editingSize\" onClick=\"$('#add_form_$this->db_table').slideDown('slow');\">\n";
+        }
 
-            if (count($this->bottom_button) > 0){
-                foreach($this->bottom_button as $button){
-					$button_value = $button[0];
-					$button_url = $button[1];
-					$button_tags = $button[2];
+		if (count($this->bottom_button) > 0){
+			foreach($this->bottom_button as $button){
+				$button_value = $button[0];
+				$button_url = $button[1];
+				$button_tags = $button[2];
 
-					if ($button_tags == ''){
-						$tag_stuff = "onClick=\"location.href = '$button_url';\"";
-					}
-					else{
-						$tag_stuff = $button_tags;
-					}
-					$add_html .= "  <input type=\"button\" value=\"$button_value\" href=\"$button_url\" class=\"btn\" $tag_stuff>\n";
+				if ($button_tags == ''){
+					$tag_stuff = "onClick=\"location.href = '$button_url';\"";
 				}
-            }
+				else{
+					$tag_stuff = $button_tags;
+				}
+				$add_html .= "  <input type=\"button\" value=\"$button_value\" href=\"$button_url\" class=\"btn\" $tag_stuff>\n";
+			}
+		}
 
+        if ($this->add){
             //$add_html .= "  <input type=\"button\" value=\"Go Back\" class=\"btn\" onClick=\"history.back();\">\n";
             $add_html .= "</center>\n";
 

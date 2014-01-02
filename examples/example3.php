@@ -49,6 +49,9 @@
 	$tblFriend->displayAs("fldPicture", "Image");
 	$tblFriend->displayAs("fkMarriedTo", "Married To");
 
+	#disallow new friends to be added (removes the add button)
+	$tblFriend->disallowAdd();
+
 	#use if you only want to show a few of the fields (not all)
 	//$tblFriend->showOnly("fldName, fldAddress, fldState, fldOwes");
 
@@ -146,6 +149,9 @@
 	#order the table by any field you want
 	$tblFriend->addOrderBy("ORDER BY fldName");
 
+	#add a button at the bottom of the table which simply goes to another page
+	$tblFriend->addButton("No More Friends. Take Me Home", "home.php");
+
 	#some logic if we want to add a field automatically on add
 	$state = $_REQUEST['state'];
 	if ($state){
@@ -153,7 +159,6 @@
 		$tblFriend->omitAddField("fldState");
 		$tblFriend->addValueOnInsert("fldState", $state);
 	}
-
 
 
 	echo "<h1>Example 3</h1>\n";
