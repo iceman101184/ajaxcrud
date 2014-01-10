@@ -168,10 +168,10 @@ class ajaxCRUD{
     //allow delete of fields | boolean variable set to true by default
     var $delete;
 
-    //defines if the add function uses ajax
+    //defines if the add functionality uses ajax
     var $ajax_add = true;
 
-    //defines if the class allows you to edit all fields
+    //defines if the class allows you to edit all fields (only used to turn off ALL editing completely)
     var $ajax_editing = true;
 
     //the fields to be displayed
@@ -261,6 +261,7 @@ class ajaxCRUD{
     var $format_field_with_function_adv = array();
 
     var $onAddExecuteCallBackFunction;
+    var $onUpdateExecuteCallBackFunction = array(); //this is an array because callback methods for update (unlike add) are field based
     var $onFileUploadExecuteCallBackFunction;
     var $onDeleteFileExecuteCallBackFunction;
 
@@ -648,6 +649,10 @@ class ajaxCRUD{
         $this->ajax_add = false;
     }
 
+    function onUpdateExecuteCallBackFunction($field_name, $function_name){
+        $this->onUpdateExecuteCallBackFunction[$field_name] = $function_name;
+    }
+
     function onFileUploadExecuteCallBackFunction($function_name){
         $this->onFileUploadExecuteCallBackFunction = $function_name;
     }
@@ -944,6 +949,32 @@ class ajaxCRUD{
 
             }//if POST parameter 'table' == db_table
 		}//action = add
+
+		if ($action == 'update' && $_REQUEST['field_name'] != "" && $_REQUEST['id'] != ""){
+
+			$paramName = $_REQUEST['paramName']; //this is the param which the field update value will come by
+			$val = addslashes($_REQUEST[$paramName]);
+			$pkID = $_REQUEST['id'];
+
+			$field_name = $_REQUEST['field_name'];
+			$success = qr("UPDATE $this->db_table SET $field_name  = \"$val\" WHERE $this->db_table_pk = $pkID");
+
+			if ($success){
+				$report_msg[] = "$item Updated";
+				if ($this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+					$updatedRowArray = qr("SELECT * FROM $this->db_table WHERE $this->db_table_pk = $pkID");
+					$callBackSuccess = call_user_func($this->onUpdateExecuteCallBackFunction[$field_name], $updatedRowArray);
+					if (!$callBackSuccess){
+						//commented this out because not all callback functions will return true or false
+						//$error_msg[] = "Callback function could not be executed; please check the name of your callback function.";
+					}
+				}
+			}
+			else{
+  				$error_msg[] = "$item could not be updated. Please try again.";
+            }
+
+		}
 
         if ($action == 'upload' && $_REQUEST['field_name'] && $_REQUEST['id'] != '' && is_array($this->file_uploads) && in_array($_REQUEST['field_name'],$this->file_uploads)){
             $update_id      = $_REQUEST['id'];
@@ -2015,12 +2046,17 @@ class ajaxCRUD{
 			$cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
 		}
 
-		if ($cell_data == "" && $field_value == "") $field_text = "--";
+		if ( (strip_tags($cell_data) == "") && $field_value == "") $field_text = "--";
 
 		//for getting rid of the html space, replace with actual no text
 		if ($field_value == "&nbsp;&nbsp;") $field_value = "";
 
 		$field_value = stripslashes(htmlspecialchars($field_value));
+
+		$postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
+		if ($this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+			$postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
+		}
 
         $return_html .= "<span class=\"editable hand_cursor\" id=\"" . $prefield ."_show\" onClick=\"
 			document.getElementById('" . $prefield . "_edit').style.display = '';
@@ -2028,24 +2064,31 @@ class ajaxCRUD{
 			document.getElementById('" . $input_name . "').focus();
             \">" . stripslashes($field_text) . "</span>
         <span id=\"" . $prefield ."_edit\" style=\"display: none;\">
-            <form style=\"display: inline;\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\" onsubmit=\"
-				document.getElementById('" . $prefield . "_edit').style.display='none';
-				document.getElementById('" . $prefield . "_save').style.display='';
-                var sndValue = document.getElementById('" . $input_name . "').value;
-                sndValue = cleanseStrForURIEncode(sndValue);
-                var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&val=' + sndValue;
-				sndUpdateReq(req);
-				return false;
-			\">";
+            <form style=\"display: inline;\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\" method=\"POST\" onsubmit=\"";
+
+			if ($postEditForm){
+				$return_html .= "return true;\">";
+			}
+			else{
+				$return_html .= "
+					document.getElementById('" . $prefield . "_edit').style.display='none';
+					document.getElementById('" . $prefield . "_save').style.display='';
+					var sndValue = document.getElementById('" . $input_name . "').value;
+					sndValue = cleanseStrForURIEncode(sndValue);
+					var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&val=' + sndValue;
+					sndUpdateReq(req);
+					return false;
+				\">";
+			}
 
             if ($type == 'text'){
                 if ($field_size == "") $field_size = 15;
 				if ($this->display_field_with_class_style[$field_name] != '') {
 					$custom_class = $this->display_field_with_class_style[$field_name];
-					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"text_$prefield\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode $custom_class\" size=\"$field_size\" value=\"$field_value\"/>\n";
+					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode $custom_class\" size=\"$field_size\" value=\"$field_value\"/>\n";
 				}
 				else {
-					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"text_$prefield\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode\" size=\"$field_size\" value=\"$field_value\"/>\n";
+					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode\" size=\"$field_size\" value=\"$field_value\"/>\n";
 				}
 			}
 			else{
@@ -2055,6 +2098,10 @@ class ajaxCRUD{
 			}
 
         $return_html .= "
+			<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
+			<input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
+			<input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
+			<input type=\"hidden\" name=\"action\" value=\"update\">
 			<input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
 
 				document.getElementById('" . $prefield . "_show').style.display = '';

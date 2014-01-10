@@ -50,7 +50,7 @@
 	$tblFriend->displayAs("fkMarriedTo", "Married To");
 
 	#disallow new friends to be added (removes the add button)
-	$tblFriend->disallowAdd();
+	//$tblFriend->disallowAdd();
 
 	#use if you only want to show a few of the fields (not all)
 	//$tblFriend->showOnly("fldName, fldAddress, fldState, fldOwes");
