@@ -2165,7 +2165,7 @@ class ajaxCRUD{
 			}
 			else{
 				$return_html .= "
-					var selected_index_value = document.getElementById('" . $prefield . "').value;
+					var selected_index_value = document.getElementById('" . $input_name . "').value;
 					document.getElementById('" . $prefield . "_edit').style.display='none';
 					document.getElementById('" . $prefield . "_save').style.display='';
 					var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&dropdown_tbl=" . $dropdown_table . "&val=' + selected_index_value;

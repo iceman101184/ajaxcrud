@@ -288,7 +288,7 @@ function handleUpdateResponse() {
 				}
 			}
 			else{
-				var the_selectbox = document.getElementById(id);
+				var the_selectbox = document.getElementById("dropdown_" + id);
 				document.getElementById(id+'_show').innerHTML = the_selectbox.options[the_selectbox.selectedIndex].text;
 			}
             document.getElementById(id+'_show').style.display = '';
