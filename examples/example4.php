@@ -82,9 +82,6 @@
     #set the number of rows to display (per page)
     $tblDemo->setLimit(30);
 
-    #implement a callback function after updating/editing a field
-    $tblDemo->onUpdateExecuteCallBackFunction("fldField1", "myCallBackFunctionForEdit");
-
 	#set a filter box at the top of the table
     //$tblDemo->addAjaxFilterBox('fldField1');
 
@@ -102,9 +99,16 @@
 	//$tblDemo->modifyFieldWithClass("fldField1", "zip required"); 	//for testing masked input functionality
 	//$tblDemo->modifyFieldWithClass("fldField2", "phone");			//for testing masked input functionality
 
-	//$tblDemo->onAddExecuteCallBackFunction("mycallbackfunction"); //uncomment this to try out an ADD ROW callback function
+	//$tblDemo->onAddExecuteCallBackFunction("myCallBackFunctionForAdd"); //uncomment this to try out an ADD ROW callback function
+
+    #implement a callback function after updating/editing a field
+    $tblDemo->onUpdateExecuteCallBackFunction("fldField1", "myCallBackFunctionForEdit");
+
+    $tblDemo->onUpdateExecuteCallBackFunction("fldCertainFields", "myCallBackFunctionForEdit");
+
 
 ?>
+	<h1>Example Using onUpdateExecuteCallBackFunction</h1>
 		<div style="float: left">
 			Total Returned Rows: <b><?=$tblDemo->insertRowsReturned();?></b><br />
 		</div>
@@ -125,7 +129,7 @@
 		return "<span style='color: blue;'>$val</span>";
 	}
 
-	function myCallBackFunction($array){
+	function myCallBackFunctionForAdd($array){
 		echo "THE ADD ROW CALLBACK FUNCTION WAS implemented";
 		print_r($array);
 	}

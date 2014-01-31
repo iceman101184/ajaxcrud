@@ -952,7 +952,7 @@ class ajaxCRUD{
 
 		if ($action == 'update' && $_REQUEST['field_name'] != "" && $_REQUEST['id'] != ""){
 
-			if ($_REQUEST['table'] == $this->db_table){//added this conditional in v8.5
+			if ($_REQUEST['table'] == $this->db_table){//added this conditional in v8.5 to account for multiple tables
 				$paramName = $_REQUEST['paramName']; //this is the param which the field update value will come by
 				$val = addslashes($_REQUEST[$paramName]);
 				$pkID = $_REQUEST['id'];
@@ -972,7 +972,7 @@ class ajaxCRUD{
 					}
 				}
 				else{
-					$error_msg[] = "$item could not be updated. Please try again.";
+					$error_msg[] = "$item could not be updated (likely because no data has changed). Please try again.";
 				}
 			}
 		}
@@ -2120,6 +2120,9 @@ class ajaxCRUD{
     function makeAjaxDropdown($unique_id, $field_name, $field_value, $dropdown_table, $dropdown_table_pk, $array_list, $selected_dropdown_text = "NOTHING_ENTERED"){
         $return_html = "";
 
+        $prefield = trim($this->db_table . $field_name . $unique_id);
+        $input_name = "dropdown" . "_" . $prefield;
+
         if ($selected_dropdown_text == "NOTHING_ENTERED"){
 
             $selected_dropdown_text = $field_value;
@@ -2143,7 +2146,10 @@ class ajaxCRUD{
             $selected_dropdown_text = "&nbsp;--&nbsp;";
         }
 
-        $prefield = trim($this->db_table . $field_name . $unique_id);
+		$postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
+		if ($this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+			$postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
+		}
 
         $return_html = "<span class=\"editable hand_cursor\" id=\"" . $prefield . "_show\" onClick=\"
 			document.getElementById('" . $prefield . "_edit').style.display = '';
@@ -2151,49 +2157,61 @@ class ajaxCRUD{
 			\">" . $selected_dropdown_text . "</span>
 
             <span style=\"display: none;\" id=\"" . $prefield . "_edit\">
-                <form style=\"display: inline;\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\">
-                <select class=\"editingSize editMode\" id=\"" . $prefield . "\" onChange=\"
-                    var selected_index_value = document.getElementById('" . $prefield . "').value;
-                    document.getElementById('" . $prefield . "_edit').style.display='none';
-                    document.getElementById('" . $prefield . "_save').style.display='';
-                    var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&dropdown_tbl=" . $dropdown_table . "&val=' + selected_index_value;
-                    sndUpdateReq(req);
-                    return false;
-                \">";
+                <form style=\"display: inline;\" method=\"POST\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\">
+                <select class=\"editingSize editMode\" name=\"$input_name\" id=\"$input_name\" onChange=\"";
 
-            if ($no_text || $this->category_required[$field_name] != TRUE){
-                if ($this->fieldIsInt($this->getFieldDataType($field_name)) || $this->fieldIsDecimal($this->getFieldDataType($field_name))){
-                    $return_html .= "<option value='0'>--Select--</option>\n";
-                }
-                else{
-                    $return_html .= "<option value=''>--Select--</option>\n";
-                }
-            }
-
-            foreach($array_list as $list){
-				$selected = '';
-                if (is_array($list)){
-                    $list_val = $list[0];
-                    $list_option = $list[1];
-                }
-                else{
-                    $list_val = $list;
-                    $list_option = $list;
-                }
-
-				if ($list_val == $field_value) $selected = " selected";
-                $return_html .= "<option value=\"$list_val\" $selected >$list_option</option>";
+			if ($postEditForm){
+				$return_html .= "this.form.submit();\">";
 			}
-            $return_html .= "</select>";
+			else{
+				$return_html .= "
+					var selected_index_value = document.getElementById('" . $prefield . "').value;
+					document.getElementById('" . $prefield . "_edit').style.display='none';
+					document.getElementById('" . $prefield . "_save').style.display='';
+					var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&dropdown_tbl=" . $dropdown_table . "&val=' + selected_index_value;
+					sndUpdateReq(req);
+					return false;
+				\">";
+			}
 
-			$return_html .= "<input type=\"button\" value=\"Cancel\" onClick=\"
+		if ($no_text || $this->category_required[$field_name] != TRUE){
+			if ($this->fieldIsInt($this->getFieldDataType($field_name)) || $this->fieldIsDecimal($this->getFieldDataType($field_name))){
+				$return_html .= "<option value='0'>--Select--</option>\n";
+			}
+			else{
+				$return_html .= "<option value=''>--Select--</option>\n";
+			}
+		}
+
+		foreach($array_list as $list){
+			$selected = '';
+			if (is_array($list)){
+				$list_val = $list[0];
+				$list_option = $list[1];
+			}
+			else{
+				$list_val = $list;
+				$list_option = $list;
+			}
+
+			if ($list_val == $field_value) $selected = " selected";
+			$return_html .= "<option value=\"$list_val\" $selected >$list_option</option>";
+		}
+		$return_html .= "</select>";
+
+		$return_html .= "<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
+			<input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
+			<input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
+			<input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
+			<input type=\"hidden\" name=\"action\" value=\"update\">
+			<input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
 				document.getElementById('" . $prefield . "_show').style.display = '';
 				document.getElementById('" . $prefield . "_edit').style.display = 'none';
 			\"/>
-		</form>
-		</span>
 
-        <span style=\"display: none;\" id=\"" . $prefield . "_save\" class=\"savingAjaxWithBackground\">Saving...</span>\n";
+			</form>
+			</span>
+	        <span style=\"display: none;\" id=\"" . $prefield . "_save\" class=\"savingAjaxWithBackground\">Saving...</span>\n";
 
         return $return_html;
 
