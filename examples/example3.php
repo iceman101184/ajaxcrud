@@ -1,5 +1,6 @@
 <?php
 
+	//note: this example reloads the page on an ADD ROW because it allows file uploading
 	require_once('../preheader.php'); // <-- this include file MUST go first before any HTML/output
 
 	#the code for the class

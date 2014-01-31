@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.3                                            */
+	/* ajaxCRUD.class.php	v8.5                                            */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -952,28 +952,29 @@ class ajaxCRUD{
 
 		if ($action == 'update' && $_REQUEST['field_name'] != "" && $_REQUEST['id'] != ""){
 
-			$paramName = $_REQUEST['paramName']; //this is the param which the field update value will come by
-			$val = addslashes($_REQUEST[$paramName]);
-			$pkID = $_REQUEST['id'];
+			if ($_REQUEST['table'] == $this->db_table){//added this conditional in v8.5
+				$paramName = $_REQUEST['paramName']; //this is the param which the field update value will come by
+				$val = addslashes($_REQUEST[$paramName]);
+				$pkID = $_REQUEST['id'];
 
-			$field_name = $_REQUEST['field_name'];
-			$success = qr("UPDATE $this->db_table SET $field_name  = \"$val\" WHERE $this->db_table_pk = $pkID");
+				$field_name = $_REQUEST['field_name'];
+				$success = qr("UPDATE $this->db_table SET $field_name  = \"$val\" WHERE $this->db_table_pk = $pkID");
 
-			if ($success){
-				$report_msg[] = "$item Updated";
-				if ($this->onUpdateExecuteCallBackFunction[$field_name] != ''){
-					$updatedRowArray = qr("SELECT * FROM $this->db_table WHERE $this->db_table_pk = $pkID");
-					$callBackSuccess = call_user_func($this->onUpdateExecuteCallBackFunction[$field_name], $updatedRowArray);
-					if (!$callBackSuccess){
-						//commented this out because not all callback functions will return true or false
-						//$error_msg[] = "Callback function could not be executed; please check the name of your callback function.";
+				if ($success){
+					$report_msg[] = "$item Updated";
+					if ($this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+						$updatedRowArray = qr("SELECT * FROM $this->db_table WHERE $this->db_table_pk = $pkID");
+						$callBackSuccess = call_user_func($this->onUpdateExecuteCallBackFunction[$field_name], $updatedRowArray);
+						if (!$callBackSuccess){
+							//commented this out because not all callback functions will return true or false
+							//$error_msg[] = "Callback function could not be executed; please check the name of your callback function.";
+						}
 					}
 				}
+				else{
+					$error_msg[] = "$item could not be updated. Please try again.";
+				}
 			}
-			else{
-  				$error_msg[] = "$item could not be updated. Please try again.";
-            }
-
 		}
 
         if ($action == 'upload' && $_REQUEST['field_name'] && $_REQUEST['id'] != '' && is_array($this->file_uploads) && in_array($_REQUEST['field_name'],$this->file_uploads)){
@@ -1256,7 +1257,7 @@ class ajaxCRUD{
 
         if (count($this->ajaxFilter_fields) > 0){
             $top_html .= "<form id=\"" . $this->db_table . "_filter_form\">\n";
-            $top_html .= "<table cellspacing='5' align='center'><tr>";
+            $top_html .= "<table cellspacing='5' align='center'><tr><thead>";
 
             foreach ($this->ajaxFilter_fields as $filter_field){
                 $display_field = $filter_field;
@@ -1275,7 +1276,7 @@ class ajaxCRUD{
                 	$filter_value = utf8_encode($_REQUEST[$filter_field]);
                 }
 
-                $top_html .= "<td><b>$display_field</b>: ";
+                $top_html .= "<th><b>$display_field</b>:";
 
 				//check for valid values (set by defineAllowableValues)
 				if (is_array($this->allowed_values[$filter_field])){
@@ -1333,9 +1334,9 @@ class ajaxCRUD{
 
                 	$top_html .= "<input type=\"text\" class=\"$custom_class\" size=\"$textbox_size\" name=\"$filter_field\" value=\"$filter_value\" onKeyUp=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
                 }
-                $top_html .= "&nbsp;&nbsp;</td>";
+                $top_html .= "&nbsp;&nbsp;</th>";
             }
-            $top_html .= "</tr></table>\n";
+            $top_html .= "</tr></thead></table>\n";
             $top_html .= "</form>\n";
         }
 
@@ -1405,7 +1406,7 @@ class ajaxCRUD{
 			//only show the header (field names) at top for horizontal display (default)
 			if ($this->orientation != 'vertical'){
 
-				$table_html .= "<tr>\n";
+				$table_html .= "<thead><tr>\n";
 				//for an (optional) checkbox
 				if ($this->showCheckbox){
 					$table_html .= "<th>&nbsp;</th>";
@@ -1439,7 +1440,7 @@ class ajaxCRUD{
 					$table_html .= "<th>Action</th>\n";
 				}
 
-				$table_html .= "</tr>\n";
+				$table_html .= "</tr></thead>\n";
 			}
 
             $count = 0;
@@ -1766,7 +1767,8 @@ class ajaxCRUD{
 					$hideOnClick = "";
 					//if a date field, show helping text
 					if ($this->fieldIsDate($this->getFieldDataType($field))){
-						$placeholder = "YYYY-mm-dd";
+						//$placeholder = "YYYY-mm-dd";
+						$placeholder = date("Y-m-d");
 						//$hideOnClick = TRUE;
 					}
 
@@ -1798,7 +1800,6 @@ class ajaxCRUD{
                     	$note = "&nbsp;&nbsp;<i>" . $this->fieldNote[$field] . "</i>";
                     }
 
-                    $placeholder  = "";
                     if ($this->placeholderText[$field] != ""){
                     	$placeholder = $this->placeholderText[$field];
                     }
@@ -1881,6 +1882,7 @@ class ajaxCRUD{
 												$custom_class = $this->display_field_with_class_style[$field];
 											}
 											$add_html .= "<th>$display_field</th><td><input $hideOnBlur onKeyPress=\"$field_onKeyPress\" class=\"editingSize $custom_class\" type=\"text\" id=\"$field\" name=\"$field\" size=\"$field_size\" maxlength=\"150\" value=\"$field_value\" placeholder=\"$placeholder\" >$note</td></tr>\n";
+											$placeholder = "";
                                         }
                                     }//else not enum field
                                 }//not an uploaded file
@@ -2100,10 +2102,10 @@ class ajaxCRUD{
         $return_html .= "
 			<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
 			<input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
+			<input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
 			<input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
 			<input type=\"hidden\" name=\"action\" value=\"update\">
 			<input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
-
 				document.getElementById('" . $prefield . "_show').style.display = '';
 				document.getElementById('" . $prefield . "_edit').style.display = 'none';
 			\"/>
