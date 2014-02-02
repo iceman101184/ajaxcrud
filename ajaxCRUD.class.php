@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.5                                            */
+	/* ajaxCRUD.class.php	v8.51                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -890,7 +890,7 @@ class ajaxCRUD{
                 }//if count add_values > 0
 
                 //wrap each field in quotes
-                $string_submitted_values = "\"" . implode("\",\"", $submitted_values) . "\"";;
+                $string_submitted_values = "\"" . implode("\",\"", $submitted_values) . "\"";
 
                 //for getting datestamp of new row for mysql's "NOW" to work
                 $string_submitted_values = str_replace('"NOW()"', 'NOW()', $string_submitted_values);
@@ -2435,16 +2435,125 @@ if (!function_exists('echo_msg_box')){
     }
 }
 
-if (!function_exists('make_filename_safe')){
+if (!function_exists('make_filename_safe')) {
 
-    function make_filename_safe($filename){
-        $filename = trim(str_replace(" ","_",$filename));
-        $filename = str_replace("'", "", $filename);
-        $filename = str_replace('"', '', $filename);
-        $filename = str_replace('#', '_', $filename);
-        $filename = str_replace('%20', '_', $filename);
+   function make_filename_safe($filename) {
+      $normalizeChars = array(
+         'Š' => 'S',
+         'š' => 's',
+         'Ð' => 'Dj',
+         'Ž' => 'Z',
+         'ž' => 'z',
+         'À' => 'A',
+         'Á' => 'A',
+         'Â' => 'A',
+         'Ã' => 'A',
+         'Ä' => 'A',
+         'Å' => 'A',
+         'Æ' => 'A',
+         'Ç' => 'C',
+         'È' => 'E',
+         'É' => 'E',
+         'Ê' => 'E',
+         'Ë' => 'E',
+         'Ì' => 'I',
+         'Í' => 'I',
+         'Î' => 'I',
+         'Ï' => 'I',
+         'Ñ' => 'N',
+         'Ò' => 'O',
+         'Ó' => 'O',
+         'Ô' => 'O',
+         'Õ' => 'O',
+         'Ö' => 'O',
+         'Ø' => 'O',
+         'Ù' => 'U',
+         'Ú' => 'U',
+         'Û' => 'U',
+         'Ü' => 'U',
+         'Ý' => 'Y',
+         'Þ' => 'B',
+         'ß' => 'Ss',
+         'à' => 'a',
+         'á' => 'a',
+         'â' => 'a',
+         'ã' => 'a',
+         'ä' => 'a',
+         'å' => 'a',
+         'æ' => 'a',
+         'ç' => 'c',
+         'è' => 'e',
+         'é' => 'e',
+         'ê' => 'e',
+         'ë' => 'e',
+         'ì' => 'i',
+         'í' => 'i',
+         'î' => 'i',
+         'ï' => 'i',
+         'ð' => 'o',
+         'ñ' => 'n',
+         'ò' => 'o',
+         'ó' => 'o',
+         'ô' => 'o',
+         'õ' => 'o',
+         'ö' => 'o',
+         'ø' => 'o',
+         'ù' => 'u',
+         'ú' => 'u',
+         'û' => 'u',
+         'ý' => 'y',
+         'ý' => 'y',
+         'þ' => 'b',
+         'ÿ' => 'y',
+         'ƒ' => 'f');
 
-        return stripslashes($filename);
-    }
+      $strip = array(
+         "~",
+         "`",
+         "!",
+         "@",
+         "#",
+         "$",
+         "%",
+         "^",
+         "&",
+         "*",
+         "(",
+         ")",
+         "=",
+         "+",
+         "[",
+         "{",
+         "]",
+         "}",
+         "\\",
+         "|",
+         ";",
+         ":",
+         "\"",
+         "'",
+         "&#8216;",
+         "&#8217;",
+         "&#8220;",
+         "&#8221;",
+         "&#8211;",
+         "&#8212;",
+         "â€”",
+         "â€“",
+         ",",
+         "<",
+         ">",
+         "/",
+         "?");
+
+      $toClean = str_replace(' ', '_', $filename);
+      $toClean = str_replace('--', '-', $toClean);
+      $toClean = strtr(stripslashes($toClean), $normalizeChars);
+      $toClean = str_replace($strip, "", $toClean);
+      $toClean = rand(1, 9999) . "_" . $toClean;
+
+      return $toClean;
+
+   }
 }
 ?>

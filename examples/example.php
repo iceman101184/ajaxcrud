@@ -115,6 +115,7 @@
 
 	#my self-defined functions used for formatFieldWithFunction
 	function makeBold($val){
+		if ($val == "") return "no value";
 		return "<b>$val</b>";
 	}
 
