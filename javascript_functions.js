@@ -96,7 +96,15 @@ function sndAddReq(action, table) {
     http.open('get', action);
     http.onreadystatechange = function() {
 		if(http.readyState == 4){
-			var action2 = ajax_file + "?ajaxAction=add&table=" + table;
+
+			/* this checks if there is a question mark in the url already (custom apps)
+			   and replaces with an ampersand
+			*/
+
+			var markki = "?";
+			if (ajax_file.search("[?]") > 0) { markki = "&"; }
+			var action2 = ajax_file + markki + "ajaxAction=add&table=" + table;
+
 			add_http.open('get', action2);
 			add_http.onreadystatechange = function(){
 				if(add_http.readyState == 4){
@@ -118,7 +126,12 @@ function sndFilterReq(action, table) {
     http.open('get', action);
     http.onreadystatechange = function(){
 		if(http.readyState == 4){
-			filter_http.open("get", ajax_file + "?ajaxAction=filter&table=" + table);
+
+			//this checks if there is a question mark in the url already (custom apps) and replaces with an ampersand
+			var markki = "?";
+			if (ajax_file.search("[?]") > 0) { markki = "&"; }
+
+			filter_http.open("get", ajax_file + markki + "ajaxAction=filter&table=" + table);
 			filter_http.onreadystatechange = function(){
 				if(filter_http.readyState == 4){
 					var table_html = filter_http.responseText;
@@ -141,7 +154,9 @@ function sndSortReq(action, table) {
     http.open('get', action);
     http.onreadystatechange = function() {
 		if(http.readyState == 4){
-			sort_http.open('get', ajax_file + "?ajaxAction=sort&table=" + table);
+			var markki = "?";
+			if (ajax_file.search("[?]") > 0) { markki = "&"; }
+    		sort_http.open('get', ajax_file + markki +"ajaxAction=getRowCount&table=" + table);
 			sort_http.onreadystatechange = function(){
 				if(sort_http.readyState == 4){
 					var table_html = sort_http.responseText;
@@ -157,7 +172,11 @@ function sndSortReq(action, table) {
 
 /* Update Row Count (if used with function insertRowsReturned() ) - added in v6.9 */
 function updateRowCount(table) {
-    http.open('get', ajax_file + "?ajaxAction=getRowCount&table=" + table);
+
+	var markki = "?";
+	if (ajax_file.search("[?]") > 0) { markki = "&"; }
+
+    http.open('get', ajax_file + markki + "ajaxAction=getRowCount&table=" + table);
     http.onreadystatechange = function(){
 		if(http.readyState == 4){
 			var numRows = http.responseText;
@@ -246,7 +265,10 @@ function deleteFile(field, id){
 }
 
 function ajax_deleteRow(id, table, pk){
-	var req = ajax_file + '?ajaxAction=delete&id=' + id + '&table=' + table + '&pk=' + pk;
+	var markki = "?";
+	if (ajax_file.search("[?]") > 0) { markki = "&"; }
+
+	var req = ajax_file + markki + 'ajaxAction=delete&id=' + id + '&table=' + table + '&pk=' + pk;
 	sndDeleteReq(req);
 }
 
