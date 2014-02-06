@@ -165,7 +165,7 @@
 	}
 
 
-	echo "<h1>Example3 tests FormatFieldWithFunction, Multiple Filters, and a Date Picker</h1>\n";
+	echo "<h3>Example3 tests FormatFieldWithFunction, defineRelationship, Multiple Filters, and a Date Picker</h3>\n";
 
 	$tblFriend->showTable();
 

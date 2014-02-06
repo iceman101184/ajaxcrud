@@ -518,7 +518,7 @@ class ajaxCRUD{
             $this->category_required[$field] = TRUE;
         }
 
-        $this->setExactSearchField($field); //set search field to use exact matching (as of 7.2.1)
+        $this->setExactSearchField($field); //set search field to use exact matching (as of v7.2.1)
     }
 
     function relationshipFieldOptional(){
@@ -999,7 +999,7 @@ class ajaxCRUD{
                 $report_msg[] = "File Uploaded Sucessfully.";
             }
             else{
-                $error_msg[] = "There was an error uploading your file (or none was selected).";
+                $error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
             }
 
         }//action = upload
