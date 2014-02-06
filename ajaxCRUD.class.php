@@ -674,8 +674,8 @@ class ajaxCRUD{
     function setFileUpload($field_name, $destination_folder, $relative_folder = ""){
         //put values into array
         $this->file_uploads[] = $field_name;
-        $this->file_upload_info[$field_name][destination_folder] = $destination_folder;
-        $this->file_upload_info[$field_name][relative_folder] = $relative_folder;
+        $this->file_upload_info[$field_name]['destination_folder'] = $destination_folder;
+        $this->file_upload_info[$field_name]['relative_folder'] = $relative_folder;
 
         //the filenames that are saved are not editable
         $this->disallowEdit($field_name);
@@ -1075,11 +1075,11 @@ class ajaxCRUD{
 				$cell_data = $cell_value;
 
 				// Check for user defined formatting functions
-				if ($this->format_field_with_function[$field] != ''){
+				if (isset($this->format_field_with_function[$field]) && $this->format_field_with_function[$field] != ''){
                     $cell_data = call_user_func($this->format_field_with_function[$field], $cell_data);
                 }
 
-				if ($this->format_field_with_function_adv[$field] != ''){
+				if (isset($this->format_field_with_function_adv[$field]) && $this->format_field_with_function_adv[$field] != ''){
 					$cell_data = call_user_func($this->format_field_with_function_adv[$field], $cell_data, $id);
 				}
 
@@ -1531,6 +1531,7 @@ class ajaxCRUD{
                         if ($this->fieldInArray($field, $this->file_uploads)){
 
                             //a file exists for this field
+                            $file_dest = "";
                             if ($cell_data != ''){
                                 $file_link = $this->file_upload_info[$field][relative_folder] . $row[$field];
                                 $file_dest = $this->file_upload_info[$field][destination_folder];
@@ -1552,7 +1553,7 @@ class ajaxCRUD{
                         }
                         else{
                             //added in 6.5. allows defineAllowableValues to work even when in readonly mode
-                            if (is_array($this->allowed_values[$field])){
+                            if (isset($this->allowed_values[$field]) && is_array($this->allowed_values[$field])){
 								foreach ($this->allowed_values[$field] as $list){
 									if (is_array($list)){
 										$list_val = $list[0];
@@ -2380,16 +2381,16 @@ class paging{
 	}
 
 	function pageLinks($url){
-        global $choose_category,$sort, $num_ajaxCRUD_tables_instantiated;
         $cssclass = "paging_links";
 		$this->pShowLinkNotice = "&nbsp;";
 		if($this->pRecordCount>$this->pRowsPerPage){
 			$this->pShowLinkNotice = "Page ".$this->pPageID. " of ".$this->pRecord;
 			//Previous link
+			$link = "";
 			if($this->pPageID!==1){
                 $prevPage = $this->pPageID - 1;
-                $link = "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=1&mid=$ltype&cid=$catid") . "\" class=\"$cssclass\">|<<</a>\n ";
-                $link .= "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$prevPage&mid=$ltype&cid=$catid") ."\" class=\"$cssclass\"><<</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
+                $link = "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=1") . "\" class=\"$cssclass\">|<<</a>\n ";
+                $link .= "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$prevPage") ."\" class=\"$cssclass\"><<</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
 			}
 			//Number links 1.2.3.4.5.
 			for($ctr=1;$ctr<=$this->pRecord;$ctr++){
@@ -2401,8 +2402,8 @@ class paging{
 			//Previous Next link
 			if($this->pPageID<($ctr-1)){
                 $nextPage = $this->pPageID + 1;
-                $link .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$nextPage&mid=$ltype&cid=$catid") . "\" class=\"$cssclass\">>></a>\n";
-                $link .="<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=".$this->pRecord."&mid=$ltype&cid=$catid") . "\" class=\"$cssclass\">>>|</a>\n";
+                $link .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$nextPage") . "\" class=\"$cssclass\">>></a>\n";
+                $link .="<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=".$this->pRecord) . "\" class=\"$cssclass\">>>|</a>\n";
 			}
 			return $link;
 		}
@@ -2411,6 +2412,7 @@ class paging{
 	function getOnClick($paging_query_string){
 		global $db_table;
 		//if any hardcoding is needed...(advanced feature for special needs)
+		$extra_query_params = "";
 		//$extra_query_params = "&Dealer=" . htmlentities($_REQUEST['Dealer']);
 		return "pageTable('" . $extra_query_params . "$paging_query_string', '$this->tableName');";
 	}

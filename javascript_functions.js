@@ -156,7 +156,8 @@ function sndSortReq(action, table) {
 		if(http.readyState == 4){
 			var markki = "?";
 			if (ajax_file.search("[?]") > 0) { markki = "&"; }
-    		sort_http.open('get', ajax_file + markki +"ajaxAction=getRowCount&table=" + table);
+    		var sortURL = ajax_file + markki +"ajaxAction=sort&table=" + table;
+    		sort_http.open('get', sortURL);
 			sort_http.onreadystatechange = function(){
 				if(sort_http.readyState == 4){
 					var table_html = sort_http.responseText;

@@ -154,7 +154,10 @@
 	$tblFriend->addButton("No More Friends. Take Me Home", "home.php");
 
 	#some logic if we want to add a field automatically on add
-	$state = $_REQUEST['state'];
+	$state = "";
+	if (isset($_REQUEST['state'])){
+		$state = $_REQUEST['state'];
+	}
 	if ($state){
 		$tblFriend->addWhereClause("WHERE fldState = \"$state\"");
 		$tblFriend->omitAddField("fldState");
