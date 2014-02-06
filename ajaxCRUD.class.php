@@ -923,9 +923,13 @@ class ajaxCRUD{
                     $success = qr($query);
 
                     if ($success){
-                        global $mysqliConn;
-                        //$insert_id = mysql_insert_id();
-                        $insert_id = $mysqliConn->insert_id;
+                        global $mysqliConn, $useMySQLi;
+                        if ($useMySQLi){
+                        	$insert_id = $mysqliConn->insert_id;
+                        }
+                        else{
+                        	$insert_id = mysql_insert_id(); //the old, mysql way of getting it (procedurual php)
+                        }
 
                         $report_msg[] = "$item Added";
 
@@ -2353,12 +2357,17 @@ class paging{
         return $record;
 	}
 	function myRecordCount($query){
-		//$rs      			= mysql_query($query) or die(mysql_error()."<br>".$query);
-		//$rsCount 			= mysql_num_rows($rs);
-		global $mysqliConn;
+		global $mysqliConn, $useMySQLi;
 
-		$rs      			= $mysqliConn->query($query) or die(mysqli_error()."<br>".$query);
-		$rsCount 			= mysqli_num_rows($rs);
+		if ($useMySQLi){
+			$rs      			= $mysqliConn->query($query) or die(mysqli_error()."<br>".$query);
+			$rsCount 			= mysqli_num_rows($rs);
+		}
+		else{
+			$rs      			= mysql_query($query) or die(mysql_error()."<br>".$query);
+			$rsCount 			= mysql_num_rows($rs);
+		}
+
 		$this->pRecordCount = $rsCount;
 		unset($rs);
 		return $rsCount;
@@ -2367,8 +2376,6 @@ class paging{
 	function startPaging($query){
 		$query    = $query." LIMIT ".$this->pStartFile.",".$this->pRowsPerPage;
 		$rs = q($query);
-		//$rs       = mysql_query($query) or die(mysql_error()."<br>".$query);
-		//mysql_free_result($rs);
 		return $rs;
 	}
 
