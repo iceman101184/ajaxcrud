@@ -849,6 +849,7 @@ class ajaxCRUD{
                     $uploads_on = true;
                 }
 
+				$arrayKeyForFoundPK = array_search($this->db_table_pk, $this->fields);
                 foreach($this->fields as $field){
 
                     $submitted_value_cleansed = "";
@@ -868,7 +869,14 @@ class ajaxCRUD{
 
                 //get rid of the primary key in the fields column
                 if (!$this->on_add_specify_primary_key){
-                    unset($submitted_values[0]);    //assumes the primary key is the FIRST field in the array
+					if (is_numeric($arrayKeyForFoundPK)){
+	                    unset($submitted_values[$arrayKeyForFoundPK]);
+	                }
+                    /*
+                    if ($submitted_values[0] == $this->db_table_pk){
+                    	unset($submitted_values[0]); //assumes the primary key is the FIRST field in the array
+                    }
+                    */
                 }
 
                 //for adding values to the row which were not in the ADD row table - but are specified by ADD on INSERT
@@ -888,10 +896,6 @@ class ajaxCRUD{
                             $submitted_values[] = $field;
                         }
 
-                        //get rid of the primary key in the fields column
-                        if (!$this->on_add_specify_primary_key){
-                            unset($submitted_values[0]);    //assumes the primary key is the FIRST field in the array
-                        }
                     }//foreach
                 }//if count add_values > 0
 
@@ -905,7 +909,17 @@ class ajaxCRUD{
                     if (!$this->on_add_specify_primary_key && $this->primaryKeyAutoIncrement){
                         //don't allow the primary key to be inputted
                         $fields_array_without_pk = $this->fields;
-                        unset($fields_array_without_pk[0]);   //assumes the primary key is the FIRST field in the array
+
+                        /*
+                        if ($fields_array_without_pk[0] == $this->db_table_pk){
+                        	unset($fields_array_without_pk[0]);   //assumes the primary key is the FIRST field in the array
+                        }
+                        */
+
+                        if (is_numeric($arrayKeyForFoundPK)){
+                        	unset($fields_array_without_pk[$arrayKeyForFoundPK]);
+                        }
+
                         $string_fields_without_pk = implode(",", $fields_array_without_pk);
 
                         $query = "INSERT INTO $this->db_table($string_fields_without_pk) VALUES ($string_submitted_values)";
@@ -920,7 +934,7 @@ class ajaxCRUD{
                         $string_fields_with_pk = implode(",", $this->fields);
                         $query = "INSERT INTO $this->db_table($string_fields_with_pk) VALUES ($primary_key_value $string_submitted_values)";
                     }
-                    $success = qr($query);
+                    $success = qr($query,1);
 
                     if ($success){
                         global $mysqliConn, $useMySQLi;

@@ -69,7 +69,7 @@
 				if (!($r = $mysqliConn->query($q))) {
 					$errorMsg = "Mysql Error in preheader.php q(). The query was: " . $q . " and the possible mysqli error follows:" . $mysqliConn->error;
 					//logError($errorMsg);
-					exit("Mysqli error in q() in preheader. See logs.");
+					exit("<p>$errorMsg</p>");
 				}
 			}
 			else{
@@ -179,8 +179,7 @@
 			if ($useMySQLi){
 				if (!($r = $mysqliConn->query($q))) {
 					$errorMsg = "Mysql Error in preheader.php qr(). The query was: " . $q . " and the possible mysqli error follows:" . $mysqliConn->error;
-					//logError($errorMsg);
-					exit("Mysqli error in qr() in preheader. See logs.");
+					exit("<p>$errorMsg</p>");
 				}
 			}
 			else{
