@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.61                                           */
+	/* ajaxCRUD.class.php	v8.62                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -276,7 +276,12 @@ class ajaxCRUD{
 
     var $loading_image_html;
 
+	/* these default to english words (e.g. "Add", "Delete" below); but can be
+	   changed by setting them via $obj->addText = "Añadir"
+	*/
     var $emptyTableMessage;
+	var $addText;
+	var $deleteText;
 
     var $sort_direction; //used when sorting the table via ajax
 
@@ -322,7 +327,6 @@ class ajaxCRUD{
 
         $this->showCheckbox     = false;
         $this->ajaxcrud_root    = $ajaxcrud_root;
-        //$this->ajax_file        = "ajax_ajaxCRUD.php";
         $this->ajax_file        = EXECUTING_SCRIPT;
 
 		$this->item 			= $item;
@@ -353,6 +357,9 @@ class ajaxCRUD{
         $this->doActionOnShowTable = true;
 
         $this->loading_image_html = "<center><br /><br  /><img src=\'" . $this->ajaxcrud_root . "css/loading.gif\'><br /><br /></center>"; //changed via setLoadingImageHTML()
+
+        $this->addText			 = "Add";
+        $this->deleteText		 = "Delete";
         $this->emptyTableMessage = "No data in this table. Click add button below.";
 
         $this->onAddExecuteCallBackFunction         = '';
@@ -1674,7 +1681,7 @@ class ajaxCRUD{
                     $table_html .= "<td>\n";
 
                     if ($this->delete){
-                        $table_html .= "<input type=\"button\" class=\"btn editingSize\" onClick=\"confirmDelete('$id', '" . $this->db_table . "', '" . $this->db_table_pk ."');\" value=\"delete\" />\n";
+                        $table_html .= "<input type=\"button\" class=\"btn editingSize\" onClick=\"confirmDelete('$id', '" . $this->db_table . "', '" . $this->db_table_pk ."');\" value=\"" . $this->deleteText . "\" />\n";
                     }
 
                     if (count($this->row_button) > 0){
@@ -1766,7 +1773,7 @@ class ajaxCRUD{
         $add_html .= "<center>\n";
         //now we come to the "add" fields
         if ($this->add){
-            $add_html .= "   <input type=\"button\" value=\"Add $item\" class=\"btn editingSize\" onClick=\"$('#add_form_$this->db_table').slideDown('fast'); x = document.getElementById('add_form_$this->db_table'); t = setTimeout('x.scrollIntoView(false)', 200); \">\n";
+            $add_html .= "   <input type=\"button\" value=\"" . $this->addText . " $item\" class=\"btn editingSize\" onClick=\"$('#add_form_$this->db_table').slideDown('fast'); x = document.getElementById('add_form_$this->db_table'); t = setTimeout('x.scrollIntoView(false)', 200); \">\n";
         }
 
 		if (count($this->bottom_button) > 0){

@@ -101,6 +101,8 @@
 
 	//$tblDemo->onAddExecuteCallBackFunction("mycallbackfunction"); //uncomment this to try out an ADD ROW callback function
 
+	$tblDemo->deleteText = "delete";
+
 ?>
 		<div style="float: left">
 			Total Returned Rows: <b><?=$tblDemo->insertRowsReturned();?></b><br />
