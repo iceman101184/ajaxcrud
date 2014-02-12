@@ -280,8 +280,7 @@ class ajaxCRUD{
 	   changed by setting them via $obj->addText = "Añadir"
 	*/
     var $emptyTableMessage;
-	var $addText;
-	var $deleteText;
+	var $addText, $deleteText, $cancelText;
 
     var $sort_direction; //used when sorting the table via ajax
 
@@ -360,6 +359,7 @@ class ajaxCRUD{
 
         $this->addText			 = "Add";
         $this->deleteText		 = "Delete";
+        $this->cancelText		 = "Cancel";
         $this->emptyTableMessage = "No data in this table. Click add button below.";
 
         $this->onAddExecuteCallBackFunction         = '';
@@ -1969,7 +1969,7 @@ class ajaxCRUD{
 			$add_html .= "<input class=\"editingSize\" type=\"button\" onClick=\"validateAddForm('$this->db_table', $postForm);\" value=\"Save $item\">";
 
 
-            $add_html .= "</td><td><input style='float: right;' class=\"btn editingSize\" type=\"button\" onClick=\"this.form.reset();$('#add_form_$this->db_table').slideUp('slow');\" value=\"Cancel\"></td></tr>\n</table>\n";
+            $add_html .= "</td><td><input style='float: right;' class=\"btn editingSize\" type=\"button\" onClick=\"this.form.reset();$('#add_form_$this->db_table').slideUp('slow');\" value=\"" . $this->cancelText . "\"></td></tr>\n</table>\n";
             $add_html .= "<input type=\"hidden\" name=\"action\" value=\"add\">\n";
             $add_html .= "<input type=\"hidden\" name=\"table\" value=\"$this->db_table\">\n";
 
