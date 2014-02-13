@@ -831,7 +831,7 @@ class ajaxCRUD{
 			$delete_id = $_REQUEST['id'];
             $success = qr("DELETE FROM $this->db_table WHERE $this->db_table_pk = \"$delete_id\"");
 			if ($success){
-				$report_msg[] = "$item Deleted";
+				$report_msg[] = "$item " . $this->deleteText . "d";
 			}
 			else{
 				$error_msg[] = "$item could not be deleted. Please try again.";
@@ -874,23 +874,11 @@ class ajaxCRUD{
                     $submitted_array[$field] = $submitted_value_cleansed;
                 }
 
-                //get rid of the primary key in the fields column
-                if (!$this->on_add_specify_primary_key){
-					if (is_numeric($arrayKeyForFoundPK)){
-	                    unset($submitted_values[$arrayKeyForFoundPK]);
-	                }
-                    /*
-                    if ($submitted_values[0] == $this->db_table_pk){
-                    	unset($submitted_values[0]); //assumes the primary key is the FIRST field in the array
-                    }
-                    */
-                }
-
                 //for adding values to the row which were not in the ADD row table - but are specified by ADD on INSERT
                 if (count($this->add_values) > 0){
                     foreach ($this->add_values as $add_value){
-                        $field_name = $add_value[0];
-                        $the_add_value = $add_value[1];
+                        $field_name 	= $add_value[0];
+                        $the_add_value 	= $add_value[1];
 
                         if ($submitted_array[$field_name] == ''){
                             $submitted_array[$field_name] = $the_add_value;
@@ -900,11 +888,20 @@ class ajaxCRUD{
                         unset($submitted_values);
                         $submitted_values = array();
                         foreach($submitted_array as $field){
+							$field = str_replace('"', "'", $field);
+							$field = str_replace('\\', "/", $field);
                             $submitted_values[] = $field;
                         }
 
                     }//foreach
                 }//if count add_values > 0
+
+                //get rid of the primary key in the fields column
+                if (!$this->on_add_specify_primary_key){
+					if (is_numeric($arrayKeyForFoundPK)){
+	                    unset($submitted_values[$arrayKeyForFoundPK]);
+	                }
+                }
 
                 //wrap each field in quotes
                 $string_submitted_values = "\"" . implode("\",\"", $submitted_values) . "\"";
@@ -917,12 +914,6 @@ class ajaxCRUD{
                         //don't allow the primary key to be inputted
                         $fields_array_without_pk = $this->fields;
 
-                        /*
-                        if ($fields_array_without_pk[0] == $this->db_table_pk){
-                        	unset($fields_array_without_pk[0]);   //assumes the primary key is the FIRST field in the array
-                        }
-                        */
-
                         if (is_numeric($arrayKeyForFoundPK)){
                         	unset($fields_array_without_pk[$arrayKeyForFoundPK]);
                         }
@@ -934,7 +925,9 @@ class ajaxCRUD{
                     else{
                         if (!$this->primaryKeyAutoIncrement){
                             $primary_key_value = q1("SELECT MAX($this->db_table_pk) FROM $this->db_table");
-                            if ($primary_key_value > 0) $primary_key_value++;
+                            if ($primary_key_value > 0){
+                            	$primary_key_value++;
+                            }
                             $primary_key_value = $primary_key_value . ", ";
                         }
 
