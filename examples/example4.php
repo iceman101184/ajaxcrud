@@ -115,7 +115,7 @@
 
 		<div style="clear:both;"></div>
 
-<?
+<?php
 
 	#actually show the table
 	$tblDemo->showTable();

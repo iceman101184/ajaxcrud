@@ -1,5 +1,8 @@
-/* javascript_functions.js - for ajaxCRUD version 6.x */
-/* you should NOT need to ever edit this file */
+/* javascript_functions.js */
+
+var deleteMessageText = "Are you sure you want to delete this item from the database? This cannot be undone.";
+
+/********* THERE SHOULD BE LITTLE NEED TO EDIT BELOW THIS LINE *******/
 
 var loading_image_html; //set via setLoadingImageHTML()
 var filterReq = "";	// used in filtering the table
@@ -13,7 +16,7 @@ function createRequestObject() {
       if (window.XMLHttpRequest) { // Mozilla, Safari,...
          http_request = new XMLHttpRequest();
          if (http_request.overrideMimeType) {
-         	// set type accordingly to anticipated content type
+         	//set type accordingly to anticipated content type (not used anymore)
             //http_request.overrideMimeType('text/xml');
             //http_request.overrideMimeType('text/html');
             //http_request.overrideMimeType('text/plain;charset=ISO-8859-1');
@@ -58,18 +61,6 @@ function getThisPage(){
 	returnPageName = returnPageName + paramChar;
 	return returnPageName;
 }
-
-/*
-unused (for now)
-function sndPostReq(url, parameters) {
-    http.open('POST', url);
-	http.onreadystatechange = handleUpdateResponse;
-	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	http.setRequestHeader("Content-length", parameters.length);
-	http.setRequestHeader("Connection", "close");
-    http.send(parameters);
-}
-*/
 
 /* Ajax Deleting */
 function sndDeleteReq(action) {
@@ -187,7 +178,6 @@ function updateRowCount(table) {
     http.send(null);
 }
 
-
 function sndReqNoResponse(action) {
     http.open('get', action);
     http.onreadystatechange = doNothing;
@@ -255,7 +245,7 @@ function filterTable(obj, table, field, query_string){
 }
 
 function confirmDelete(id, table, pk){
-	if(confirm('Are you sure you want to delete this item from the database? This cannot be undone.')) {
+	if(confirm(deleteMessageText)) {
 		ajax_deleteRow(id, table, pk);
 	}
 }
@@ -468,7 +458,7 @@ function setAllCheckboxes(str, ck) {
 	}
 }
 
-//I don't know why javascript doesn't have this function built into the language!
+//I do not know why javascript does not have this function built into the language!
 Array.prototype.findIndex = function(value){
 	var ctr = "";
 	for (var i=0; i < this.length; i++) {
@@ -504,4 +494,4 @@ if('function' != typeof Array.prototype.splice) {
 	};
 }
 
-/* javascript_functions.js - last updated 10/1/2011 */
+/* javascript_functions.js END */
