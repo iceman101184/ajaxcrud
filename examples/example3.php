@@ -72,6 +72,7 @@
 
 	#format field output
 	$tblFriend->formatFieldWithFunction('fldOwes', 'addDollarSign');
+	$tblFriend->formatFieldWithFunction('fldPicture', 'displayImage');
 
 	$tblFriend->defineCheckbox("fldBestFriend", "Y", "N");
 
@@ -174,6 +175,10 @@
 	#self-defined functions used for formatFieldWithFunction
 	function addDollarSign($val) {
 		return "$" . $val;
+	}
+
+	function displayImage($val){
+		return "<img src=\"uploads/$val\" width=\"90\">";
 	}
 ?>
 
