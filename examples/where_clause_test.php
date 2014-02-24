@@ -2,7 +2,7 @@
 
 	//for more documentation go to http://ajaxcrud.com/api/index.php?id=ajaxcrud_where_clause
 
-	session_start(); //this is all i need to include for this demo
+	session_start(); //i need in order to access session variables
 
 	echo "<h2>Current WHERE Clauses in SESSION</h2><hr /<br /><br />\n";
 
