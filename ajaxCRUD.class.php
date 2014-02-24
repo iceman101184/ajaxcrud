@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.63                                           */
+	/* ajaxCRUD.class.php	v8.64                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -480,6 +480,8 @@ class ajaxCRUD{
 
             $this->sql_where_clause = " $whereClause";
         }
+
+		$_SESSION['ajaxcrud_where_clause'][$this->db_table] = $this->sql_where_clause;
 	}
 
 	function addOrderBy($sql_order_by){
@@ -1200,20 +1202,25 @@ class ajaxCRUD{
 		}
         //print_r($this->exactSearchField);
         foreach ($this->fields as $field){
-			if (isset($_REQUEST[$field]) && $_REQUEST[$field] != '' && ($action != 'add' && $action != 'delete' && $action != 'update' && $action != 'upload' && $action != 'delete_file')){
-				$filter_field = $field;
-				$filter_value = $_REQUEST[$field];
-				if ($this->exactSearchField[$filter_field]){
-					//exact search (is set by
-					$filter_where_clause = "WHERE $filter_field = \"$filter_value\"";
+			//this if condition is so MULTIPLE ajaxCRUD tables can be used on the same page.
+			if ($_REQUEST['table'] == $this->db_table){
+
+				if (isset($_REQUEST[$field]) && $_REQUEST[$field] != '' && ($action != 'add' && $action != 'delete' && $action != 'update' && $action != 'upload' && $action != 'delete_file')){
+					$filter_field = $field;
+					$filter_value = $_REQUEST[$field];
+					if ($this->exactSearchField[$filter_field]){
+						//exact search (is set by
+						$filter_where_clause = "WHERE $filter_field = \"$filter_value\"";
+					}
+					else{
+						//approximate search (default)
+						$filter_where_clause = "WHERE $filter_field LIKE \"%" . $filter_value . "%\"";
+					}
+
+					$this->addWhereClause($filter_where_clause);
+					$this->filtered_table = true;
+					$count_filtered++;
 				}
-				else{
-					//approximate search (default)
-					$filter_where_clause = "WHERE $filter_field LIKE \"%" . $filter_value . "%\"";
-				}
-				$this->addWhereClause($filter_where_clause);
-				$this->filtered_table = true;
-                $count_filtered++;
 			}
 		}
         if ($count_filtered > 0){

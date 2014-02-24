@@ -45,7 +45,7 @@
 
     $tblDemo2->setTextareaHeight('fldLongField', 50);
     $tblDemo2->setLimit(20);
-    //$tblDemo2->addAjaxFilterBox('fldField1');
+    $tblDemo2->addAjaxFilterBox('fldField1');
 	$tblDemo2->formatFieldWithFunction('fldField2', 'makeBlue');
 	$tblDemo2->formatFieldWithFunction('fldField1', 'makeBold');
 	echo "<h2>Table tblDemo2</h2>\n";

@@ -54,7 +54,7 @@
     //$tblDemo->addValueOnInsert("fldField1", "NOW()");
 
     #i can use a where field to better-filter my table
-    //$tblDemo->addWhereClause("WHERE (fldField1 = 'test'");
+    //$tblDemo->addWhereClause("WHERE (fldField1 = 'test')");
 
     #i can order my table by whatever i want
     //$tblDemo->addOrderBy("ORDER BY fldField1 ASC");

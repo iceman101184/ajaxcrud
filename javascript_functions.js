@@ -221,8 +221,8 @@ function setLoadingImage(table){
 function filterTable(obj, table, field, query_string){
 	var filter_fields = getFormValues(document.getElementById(table + '_filter_form'), '');
     if (filter_fields != ''){
-    	var req = getThisPage() + filter_fields + "&" + query_string;
-    	filterReq = "&" + filter_fields + "&" + query_string; //this var declared at the top of this file
+    	var req = getThisPage() + filter_fields + "&table=" + table + "&" + query_string;
+    	filterReq = "&table=" + table + "&" + filter_fields + "&" + query_string; //this var declared at the top of this file
     }
     else{
 		var req = getThisPage() + "action=unfilter";
