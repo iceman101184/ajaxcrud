@@ -29,7 +29,7 @@
     #the table fields have prefixes; i want to give the heading titles something more meaningful
     $tblDemo->displayAs("fldField1", "Field1");
     $tblDemo->displayAs("fldField2", "Field2");
-    $tblDemo->displayAs("fldCertainFields", "Certain Fields");
+    $tblDemo->displayAs("fldCertainFields", "Valid Value Field");
     $tblDemo->displayAs("fldLongField", "Long Field");
     $tblDemo->displayAs("fldCheckbox", "Is Selected?");
 
@@ -61,7 +61,7 @@
 
     #i can set certain fields to only allow certain values
     #http://ajaxcrud.com/api/index.php?id=defineAllowableValues
-    $allowableValues = array("Allowable Value 1", "Allowable Value2", "Dropdown Value", "CRUD");
+    $allowableValues = array("Allowable Value1", "Allowable Value2", "Dropdown Value", "CRUD");
     $tblDemo->defineAllowableValues("fldCertainFields", $allowableValues);
 
     //set field fldCheckbox to be a checkbox

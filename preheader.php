@@ -142,7 +142,7 @@
 				if (!($r = $mysqliConn->query($q))) {
 					$errorMsg = "Mysql Error in preheader.php q1(). The query was: " . $q . " and the possible mysqli error follows:" . $mysqliConn->error;
 					//logError($errorMsg);
-					exit("Mysqli error in q1() in preheader. See logs.");
+					exit($errorMsg);
 				}
 			}
 			else{
@@ -157,7 +157,7 @@
 				echo "<br>$q<br>";
 			}
 
-			if ($useMySQLi){
+			if ($useMySQLi && isset($r)){
 				$row = $r->fetch_array();
 			}
 			else{
@@ -206,6 +206,11 @@
 					return true;
 				}
 				return false;
+			}
+
+			if(stristr(substr($q,0,8),"create") || stristr(substr($q,0,8),"drop")){
+				//added for executing create table statements; e.g. the example install script /examples/install.php
+				return true;
 			}
 
 			$results = array();

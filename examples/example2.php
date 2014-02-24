@@ -13,12 +13,12 @@
     $tblDemo->omitPrimaryKey();
     $tblDemo->displayAs("fldField1", "Field1");
     $tblDemo->displayAs("fldField2", "Field2");
-    $tblDemo->displayAs("fldCertainFields", "Certain Fields");
+    $tblDemo->displayAs("fldCertainFields", "Pick List");
     $tblDemo->displayAs("fldLongField", "Long Field");
     $tblDemo->displayAs("fldCheckbox", "Is Selected?");
     $tblDemo->setTextareaHeight('fldLongField', 100);
 
-    $allowableValues = array("Allowable Value 1", "Allowable Value2", "Dropdown Value", "CRUD");
+    $allowableValues = array("Allowable Value1", "Allowable Value2", "Dropdown Value", "CRUD");
     $tblDemo->defineAllowableValues("fldCertainFields", $allowableValues);
 
     //set field fldCheckbox to be a checkbox
@@ -28,6 +28,7 @@
     $tblDemo->addAjaxFilterBox('fldField1');
 	$tblDemo->formatFieldWithFunction('fldField1', 'makeBlue');
 	$tblDemo->formatFieldWithFunction('fldField2', 'makeBold');
+	echo "<h2>Table tblDemo</h2>\n";
 	$tblDemo->showTable();
 
 	echo "<br /><hr ><br />\n";
@@ -36,16 +37,18 @@
     $tblDemo2->omitPrimaryKey();
     $tblDemo2->displayAs("fldField1", "Field1");
     $tblDemo2->displayAs("fldField2", "Field2");
-    $tblDemo2->displayAs("fldCertainFields", "Certain Fields");
+    $tblDemo2->displayAs("fldCertainFields", "Color");
     $tblDemo2->displayAs("fldLongField", "Long Field");
 
-    $tblDemo2->defineAllowableValues("fldCertainFields", $allowableValues);
+    $allowableValues2 = array("Green", "Blue", "Red", "Periwinkle");
+    $tblDemo2->defineAllowableValues("fldCertainFields", $allowableValues2);
 
     $tblDemo2->setTextareaHeight('fldLongField', 50);
     $tblDemo2->setLimit(20);
     //$tblDemo2->addAjaxFilterBox('fldField1');
 	$tblDemo2->formatFieldWithFunction('fldField2', 'makeBlue');
 	$tblDemo2->formatFieldWithFunction('fldField1', 'makeBold');
+	echo "<h2>Table tblDemo2</h2>\n";
 	$tblDemo2->showTable();
 
 
