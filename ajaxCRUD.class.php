@@ -1546,7 +1546,6 @@ class ajaxCRUD{
 
                         $table_html .= "<td>";
 
-
                         $key = array_search($field, $this->display_fields);
 
                         if ($this->fieldInArray($field, $this->file_uploads)){
@@ -1554,8 +1553,8 @@ class ajaxCRUD{
                             //a file exists for this field
                             $file_dest = "";
                             if ($cell_data != ''){
-                                $file_link = $this->file_upload_info[$field][relative_folder] . $row[$field];
-                                $file_dest = $this->file_upload_info[$field][destination_folder];
+                                $file_link = $this->file_upload_info[$field]['relative_folder'] . $row[$field];
+                                $file_dest = $this->file_upload_info[$field]['destination_folder'];
 
                                 $table_html .= "<span id='text_" . $field . $id . "'><a target=\"_new\" href=\"$file_link\">" . $cell_data . "</a> (<a style=\"font-size: 9px;\" href=\"javascript:\" onClick=\"document.getElementById('file_$field$id').style.display = ''; document.getElementById('text_$field$id').style.display = 'none'; \">edit</a> <a style=\"font-size: 9px;\" href=\"javascript:\" onClick=\"deleteFile('$field', '$id')\">delete</a>)</span> \n";
 
@@ -2091,6 +2090,9 @@ class ajaxCRUD{
 		$cell_data = "";
 		if (isset($this->format_field_with_function[$field_name]) && $this->format_field_with_function[$field_name] != ''){
 			$cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
+		}
+		if (isset($this->format_field_with_function_adv[$field_name]) && $this->format_field_with_function_adv[$field_name] != ''){
+			$cell_data = call_user_func($this->format_field_with_function_adv[$field_name], $field_value, $unique_id);
 		}
 
 		if ( (strip_tags($cell_data) == "") && $field_value == "") $field_text = "--";
