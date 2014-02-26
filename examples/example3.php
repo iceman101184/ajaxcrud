@@ -14,7 +14,8 @@
 <html>
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<? 	$tblFriend->insertHeader(); ?>
+
+		<?php $tblFriend->insertHeader(); ?>
 
 		<!-- these js/css includes are ONLY to make the calendar widget work (fldDateMet);
 			 these includes are not necessary for the class to work!! -->
