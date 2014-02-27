@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.64                                           */
+	/* ajaxCRUD.class.php	v8.7                                            */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -262,6 +262,7 @@ class ajaxCRUD{
     //array holding the (user-defined) function to format a field with on display (format: array[field] = function_name);
     //used in formatFieldWithFunction function
     var $format_field_with_function 	= array();
+    var $validate_delete_with_function 	= ""; //used to determine if a particular row can be deleted or not (user-defined function)
 
     //used in formatFieldWithFunctionAdvanced function (takes a second param - the id of the row)
     var $format_field_with_function_adv = array();
@@ -511,6 +512,10 @@ class ajaxCRUD{
 
     function formatFieldWithFunctionAdvanced($field, $function_name){
         $this->format_field_with_function_adv[$field] = $function_name;
+    }
+
+    function validateDeleteWithFunction($function_name){
+    	$this->validate_delete_with_function = $function_name;
     }
 
     function defineRelationship($field, $category_table, $category_table_pk, $category_field_name, $category_sort_field = "", $category_required = "1", $where_clause = ""){
@@ -1680,7 +1685,15 @@ class ajaxCRUD{
                     $table_html .= "<td>\n";
 
                     if ($this->delete){
-                        $table_html .= "<input type=\"button\" class=\"btn editingSize\" onClick=\"confirmDelete('$id', '" . $this->db_table . "', '" . $this->db_table_pk ."');\" value=\"" . $this->deleteText . "\" />\n";
+
+						$canRowBeDeleted = true;
+						if (isset($this->validate_delete_with_function) && $this->validate_delete_with_function != ''){
+							$canRowBeDeleted = call_user_func($this->validate_delete_with_function, $id);
+						}
+
+                        if ($canRowBeDeleted){
+                        	$table_html .= "<input type=\"button\" class=\"btn editingSize\" onClick=\"confirmDelete('$id', '" . $this->db_table . "', '" . $this->db_table_pk ."');\" value=\"" . $this->deleteText . "\" />\n";
+                        }
                     }
 
                     if (count($this->row_button) > 0){
