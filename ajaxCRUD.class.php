@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.7                                            */
+	/* ajaxCRUD.class.php	v8.71                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -252,7 +252,7 @@ class ajaxCRUD{
 
     //destination folder to be set for a particular field that allows uploading of files. the array is set as $field_name => $destination_folder
     var $file_uploads = array();
-    var $file_upload_info = array(); //array[$field_name][destination_folder] and array[$field_name][relative_folder]
+    var $file_upload_info = array(); //array[$field_name]['destination_folder'] and array[$field_name]['relative_folder']
     var $filename_append_field = "";
 
     //array dictating that "dropdown" fields do not show dropdown (but text editor) on edit (format: array[field] = true/false);
@@ -514,8 +514,18 @@ class ajaxCRUD{
         $this->format_field_with_function_adv[$field] = $function_name;
     }
 
+    /*	added in R8.7
+    	uses a user-defined function which will return true or false re whether THAT ROW
+    	is deletable (validateDeleteWithFunction)  or any any field in that row is editable (validateUpdateWithFunction)
+    	Example and Documentation: http://ajaxcrud.com/api/index.php?id=validateDeleteWithFunction
+    	Example and Documentation: http://ajaxcrud.com/api/index.php?id=validateUpdateWithFunction
+    */
     function validateDeleteWithFunction($function_name){
     	$this->validate_delete_with_function = $function_name;
+    }
+
+    function validateUpdateWithFunction($function_name){
+    	$this->validate_update_with_function = $function_name;
     }
 
     function defineRelationship($field, $category_table, $category_table_pk, $category_field_name, $category_sort_field = "", $category_required = "1", $where_clause = ""){
@@ -1514,6 +1524,12 @@ class ajaxCRUD{
                     $table_html .= "<td><input type='checkbox' $checkbox_selected onClick=\"window.location ='" . $_SERVER['PHP_SELF'] . "?$this->db_table_pk=$id'\" /></td>";
                 }
 
+				$canRowBeUpdated = true;
+				if (isset($this->validate_update_with_function) && $this->validate_update_with_function != ''){
+					$canRowBeUpdated = call_user_func($this->validate_update_with_function, $id);
+				}
+
+
                 foreach($this->display_fields as $field){
                     $cell_data = $row[$field];
 
@@ -1547,7 +1563,7 @@ class ajaxCRUD{
 					}
 
                     //don't allow uneditable fields (which usually includes the primary key) to be editable
-                    if ( ($this->fieldInArray($field, $this->uneditable_fields) && (!is_numeric($found_category_index)))){
+                    if ( !$canRowBeUpdated || ( ($this->fieldInArray($field, $this->uneditable_fields) && (!is_numeric($found_category_index))) ) ){
 
                         $table_html .= "<td>";
 
@@ -1610,7 +1626,7 @@ class ajaxCRUD{
 
                                 //if a checkbox
                                 if (isset($this->checkbox[$field]) && is_array($this->checkbox[$field])){
-                                    $table_html .= $this->makeAjaxCheckbox($id, $field, $cell_data);
+                                    $table_html .= $this->makeAjaxCheckbox($id, $field, $cell_value);
                                 }
                                 else{
                                     //is an editable field
