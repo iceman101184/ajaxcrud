@@ -1529,7 +1529,6 @@ class ajaxCRUD{
 					$canRowBeUpdated = call_user_func($this->validate_update_with_function, $id);
 				}
 
-
                 foreach($this->display_fields as $field){
                     $cell_data = $row[$field];
 
@@ -1609,7 +1608,7 @@ class ajaxCRUD{
 								}
                             }
                             else{
-                            	$table_html .= $cell_data;
+                            	$table_html .= stripslashes($cell_data);
                             }
                         }
                     }//if field is not editable
