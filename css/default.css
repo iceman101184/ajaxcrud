@@ -82,7 +82,7 @@ input, select, textarea{
 .btn{
 	font-size: 11px;
 }
-.report {
+.report, .alertgood {
 	text-align: left;
 	border-top: 1px solid #9c9;
 	border-bottom: 1px solid #9c9;
@@ -93,7 +93,7 @@ input, select, textarea{
 	background: url("checkicon.gif") #e2f9e3 left no-repeat;
 }
 
-.error {
+.error, .alertbad {
 	text-align: left;
 	font-weight: bold;
 	border-top: 1px solid #c99;

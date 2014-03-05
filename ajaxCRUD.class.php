@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.71                                           */
+	/* ajaxCRUD.class.php	v8.72                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -281,7 +281,8 @@ class ajaxCRUD{
 	   changed by setting them via $obj->addText = "Añadir"
 	*/
     var $emptyTableMessage;
-	var $addText, $deleteText, $cancelText;
+	var $addText, $deleteText, $cancelText; //text values for buttons
+	var $addMessage; //used when onAddExecuteCallBackFunction is leveraged
 
     var $sort_direction; //used when sorting the table via ajax
 
@@ -362,6 +363,7 @@ class ajaxCRUD{
         $this->deleteText		 = "Delete";
         $this->cancelText		 = "Cancel";
         $this->emptyTableMessage = "No data in this table. Click add button below.";
+        $this->addMessage		 = ""; //when blank, defaults to generic '{Item} added' message
 
         $this->onAddExecuteCallBackFunction         = '';
         $this->onFileUploadExecuteCallBackFunction  = '';
@@ -962,7 +964,12 @@ class ajaxCRUD{
                         	$insert_id = mysql_insert_id(); //the old, mysql way of getting it (procedurual php)
                         }
 
-                        $report_msg[] = "$item Added";
+                        if ($this->addMessage == ""){
+                        	$report_msg[] = "$item Added";
+                        }
+                        else{
+                        	$report_msg[] = $this->addMessage;
+                        }
 
                         if ($uploads_on){
                             foreach($this->file_uploads as $field_name){
@@ -975,7 +982,7 @@ class ajaxCRUD{
                         }
 
                         if ($this->onAddExecuteCallBackFunction != ''){
-                            $submitted_array[id] = $insert_id;
+                            $submitted_array['id'] = $insert_id;
                             $submitted_array[$this->db_table_pk] = $insert_id;
                             call_user_func($this->onAddExecuteCallBackFunction, $submitted_array);
                         }
@@ -1823,7 +1830,13 @@ class ajaxCRUD{
             //$add_html .= "  <input type=\"button\" value=\"Go Back\" class=\"btn\" onClick=\"history.back();\">\n";
             $add_html .= "</center>\n";
 
-            $add_html .= "<form action=\"" . $_SERVER['PHP_SELF'] ."#ajaxCRUD\" id=\"add_form_$this->db_table\" method=\"POST\" ENCTYPE=\"multipart/form-data\" style=\"display:none;\">\n";
+            $formActionURL = $_SERVER['PHP_SELF'];
+            if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != ""){
+            	//some web applications require posting to the same exact page (with parameters included); this is useful if/when onAddExecuteCallbackFunction is used
+            	$formActionURL = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+            }
+
+            $add_html .= "<form action=\"" . $formActionURL . "#ajaxCRUD\" id=\"add_form_$this->db_table\" method=\"POST\" ENCTYPE=\"multipart/form-data\" style=\"display:none;\">\n";
             //$add_html .= "<br /><h3 align='center'>New <b>$item</b></h3>\n";
             $add_html .= "<br />\n";
             $add_html .= "<table align='center' name='form'>\n";
