@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.72                                           */
+	/* ajaxCRUD.class.php	v8.73                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -1626,7 +1626,7 @@ class ajaxCRUD{
 
                             //was allowable values for this field defined?
                             if ( (isset($this->allowed_values[$field]) && is_array($this->allowed_values[$field])) && !isset($this->field_no_dropdown[$field]) ){
-                                $table_html .= $this->makeAjaxDropdown($id, $field, $cell_data, $this->db_table, $this->db_table_pk, $this->allowed_values[$field]);
+                                $table_html .= $this->makeAjaxDropdown($id, $field, $cell_value, $this->db_table, $this->db_table_pk, $this->allowed_values[$field]);
                             }
                             else{
 
@@ -1648,7 +1648,7 @@ class ajaxCRUD{
 
                                     if ($this->fieldIsEnum($this->getFieldDataType($field))){
                                         $allowed_enum_values_array = $this->getEnumArray($this->getFieldDataType($field));
-                                        $table_html .= $this->makeAjaxDropdown($id, $field, $cell_data, $this->db_table, $this->db_table_pk, $allowed_enum_values_array);
+                                        $table_html .= $this->makeAjaxDropdown($id, $field, $cell_value, $this->db_table, $this->db_table_pk, $allowed_enum_values_array);
                                     }
                                     else{
 										//updated logic in 7.1 to enable a textarea to be 'forced' if desired [thanks to dpruitt for code revision]
@@ -2211,9 +2211,17 @@ class ajaxCRUD{
         $prefield = trim($this->db_table . $field_name . $unique_id);
         $input_name = "dropdown" . "_" . $prefield;
 
+		$cell_data = $field_value;
+		if (isset($this->format_field_with_function[$field_name]) && $this->format_field_with_function[$field_name] != ''){
+			$cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
+		}
+		if (isset($this->format_field_with_function_adv[$field_name]) && $this->format_field_with_function_adv[$field_name] != ''){
+			$cell_data = call_user_func($this->format_field_with_function_adv[$field_name], $field_value, $unique_id);
+		}
+
         if ($selected_dropdown_text == "NOTHING_ENTERED"){
 
-            $selected_dropdown_text = $field_value;
+            $selected_dropdown_text = $cell_data;
 
             foreach ($array_list as $list){
                 if (is_array($list)){
@@ -2225,7 +2233,7 @@ class ajaxCRUD{
                     $list_option = $list;
                 }
 
-                if ($list_val == $field_value) $selected_dropdown_text = $list_option;
+                //if ($list_val == $field_value) $selected_dropdown_text = $list_option;
             }
         }
 
