@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.73                                           */
+	/* ajaxCRUD.class.php	v8.74                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -211,6 +211,9 @@ class ajaxCRUD{
     //array with value being the url for the buttom to go to (passing the id) [0] = value [1] = url
     var $row_button = array();
 
+	//array with value being "same" or "new" - specifying the target window for the opening the page. index of array is the button 'id'
+    var $addButtonToRowWindowOpen = "";
+
     ################################################
     #
     # The following are parallel arrays to help in the definition of a defined db relationship
@@ -354,6 +357,8 @@ class ajaxCRUD{
         $this->css              = true;
         $this->ajax_add         = true;
         $this->orientation 		= 'horizontal';
+
+        $this->addButtonToRowWindowOpen = 'same'; //global window to open pages in - used when adding custom buttons to a row
 
         $this->doActionOnShowTable = true;
 
@@ -825,8 +830,8 @@ class ajaxCRUD{
         $this->bottom_button[] = array(0 => $value, 1 => $url, 2 => $tags);
     }
 
-    function addButtonToRow($value, $url, $attach_params = "", $javascript_tags = ""){
-        $this->row_button[] = array(0 => $value, 1 => $url, 2 => $attach_params, 3 => $javascript_tags);
+    function addButtonToRow($value, $url, $attach_params = "", $javascript_tags = "", $windowToOpen = "same"){
+        $this->row_button[] = array(0 => $value, 1 => $url, 2 => $attach_params, 3 => $javascript_tags, 4 => $windowToOpen);
     }
 
     function onAddSpecifyPrimaryKey(){
@@ -1719,11 +1724,13 @@ class ajaxCRUD{
                     }
 
                     if (count($this->row_button) > 0){
-                        foreach ($this->row_button as $the_row_button){
+                        foreach ($this->row_button as $button_id => $the_row_button){
                             $value = $the_row_button[0];
                             $url = $the_row_button[1];
-                            $attach_param = $the_row_button[2];
-                            $javascript_onclick_function = $the_row_button[3];
+                            $attach_param = $the_row_button[2]; //optional param
+                            $javascript_onclick_function = $the_row_button[3]; //optional param
+                            $window_to_open = $the_row_button[4]; //optional param
+
                             if ($attach_param == "all"){
                                 $attach = "?attachments" . $attach_params;
                             }
@@ -1750,7 +1757,13 @@ class ajaxCRUD{
                                 $javascript_for_button = "onClick=\"" . $javascript_onclick_function . "($id);\"";
                             }
                             else{
-                                $javascript_for_button = "onClick=\"location.href='" . $url . $attach . "'\"";
+                                //either button-specific window is 'same' or global (all buttons' window is 'same'
+                                if ($window_to_open == "same" && $this->addButtonToRowWindowOpen == "same"){
+                                	$javascript_for_button = "onClick=\"location.href='" . $url . $attach . "'\"";
+                                }
+                                else{
+                                	$javascript_for_button = "onClick=\"window.open('" . $url . $attach . "')\"";
+                                }
                             }
 
 
