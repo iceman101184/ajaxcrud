@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.74                                           */
+	/* ajaxCRUD.class.php	v8.75                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -912,8 +912,9 @@ class ajaxCRUD{
                         unset($submitted_values);
                         $submitted_values = array();
                         foreach($submitted_array as $field){
-							$field = str_replace('"', "'", $field);
-							$field = str_replace('\\', "/", $field);
+							//$field = str_replace('"', "'", $field);
+							//$field = str_replace('\\', "/", $field);
+							$field = addslashes($field);
                             $submitted_values[] = $field;
                         }
 
