@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.75                                           */
+	/* ajaxCRUD.class.php	v8.76                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -1617,7 +1617,8 @@ class ajaxCRUD{
 										$list_option = $list;
 									}
 
-									if ($list_val == $cell_data) $table_html .= $list_option;
+									//fixed bug in 8.76. cell_value ensures we're looking at original value vs value set by user-defined function
+									if ($list_val == $cell_value) $table_html .= $list_option;
 								}
                             }
                             else{
