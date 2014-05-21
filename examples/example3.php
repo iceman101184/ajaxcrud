@@ -153,7 +153,12 @@
 	$tblFriend->addOrderBy("ORDER BY fldName");
 
 	#add a button at the bottom of the table which simply goes to another page
-	$tblFriend->addButton("No More Friends. Take Me Home", "home.php");
+	$tblFriend->addButton("No More Friends. Take Me Home", "./");
+
+	//$tblFriend->turnOffSorting(); //turns off ajax sorting by pressing header links
+	//$tblFriend->disableTableHeaders(); //disables table headers from displaying
+
+	//$tblFriend->turnOffAjaxEditing(); //turns of ajax editing of all data
 
 	#some logic if we want to add a field automatically on add
 	$state = "";

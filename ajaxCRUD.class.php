@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.76                                           */
+	/* ajaxCRUD.class.php	v8.80                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -139,7 +139,10 @@ class ajaxCRUD{
     var $css_file;
     var $css = true; 	//indicates a css spredsheet WILL be used
     var $add = true;    //adding is ok
-    var $includeJQuery = true; //include jquery (by default)
+
+    var $includeTableHeaders = true; //include table headers (default)
+    var $includeJQuery 	= true; //include jquery (default)
+
     var $allowHeaderInsert = true; //insert the jquery/css files by default [you can insert whereever you want in your script with $yourObject->insertHeader();]
 
     var $doActionOnShowTable; //boolean var. When true and showTable() is called, doAction() is also called. turn off when you want to only have a table show in certain conditions but CRUD operations can take place on the table "behind the scenes"
@@ -180,6 +183,9 @@ class ajaxCRUD{
     //defines if the class allows you to edit all fields (only used to turn off ALL editing completely)
     var $ajax_editing = true;
 
+    //defines if the class allows you to sort all fields
+    var $ajax_sorting = true;
+
     //the fields to be displayed
     var $display_fields = array();
 
@@ -189,6 +195,9 @@ class ajaxCRUD{
 
     //the fields which are displayed, but not editable
     var $uneditable_fields = array();
+
+    //the header fields which are displayed, but not sortable (i.e. click to sort)
+    var $unsortable_fields = array();
 
 	var $sql_where_clause;
     var $sql_where_clauses = array(); //array used IF there is more than one where clause
@@ -417,12 +426,23 @@ class ajaxCRUD{
 		}
     }
 
+    function turnOffSorting(){
+        $this->ajax_sorting = false;
+        foreach ($this->fields as $field){
+			$this->disallowSort($field);
+		}
+    }
+
     function turnOffPaging($limit = ""){
         $this->showPaging = false;
         if ($limit != ''){
             $this->sql_limit = " LIMIT $limit";
         }
     }
+
+	function disableTableHeaders() {
+		$this->includeTableHeaders = false;
+	}
 
 	function disableJQuery() {
 		$this->includeJQuery = false;
@@ -816,6 +836,10 @@ class ajaxCRUD{
 
     function disallowEdit($field){
         $this->uneditable_fields[] = $field;
+    }
+
+    function disallowSort($field){
+        $this->unsortable_fields[] = $field;
     }
 
     function disallowDelete(){
@@ -1476,41 +1500,51 @@ class ajaxCRUD{
 			//only show the header (field names) at top for horizontal display (default)
 			if ($this->orientation != 'vertical'){
 
-				$table_html .= "<thead><tr>\n";
-				//for an (optional) checkbox
-				if ($this->showCheckbox){
-					$table_html .= "<th>&nbsp;</th>";
-				}
-
-				foreach ($this->display_fields as $field){
-					$field_name = $field;
-					if ($this->displayAs_array[$field] != ''){
-						$field = $this->displayAs_array[$field];
+				if ($this->includeTableHeaders){
+					$table_html .= "<thead><tr>\n";
+					//for an (optional) checkbox
+					if ($this->showCheckbox){
+						$table_html .= "<th>&nbsp;</th>";
 					}
-					if (array_key_exists($field_name, $this->checkboxall)) {
-						$table_html .= "<th><input type=\"checkbox\" name=\"$field_name" . "_checkboxall\" value=\"checkAll\" onClick=\"
-							if (this.checked) {
-								setAllCheckboxes('$field_name" . "_fieldckbox',false);
-							} else {
-								setAllCheckboxes('$field_name" . "_fieldckbox',true);
-							}
-							\">";
 
-						if ($this->checkboxall[$field_name] == true) {
-							$table_html .= "<a href='javascript:;' onClick=\"changeSort('$this->db_table', '$field_name', '$this->sort_direction');\" >" . $field . "</a>";
+					foreach ($this->display_fields as $field){
+						$field_name = $field;
+						if ($this->displayAs_array[$field] != ''){
+							$field = $this->displayAs_array[$field];
 						}
-						$table_html .= "</th>";
-					}
-					else {
-						$table_html .= "<th><a href='javascript:;' onClick=\"changeSort('$this->db_table', '$field_name', '$this->sort_direction');\" >" . $field . "</a></th>";
-					}
-				}
 
-				if ($this->delete || (count($this->row_button)) > 0){
-					$table_html .= "<th>Action</th>\n";
-				}
+						if (!$this->fieldInArray($field_name, $this->unsortable_fields)){
+							$fieldHeaderHTML = "<a href='javascript:;' onClick=\"changeSort('$this->db_table', '$field_name', '$this->sort_direction');\" >" . $field . "</a>";
+						}
+						else{
+							$fieldHeaderHTML = $field;
+						}
 
-				$table_html .= "</tr></thead>\n";
+						if (array_key_exists($field_name, $this->checkboxall)) {
+							$table_html .= "<th><input type=\"checkbox\" name=\"$field_name" . "_checkboxall\" value=\"checkAll\" onClick=\"
+								if (this.checked) {
+									setAllCheckboxes('$field_name" . "_fieldckbox',false);
+								} else {
+									setAllCheckboxes('$field_name" . "_fieldckbox',true);
+								}
+								\">";
+
+							if ($this->checkboxall[$field_name] == true) {
+								$table_html .= $fieldHeaderHTML;
+							}
+							$table_html .= "</th>";
+						}
+						else {
+							$table_html .= "<th>$fieldHeaderHTML</th>";
+						}
+					}
+
+					if ($this->delete || (count($this->row_button)) > 0){
+						$table_html .= "<th>Action</th>\n";
+					}
+
+					$table_html .= "</tr></thead>\n";
+				}
 			}
 
             $count = 0;
