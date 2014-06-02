@@ -777,15 +777,21 @@ class ajaxCRUD{
 
 		/* Load Javascript dependencies */
 		if ($this->includeJQuery){
-			//echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js\"></script>\n"; 				//rel 3.5 - using jquery instead of protoculous
-			echo "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>\n"; // EDITED 1/16/2012 - libary on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
-    		//echo "<script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>\n"; 									//rel 6 - using latest version of jquery from jquery site (http://docs.jquery.com/Plugins/Validation/Validator)
-    		echo "<script type=\"text/javascript\" src=\"http://ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.min.js\"></script>\n"; 		//rel 6 - added ability to validate forms fields
-			echo "<script type=\"text/javascript\" src=\"http://ajaxcrud.com/code/jquery.maskedinput.js\"></script>\n"; 								//rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
-			echo "<script src=\"" . $this->ajaxcrud_root . "validation.js\" type=\"text/javascript\"></script>\n";
+			//echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js\"></script>\n"; //rel 3.5 - using jquery instead of protoculous
+    		//echo "<script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>\n"; //rel 6 - using latest version of jquery from jquery site (http://docs.jquery.com/Plugins/Validation/Validator)
+			if (isset($LOCAL_JS) && $LOCAL_JS) {
+				echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.min.js\"></script>\n";          // EDITED 1/16/2012 - library on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
+				echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.validate.min.js\"></script>\n"; //rel 6 - added ability to validate forms fields
+				echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.maskedinput.js\"></script>\n";  //rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
+			} else {
+				echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>\n"; // EDITED 1/16/2012 - library on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
+				echo "<script type=\"text/javascript\" src=\"http://ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.min.js\"></script>\n"; //rel 6 - added ability to validate forms fields
+				echo "<script type=\"text/javascript\" src=\"http://ajaxcrud.com/code/jquery.maskedinput.js\"></script>\n"; //rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
+			}
+			echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/validation.js\"></script>\n";
 		}
         echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n";
-        echo "<script src=\"" . $this->ajaxcrud_root . "javascript_functions.js\" type=\"text/javascript\"></script>\n";
+        echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/javascript_functions.js\"></script>\n";
         echo "<link href=\"" . $this->ajaxcrud_root . "css/" . $this->css_file . "\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n";
 
         echo "

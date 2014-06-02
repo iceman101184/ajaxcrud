@@ -13,6 +13,7 @@
 		$("input.zip").mask("99999");
 
 		//add any other validation entries here
+		$("input.pincode").mask("999999"); // Indian Pincode
 
 		//put a date picker on a field (comment this out if you do not use calendars)
 		try{
