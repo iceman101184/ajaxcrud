@@ -2,7 +2,7 @@
 	/* Basic users should NOT need to ever edit this file */
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.80                                           */
+	/* ajaxCRUD.class.php	v8.81                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -289,11 +289,13 @@ class ajaxCRUD{
 
     var $loading_image_html;
 
+    var $emptyTableMessage;
+
 	/* these default to english words (e.g. "Add", "Delete" below); but can be
 	   changed by setting them via $obj->addText = "Añadir"
 	*/
-    var $emptyTableMessage;
-	var $addText, $deleteText, $cancelText; //text values for buttons
+	var $addText, $deleteText, $cancelText, $actionText, $fileDeleteText, $fileEditText; //text values for buttons and other table text
+	var $addButtonText; //if you want to replace the entire add button text with a phrase or other text. Added in 8.81
 	var $addMessage; //used when onAddExecuteCallBackFunction is leveraged
 
     var $sort_direction; //used when sorting the table via ajax
@@ -376,7 +378,12 @@ class ajaxCRUD{
         $this->addText			 = "Add";
         $this->deleteText		 = "Delete";
         $this->cancelText		 = "Cancel";
+        $this->actionText		 = "Action";
+        $this->fileEditText	 	 = "edit"; //added in 8.81 (for file crud)
+        $this->fileDeleteText	 = "del"; //added in 8.81 (for file crud)
+
         $this->emptyTableMessage = "No data in this table. Click add button below.";
+        $this->addButtonText	 = ""; //when blank, button text defaults to 'Add {Item}' text unless when $addText is set then defaults to '{addText} {Item}'; if set the entire button is replaced with {addButtonText}
         $this->addMessage		 = ""; //when blank, defaults to generic '{Item} added' message
 
         $this->onAddExecuteCallBackFunction         = '';
@@ -1540,7 +1547,7 @@ class ajaxCRUD{
 					}
 
 					if ($this->delete || (count($this->row_button)) > 0){
-						$table_html .= "<th>Action</th>\n";
+						$table_html .= "<th>" . $this->actionText . "</th>\n";
 					}
 
 					$table_html .= "</tr></thead>\n";
@@ -1552,7 +1559,7 @@ class ajaxCRUD{
 
             $attach_params = "";
 
-			$valign = "top";
+			$valign = "middle";
 
             foreach ($rows as $row){
                 $id = $row[$this->db_table_pk];
@@ -1623,7 +1630,7 @@ class ajaxCRUD{
                                 $file_link = $this->file_upload_info[$field]['relative_folder'] . $row[$field];
                                 $file_dest = $this->file_upload_info[$field]['destination_folder'];
 
-                                $table_html .= "<span id='text_" . $field . $id . "'><a target=\"_new\" href=\"$file_link\">" . $cell_data . "</a> (<a style=\"font-size: 9px;\" href=\"javascript:\" onClick=\"document.getElementById('file_$field$id').style.display = ''; document.getElementById('text_$field$id').style.display = 'none'; \">edit</a> <a style=\"font-size: 9px;\" href=\"javascript:\" onClick=\"deleteFile('$field', '$id')\">delete</a>)</span> \n";
+                                $table_html .= "<span style=\"font-size: 9px;\" id='text_" . $field . $id . "'><a target=\"_new\" href=\"$file_link\">" . $cell_data . "</a> <a style=\"font-size: 9px;\" href=\"javascript:\" onClick=\"document.getElementById('file_$field$id').style.display = ''; document.getElementById('text_$field$id').style.display = 'none'; \">" . $this->fileEditText . "</a> | <a style=\"font-size: 9px;\" href=\"javascript:\" onClick=\"deleteFile('$field', '$id')\">" . $this->fileDeleteText . "</a></span>\n";
 
                                 $table_html .= "<div id='file_" . $field . $id . "' style='display:none;'>\n";
                                 $table_html .= $this->showUploadForm($field, $file_dest, $id);
@@ -1742,7 +1749,7 @@ class ajaxCRUD{
                 if ($this->delete || (count($this->row_button)) > 0){
 
 					if ($this->orientation == 'vertical'){
-						$table_html .= "<th class='vertical'>Action</th>";
+						$table_html .= "<th class='vertical'>" . $this->actionText . "</th>";
 					}
 
                     $table_html .= "<td>\n";
@@ -1856,7 +1863,12 @@ class ajaxCRUD{
         $add_html .= "<center>\n";
         //now we come to the "add" fields
         if ($this->add){
-            $add_html .= "   <input type=\"button\" value=\"" . $this->addText . " $item\" class=\"btn editingSize\" onClick=\"$('#add_form_$this->db_table').slideDown('fast'); x = document.getElementById('add_form_$this->db_table'); t = setTimeout('x.scrollIntoView(false)', 200); \">\n";
+            $addButtonVal = $this->addText . " " . $item;
+            if ($this->addButtonText != ""){
+            	$addButtonVal = $this->addButtonText;
+            }
+
+            $add_html .= "   <input type=\"button\" value=\"$addButtonVal\" class=\"btn editingSize\" onClick=\"$('#add_form_$this->db_table').slideDown('fast'); x = document.getElementById('add_form_$this->db_table'); t = setTimeout('x.scrollIntoView(false)', 200); \">\n";
         }
 
 		if (count($this->bottom_button) > 0){
