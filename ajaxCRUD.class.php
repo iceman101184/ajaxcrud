@@ -1,8 +1,12 @@
 <?php
-	/* Basic users should NOT need to ever edit this file */
+	/*
+		Basic users should not need to edit this file
+		Instead - post questions or feature requests to our forum -
+		http://ajaxcrud.com/forum/viewforum.php?f=2
+	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.81                                           */
+	/* ajaxCRUD.class.php	v8.82                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -78,12 +82,6 @@
 			}
 
 			if ($ajaxAction == 'update'){
-				//$val = str_replace("<P>","<br /><br />", $val);
-				//$val = str_replace("<p>","<br /><br />", $val);
-
-				//$val = str_replace("</P>","", $val);
-				//$val = str_replace("</p>","", $val);
-
 				$val = addslashes($val);
 				//check to see if  record exists
 				$row_current_value = q1("SELECT $pk FROM $table WHERE $pk = $sql_id");
@@ -1431,12 +1429,12 @@ class ajaxCRUD{
 				}
 				//a "regualar" textbox filter box
 				else{
-					$custom_class = "";
+					$customClass = "";
 					if (isset($this->display_field_with_class_style[$filter_field]) && $this->display_field_with_class_style[$filter_field] != '') {
-						$custom_class = $this->display_field_with_class_style[$filter_field];
+						$customClass = $this->display_field_with_class_style[$filter_field];
 					}
 
-                	$top_html .= "<input type=\"text\" class=\"$custom_class\" size=\"$textbox_size\" name=\"$filter_field\" value=\"$filter_value\" onKeyUp=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
+                	$top_html .= "<input type=\"text\" class=\"$customClass\" size=\"$textbox_size\" name=\"$filter_field\" value=\"$filter_value\" onKeyUp=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
                 }
                 $top_html .= "&nbsp;&nbsp;</th>";
             }
@@ -2016,23 +2014,36 @@ class ajaxCRUD{
                                         }
                                         else{
                                             //any ol' text data (generic text box)
-                                            $field_size = "";
+                                            $fieldType = "text";
+                                            $fieldSize = "";
+
+                                            //change the type of textbox field if a password (HTML 5 compatible)
+                                            if (stristr($field, "password")){
+                                            	$fieldType = "password";
+                                            }
+
+                                            //change the type of textbox field if a password (HTML 5 compatible)
+                                            if (stristr($field, "email")){
+                                            	$fieldType = "email";
+                                            }
+
 
                                             if ($this->fieldIsInt($this->getFieldDataType($field)) || $this->fieldIsDecimal($this->getFieldDataType($field))){
-                                                $field_size = 7;
+                                                $fieldSize = 7;
+                                                $fieldType = "number";
                                             }
 
                                             //if the textbox width was set manually with function setTextboxWidth
                                             if (isset($this->textboxWidth[$field]) && $this->textboxWidth[$field] != ''){
-                                            	$field_size = $this->textboxWidth[$field];
+                                            	$fieldSize = $this->textboxWidth[$field];
                                             }
 
-											$custom_class = "";
+											$customClass = "";
 											// Apply custom CSS class to field if applicable
 											if (isset($this->display_field_with_class_style[$field]) && $this->display_field_with_class_style[$field] != '') {
-												$custom_class = $this->display_field_with_class_style[$field];
+												$customClass = $this->display_field_with_class_style[$field];
 											}
-											$add_html .= "<th>$display_field</th><td><input onKeyPress=\"$field_onKeyPress\" class=\"editingSize $custom_class\" type=\"text\" id=\"$field\" name=\"$field\" size=\"$field_size\" maxlength=\"150\" value=\"$field_value\" placeholder=\"$placeholder\" >$note</td></tr>\n";
+											$add_html .= "<th>$display_field</th><td><input onKeyPress=\"$field_onKeyPress\" class=\"editingSize $customClass\" type=\"$fieldType\" id=\"$field\" name=\"$field\" size=\"$fieldSize\" maxlength=\"150\" value=\"$field_value\" placeholder=\"$placeholder\" >$note</td></tr>\n";
 											$placeholder = "";
                                         }
                                     }//else not enum field
@@ -2185,7 +2196,7 @@ class ajaxCRUD{
         return false;
     }
 
-	function makeAjaxEditor($unique_id, $field_name, $field_value, $type = 'textarea', $field_size = "", $field_text = "", $onKeyPress_function = ""){
+	function makeAjaxEditor($unique_id, $field_name, $field_value, $type = 'textarea', $fieldSize = "", $field_text = "", $onKeyPress_function = ""){
 
         $prefield = trim($this->db_table . $field_name . $unique_id);
 
@@ -2239,18 +2250,18 @@ class ajaxCRUD{
 			}
 
             if ($type == 'text'){
-                if ($field_size == "") $field_size = 15;
+                if ($fieldSize == "") $fieldSize = 15;
 				if (isset($this->display_field_with_class_style[$field_name]) && $this->display_field_with_class_style[$field_name] != '') {
-					$custom_class = $this->display_field_with_class_style[$field_name];
-					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode $custom_class\" size=\"$field_size\" value=\"$field_value\"/>\n";
+					$customClass = $this->display_field_with_class_style[$field_name];
+					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode $customClass\" size=\"$fieldSize\" value=\"$field_value\"/>\n";
 				}
 				else {
-					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode\" size=\"$field_size\" value=\"$field_value\"/>\n";
+					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode\" size=\"$fieldSize\" value=\"$field_value\"/>\n";
 				}
 			}
 			else{
-                if ($field_size == "") $field_size = 80;
-                $return_html .= "<textarea ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"textarea_$prefield\" class=\"editingSize editMode\" style=\"width: 100%; height: " . $field_size . "px;\">$field_value</textarea>\n";
+                if ($fieldSize == "") $fieldSize = 80;
+                $return_html .= "<textarea ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"textarea_$prefield\" class=\"editingSize editMode\" style=\"width: 100%; height: " . $fieldSize . "px;\">$field_value</textarea>\n";
                 $return_html .= "<br /><input type=\"submit\" class=\"editingSize\" value=\"Ok\">\n";
 			}
 
