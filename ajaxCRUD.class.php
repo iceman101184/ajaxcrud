@@ -6,7 +6,7 @@
 	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.82                                           */
+	/* ajaxCRUD.class.php	v8.9                                            */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -262,7 +262,7 @@ class ajaxCRUD{
 
     //destination folder to be set for a particular field that allows uploading of files. the array is set as $field_name => $destination_folder
     var $file_uploads = array();
-    var $file_upload_info = array(); //array[$field_name]['destination_folder'] and array[$field_name]['relative_folder']
+    var $file_upload_info = array(); //array[$field_name]['destination_folder'], array[$field_name]['relative_folder'], and array[$field_name]['permittedFileExts']
     var $filename_append_field = "";
 
     //array dictating that "dropdown" fields do not show dropdown (but text editor) on edit (format: array[field] = true/false);
@@ -727,11 +727,17 @@ class ajaxCRUD{
         $this->primaryKeyAutoIncrement = false;
     }
 
-    function setFileUpload($field_name, $destination_folder, $relative_folder = ""){
+    //the forth optional param (permittedFileExts) was added in v8.9; it is an ARRAY of permitted file extensions allowed for upload; e.g. array("png", "jpg")
+    function setFileUpload($field_name, $destination_folder, $relative_folder = "", $permittedFileExts = ""){
         //put values into array
         $this->file_uploads[] = $field_name;
         $this->file_upload_info[$field_name]['destination_folder'] = $destination_folder;
         $this->file_upload_info[$field_name]['relative_folder'] = $relative_folder;
+
+        //added in v8.9
+        if (is_array($permittedFileExts)){
+	        $this->file_upload_info[$field_name]['permittedFileExts'] = $permittedFileExts;
+	    }
 
         //the filenames that are saved are not editable
         $this->disallowEdit($field_name);
@@ -1014,10 +1020,15 @@ class ajaxCRUD{
 
                         if ($uploads_on){
                             foreach($this->file_uploads as $field_name){
-                                $file_dest  = $this->file_upload_info[$field_name][destination_folder];
+                                $file_dest  = $this->file_upload_info[$field_name]['destination_folder'];
+
+                                $allowedExts = "";
+                                if (isset($this->file_upload_info[$field_name]['permittedFileExts'])){
+                                	$allowedExts = $this->file_upload_info[$field_name]['permittedFileExts'];
+                                }
 
                                 if ($_FILES[$field_name]['name'] != ''){
-                                    $this->uploadFile($insert_id, $field_name, $file_dest);
+                                    $this->uploadFile($insert_id, $field_name, $file_dest, $allowedExts);
                                 }
                             }
                         }
@@ -1070,15 +1081,20 @@ class ajaxCRUD{
         if ($action == 'upload' && $_REQUEST['field_name'] && $_REQUEST['id'] != '' && is_array($this->file_uploads) && in_array($_REQUEST['field_name'],$this->file_uploads)){
             $update_id      = $_REQUEST['id'];
             $file_field     = $_REQUEST['field_name'];
-            $upload_folder  = $this->file_upload_info[$file_field][destination_folder];
+            $upload_folder  = $this->file_upload_info[$file_field]['destination_folder'];
 
-            $success = $this->uploadFile($update_id, $file_field, $upload_folder);
+			$allowedExts = "";
+			if (isset($this->file_upload_info[$file_field]['permittedFileExts'])){
+				$allowedExts = $this->file_upload_info[$file_field]['permittedFileExts'];
+			}
+
+            $success = $this->uploadFile($update_id, $file_field, $upload_folder, $allowedExts);
 
             if ($success){
                 $report_msg[] = "File Uploaded Sucessfully.";
             }
             else{
-                $error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
+                //$error_msg[] = "There was an error uploading your file.";
             }
 
         }//action = upload
@@ -1092,7 +1108,7 @@ class ajaxCRUD{
             $success = qr("UPDATE $this->db_table SET $file_field = \"\" WHERE $this->db_table_pk = $delete_id");
 
             if ($success){
-                $file_dest  = $this->file_upload_info[$file_field][destination_folder];
+                $file_dest  = $this->file_upload_info[$file_field]['destination_folder'];
 
                 unlink($file_dest . $filename);
                 $report_msg[] = "File Deleted Sucessfully.";
@@ -1191,11 +1207,21 @@ class ajaxCRUD{
 	}
 
     //a file must have been "sent"/posted for this to work
-    function uploadFile($row_id, $file_field, $upload_folder){
+    function uploadFile($row_id, $file_field, $upload_folder, $allowedExts = ""){
+        global $report_msg, $error_msg;
+
         @$fileName  = $_FILES[$file_field]['name'];
         @$tmpName   = $_FILES[$file_field]['tmp_name'];
         @$fileSize  = $_FILES[$file_field]['size'];
         @$fileType  = $_FILES[$file_field]['type'];
+
+        if (is_array($allowedExts)){
+	        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION)); //gets file ext (lowercase)
+	        if ( !in_array($fileExt, $allowedExts)){
+	        	$error_msg[] = "Upload failed. Selected file was extention <b>.{$fileExt}</b> but this is not an permitted file extension.";
+	        	return false;
+	        }
+	    }
 
         $new_filename = make_filename_safe($fileName);
         if ($this->filename_append_field != ""){
@@ -1233,16 +1259,13 @@ class ajaxCRUD{
                 call_user_func($this->onFileUploadExecuteCallBackFunction, $file_info_array);
             }
 
-        }
-
-        if ($update_success){
-            return true;
-            //$report_msg[] = "File Uploaded.";
+            if ($update_success) return true;
         }
         else{
-            return false;
-            //$error_msg[] = "There was an error uploading your file (or none was selected).";
-        }
+			$error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
+		}
+
+		return false;
     }
 
 	function showTable(){
