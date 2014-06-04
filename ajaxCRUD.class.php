@@ -6,7 +6,7 @@
 	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.9                                            */
+	/* ajaxCRUD.class.php	v8.91                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -1847,7 +1847,7 @@ class ajaxCRUD{
                 $table_html .= "</tr>";
 
 				if ($this->orientation == 'vertical'){
-					$table_html .= "<tr><td colspan='2' style='border-top: 1px silver solid;' ></td></tr>\n";
+					$table_html .= "<tr><td colspan='2' style='border-top: 4px silver solid;' ></td></tr>\n";
 				}
 
 
