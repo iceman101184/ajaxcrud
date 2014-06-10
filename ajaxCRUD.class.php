@@ -6,7 +6,7 @@
 	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.91                                           */
+	/* ajaxCRUD.class.php	v8.92                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -1615,7 +1615,7 @@ class ajaxCRUD{
 
                     //for adding a button via addButtonToRow
                     if (count($this->row_button) > 0){
-                        $attach_params .= "&" . $field . "=" . $cell_data;
+                        $attach_params .= "&" . $field . "=" . urlencode($cell_data);
                     }
 
                     $cell_value = $cell_data; //retain original value in new variable (before executing callback method)
@@ -1819,6 +1819,7 @@ class ajaxCRUD{
 										$valueToPass = $row[$attach_param];
 									}
                                 }
+                                $valueToPass = urlencode($valueToPass);
                                 $attach = $char . $getParam . "=$valueToPass";
                             }
 
