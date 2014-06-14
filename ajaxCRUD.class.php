@@ -1,8 +1,12 @@
 <?php
-	/* Basic users should NOT need to ever edit this file */
+	/*
+		Basic users should not need to edit this file
+		Instead - post questions or feature requests to our forum -
+		http://ajaxcrud.com/forum/viewforum.php?f=2
+	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.81                                           */
+	/* ajaxCRUD.class.php	v8.92                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -78,12 +82,6 @@
 			}
 
 			if ($ajaxAction == 'update'){
-				//$val = str_replace("<P>","<br /><br />", $val);
-				//$val = str_replace("<p>","<br /><br />", $val);
-
-				//$val = str_replace("</P>","", $val);
-				//$val = str_replace("</p>","", $val);
-
 				$val = addslashes($val);
 				//check to see if  record exists
 				$row_current_value = q1("SELECT $pk FROM $table WHERE $pk = $sql_id");
@@ -264,7 +262,7 @@ class ajaxCRUD{
 
     //destination folder to be set for a particular field that allows uploading of files. the array is set as $field_name => $destination_folder
     var $file_uploads = array();
-    var $file_upload_info = array(); //array[$field_name]['destination_folder'] and array[$field_name]['relative_folder']
+    var $file_upload_info = array(); //array[$field_name]['destination_folder'], array[$field_name]['relative_folder'], and array[$field_name]['permittedFileExts']
     var $filename_append_field = "";
 
     //array dictating that "dropdown" fields do not show dropdown (but text editor) on edit (format: array[field] = true/false);
@@ -729,11 +727,17 @@ class ajaxCRUD{
         $this->primaryKeyAutoIncrement = false;
     }
 
-    function setFileUpload($field_name, $destination_folder, $relative_folder = ""){
+    //the forth optional param (permittedFileExts) was added in v8.9; it is an ARRAY of permitted file extensions allowed for upload; e.g. array("png", "jpg")
+    function setFileUpload($field_name, $destination_folder, $relative_folder = "", $permittedFileExts = ""){
         //put values into array
         $this->file_uploads[] = $field_name;
         $this->file_upload_info[$field_name]['destination_folder'] = $destination_folder;
         $this->file_upload_info[$field_name]['relative_folder'] = $relative_folder;
+
+        //added in v8.9
+        if (is_array($permittedFileExts)){
+	        $this->file_upload_info[$field_name]['permittedFileExts'] = $permittedFileExts;
+	    }
 
         //the filenames that are saved are not editable
         $this->disallowEdit($field_name);
@@ -1016,10 +1020,15 @@ class ajaxCRUD{
 
                         if ($uploads_on){
                             foreach($this->file_uploads as $field_name){
-                                $file_dest  = $this->file_upload_info[$field_name][destination_folder];
+                                $file_dest  = $this->file_upload_info[$field_name]['destination_folder'];
+
+                                $allowedExts = "";
+                                if (isset($this->file_upload_info[$field_name]['permittedFileExts'])){
+                                	$allowedExts = $this->file_upload_info[$field_name]['permittedFileExts'];
+                                }
 
                                 if ($_FILES[$field_name]['name'] != ''){
-                                    $this->uploadFile($insert_id, $field_name, $file_dest);
+                                    $this->uploadFile($insert_id, $field_name, $file_dest, $allowedExts);
                                 }
                             }
                         }
@@ -1072,15 +1081,20 @@ class ajaxCRUD{
         if ($action == 'upload' && $_REQUEST['field_name'] && $_REQUEST['id'] != '' && is_array($this->file_uploads) && in_array($_REQUEST['field_name'],$this->file_uploads)){
             $update_id      = $_REQUEST['id'];
             $file_field     = $_REQUEST['field_name'];
-            $upload_folder  = $this->file_upload_info[$file_field][destination_folder];
+            $upload_folder  = $this->file_upload_info[$file_field]['destination_folder'];
 
-            $success = $this->uploadFile($update_id, $file_field, $upload_folder);
+			$allowedExts = "";
+			if (isset($this->file_upload_info[$file_field]['permittedFileExts'])){
+				$allowedExts = $this->file_upload_info[$file_field]['permittedFileExts'];
+			}
+
+            $success = $this->uploadFile($update_id, $file_field, $upload_folder, $allowedExts);
 
             if ($success){
                 $report_msg[] = "File Uploaded Sucessfully.";
             }
             else{
-                $error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
+                //$error_msg[] = "There was an error uploading your file.";
             }
 
         }//action = upload
@@ -1094,7 +1108,7 @@ class ajaxCRUD{
             $success = qr("UPDATE $this->db_table SET $file_field = \"\" WHERE $this->db_table_pk = $delete_id");
 
             if ($success){
-                $file_dest  = $this->file_upload_info[$file_field][destination_folder];
+                $file_dest  = $this->file_upload_info[$file_field]['destination_folder'];
 
                 unlink($file_dest . $filename);
                 $report_msg[] = "File Deleted Sucessfully.";
@@ -1193,11 +1207,21 @@ class ajaxCRUD{
 	}
 
     //a file must have been "sent"/posted for this to work
-    function uploadFile($row_id, $file_field, $upload_folder){
+    function uploadFile($row_id, $file_field, $upload_folder, $allowedExts = ""){
+        global $report_msg, $error_msg;
+
         @$fileName  = $_FILES[$file_field]['name'];
         @$tmpName   = $_FILES[$file_field]['tmp_name'];
         @$fileSize  = $_FILES[$file_field]['size'];
         @$fileType  = $_FILES[$file_field]['type'];
+
+        if (is_array($allowedExts)){
+	        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION)); //gets file ext (lowercase)
+	        if ( !in_array($fileExt, $allowedExts)){
+	        	$error_msg[] = "Upload failed. Selected file was extention <b>.{$fileExt}</b> but this is not an permitted file extension.";
+	        	return false;
+	        }
+	    }
 
         $new_filename = make_filename_safe($fileName);
         if ($this->filename_append_field != ""){
@@ -1235,16 +1259,13 @@ class ajaxCRUD{
                 call_user_func($this->onFileUploadExecuteCallBackFunction, $file_info_array);
             }
 
-        }
-
-        if ($update_success){
-            return true;
-            //$report_msg[] = "File Uploaded.";
+            if ($update_success) return true;
         }
         else{
-            return false;
-            //$error_msg[] = "There was an error uploading your file (or none was selected).";
-        }
+			$error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
+		}
+
+		return false;
     }
 
 	function showTable(){
@@ -1431,12 +1452,12 @@ class ajaxCRUD{
 				}
 				//a "regualar" textbox filter box
 				else{
-					$custom_class = "";
+					$customClass = "";
 					if (isset($this->display_field_with_class_style[$filter_field]) && $this->display_field_with_class_style[$filter_field] != '') {
-						$custom_class = $this->display_field_with_class_style[$filter_field];
+						$customClass = $this->display_field_with_class_style[$filter_field];
 					}
 
-                	$top_html .= "<input type=\"text\" class=\"$custom_class\" size=\"$textbox_size\" name=\"$filter_field\" value=\"$filter_value\" onKeyUp=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
+                	$top_html .= "<input type=\"text\" class=\"$customClass\" size=\"$textbox_size\" name=\"$filter_field\" value=\"$filter_value\" onKeyUp=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
                 }
                 $top_html .= "&nbsp;&nbsp;</th>";
             }
@@ -1594,7 +1615,7 @@ class ajaxCRUD{
 
                     //for adding a button via addButtonToRow
                     if (count($this->row_button) > 0){
-                        $attach_params .= "&" . $field . "=" . $cell_data;
+                        $attach_params .= "&" . $field . "=" . urlencode($cell_data);
                     }
 
                     $cell_value = $cell_data; //retain original value in new variable (before executing callback method)
@@ -1798,6 +1819,7 @@ class ajaxCRUD{
 										$valueToPass = $row[$attach_param];
 									}
                                 }
+                                $valueToPass = urlencode($valueToPass);
                                 $attach = $char . $getParam . "=$valueToPass";
                             }
 
@@ -1826,7 +1848,7 @@ class ajaxCRUD{
                 $table_html .= "</tr>";
 
 				if ($this->orientation == 'vertical'){
-					$table_html .= "<tr><td colspan='2' style='border-top: 1px silver solid;' ></td></tr>\n";
+					$table_html .= "<tr><td colspan='2' style='border-top: 4px silver solid;' ></td></tr>\n";
 				}
 
 
@@ -2016,23 +2038,36 @@ class ajaxCRUD{
                                         }
                                         else{
                                             //any ol' text data (generic text box)
-                                            $field_size = "";
+                                            $fieldType = "text";
+                                            $fieldSize = "";
+
+                                            //change the type of textbox field if a password (HTML 5 compatible)
+                                            if (stristr($field, "password")){
+                                            	$fieldType = "password";
+                                            }
+
+                                            //change the type of textbox field if a password (HTML 5 compatible)
+                                            if (stristr($field, "email")){
+                                            	$fieldType = "email";
+                                            }
+
 
                                             if ($this->fieldIsInt($this->getFieldDataType($field)) || $this->fieldIsDecimal($this->getFieldDataType($field))){
-                                                $field_size = 7;
+                                                $fieldSize = 7;
+                                                $fieldType = "number";
                                             }
 
                                             //if the textbox width was set manually with function setTextboxWidth
                                             if (isset($this->textboxWidth[$field]) && $this->textboxWidth[$field] != ''){
-                                            	$field_size = $this->textboxWidth[$field];
+                                            	$fieldSize = $this->textboxWidth[$field];
                                             }
 
-											$custom_class = "";
+											$customClass = "";
 											// Apply custom CSS class to field if applicable
 											if (isset($this->display_field_with_class_style[$field]) && $this->display_field_with_class_style[$field] != '') {
-												$custom_class = $this->display_field_with_class_style[$field];
+												$customClass = $this->display_field_with_class_style[$field];
 											}
-											$add_html .= "<th>$display_field</th><td><input onKeyPress=\"$field_onKeyPress\" class=\"editingSize $custom_class\" type=\"text\" id=\"$field\" name=\"$field\" size=\"$field_size\" maxlength=\"150\" value=\"$field_value\" placeholder=\"$placeholder\" >$note</td></tr>\n";
+											$add_html .= "<th>$display_field</th><td><input onKeyPress=\"$field_onKeyPress\" class=\"editingSize $customClass\" type=\"$fieldType\" id=\"$field\" name=\"$field\" size=\"$fieldSize\" maxlength=\"150\" value=\"$field_value\" placeholder=\"$placeholder\" >$note</td></tr>\n";
 											$placeholder = "";
                                         }
                                     }//else not enum field
@@ -2185,7 +2220,7 @@ class ajaxCRUD{
         return false;
     }
 
-	function makeAjaxEditor($unique_id, $field_name, $field_value, $type = 'textarea', $field_size = "", $field_text = "", $onKeyPress_function = ""){
+	function makeAjaxEditor($unique_id, $field_name, $field_value, $type = 'textarea', $fieldSize = "", $field_text = "", $onKeyPress_function = ""){
 
         $prefield = trim($this->db_table . $field_name . $unique_id);
 
@@ -2239,18 +2274,18 @@ class ajaxCRUD{
 			}
 
             if ($type == 'text'){
-                if ($field_size == "") $field_size = 15;
+                if ($fieldSize == "") $fieldSize = 15;
 				if (isset($this->display_field_with_class_style[$field_name]) && $this->display_field_with_class_style[$field_name] != '') {
-					$custom_class = $this->display_field_with_class_style[$field_name];
-					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode $custom_class\" size=\"$field_size\" value=\"$field_value\"/>\n";
+					$customClass = $this->display_field_with_class_style[$field_name];
+					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode $customClass\" size=\"$fieldSize\" value=\"$field_value\"/>\n";
 				}
 				else {
-					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode\" size=\"$field_size\" value=\"$field_value\"/>\n";
+					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode\" size=\"$fieldSize\" value=\"$field_value\"/>\n";
 				}
 			}
 			else{
-                if ($field_size == "") $field_size = 80;
-                $return_html .= "<textarea ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"textarea_$prefield\" class=\"editingSize editMode\" style=\"width: 100%; height: " . $field_size . "px;\">$field_value</textarea>\n";
+                if ($fieldSize == "") $fieldSize = 80;
+                $return_html .= "<textarea ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"textarea_$prefield\" class=\"editingSize editMode\" style=\"width: 100%; height: " . $fieldSize . "px;\">$field_value</textarea>\n";
                 $return_html .= "<br /><input type=\"submit\" class=\"editingSize\" value=\"Ok\">\n";
 			}
 
@@ -2534,9 +2569,9 @@ class paging{
 			//Number links 1.2.3.4.5.
 			for($ctr=1;$ctr<=$this->pRecord;$ctr++){
 				if($this->pPageID==$ctr)
-					$link .=  "<b>$ctr</b>\n";
+                $link .=  "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\"><b>$ctr</b></a>\n";
 				else
-					$link .= "  <a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\">$ctr</a>\n";
+                $link .= "  <a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\">$ctr</a>\n";
 			}
 			//Previous Next link
 			if($this->pPageID<($ctr-1)){
