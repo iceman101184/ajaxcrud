@@ -1381,7 +1381,7 @@ class ajaxCRUD{
         if (!isset($extra_query_params)) $extra_query_params = "";//this is used by certain applications which require extra query params to be passed (not typical)
 
         if (count($this->ajaxFilter_fields) > 0){
-            $top_html .= "<form id=\"" . $this->db_table . "_filter_form\">\n";
+            $top_html .= "<form id=\"" . $this->db_table . "_filter_form\" class=\"ajaxCRUD\">\n";
             $top_html .= "<table cellspacing='5' align='center'><tr><thead>";
 
             foreach ($this->ajaxFilter_fields as $filter_field){
@@ -2569,9 +2569,9 @@ class paging{
 			//Number links 1.2.3.4.5.
 			for($ctr=1;$ctr<=$this->pRecord;$ctr++){
 				if($this->pPageID==$ctr)
-                $link .=  "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\"><b>$ctr</b></a>\n";
+					$link .=  "<b>$ctr</b>\n";
 				else
-                $link .= "  <a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\">$ctr</a>\n";
+					$link .= "  <a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\">$ctr</a>\n";
 			}
 			//Previous Next link
 			if($this->pPageID<($ctr-1)){
