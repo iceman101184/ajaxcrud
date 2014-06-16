@@ -229,4 +229,49 @@
 			return $results;
 		}
 	}
+	
+// Custom Functions for displaying tables from SQL by Ap.Muthu
+// Use for static non sortable display of summary info, legends, lookup records, etc
+
+	function showSQLRecord($selectSQL, $titles=Array()) {
+// Get single record [and titles] display code
+		$row = qr($selectSQL);
+		$content  = CHR(10) . "<table border='1' class='ajaxCRUD'>";
+		if (count($titles) > 0)
+			$content .= showRow($titles, true);
+		// Single Row
+		$content .= showRow($row);
+		$content .= '</table>' . CHR(10);
+		return $content;
+	}
+
+	function showSQLRows($selectSQL, $titles=Array()) {
+// Get multiple records [and titles] display code
+		$rows = q($selectSQL);
+		$content  = CHR(10) . "<table border='1' class='ajaxCRUD'>";
+		if (count($titles) > 0)
+			$content .= showRow($titles, true);
+		// Multiple Rows
+		foreach ($rows as $row) {
+			$content .= showRow($row);
+		}
+		$content .= '</table>' . CHR(10);
+		return $content;
+	}
+
+	function showRow($row, $isHead=false) {
+// Get table cell fragment
+		$tag = 'td';
+		$ct  = 2;
+		if ($isHead) {
+			$tag = 'th';
+			$ct  = 1;
+		}
+		$content .= CHR(10) . "<tr>";
+		for ($i=0; $ct*$i < count($row); $i++)
+			$content .= "<$tag>$row[$i]</$tag>";
+		$content .= CHR(10) . "</tr>";
+		return $content;
+	}
+
 ?>
