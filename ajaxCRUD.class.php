@@ -6,7 +6,7 @@
 	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.92                                           */
+	/* ajaxCRUD.class.php	v8.93                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -740,7 +740,7 @@ class ajaxCRUD{
 	    }
 
         //the filenames that are saved are not editable
-        $this->disallowEdit($field_name);
+        //$this->disallowEdit($field_name);
 
         //have to add the row via POST now
         $this->ajax_add = false;
@@ -1643,13 +1643,13 @@ class ajaxCRUD{
 					}
 
                     //don't allow uneditable fields (which usually includes the primary key) to be editable
-                    if ( !$canRowBeUpdated || ( ($this->fieldInArray($field, $this->uneditable_fields) && (!is_numeric($found_category_index))) ) ){
+                    if ( !$canRowBeUpdated || $this->fieldInArray($field, $this->file_uploads) || ( ($this->fieldInArray($field, $this->uneditable_fields) && (!is_numeric($found_category_index))) ) ){
 
                         $table_html .= "<td>";
 
                         $key = array_search($field, $this->display_fields);
 
-                        if ($this->fieldInArray($field, $this->file_uploads)){
+                        if ($this->fieldInArray($field, $this->file_uploads) && !$this->fieldInArray($field, $this->uneditable_fields)){
 
                             //a file exists for this field
                             $file_dest = "";
@@ -1663,8 +1663,7 @@ class ajaxCRUD{
                                 $table_html .= $this->showUploadForm($field, $file_dest, $id);
                                 $table_html .= "</div>\n";
                             }
-
-                            if ($cell_data == ''){
+                            else{
                                 $table_html .= "<span id='text_" . $field . $id . "'><a style=\"font-size: 9px;\" href=\"javascript:\" onClick=\"document.getElementById('file_$field$id').style.display = ''; document.getElementById('text_$field$id').style.display = 'none'; \">Add File</a></span> \n";
 
                                 $table_html .= "<div id='file_" . $field. $id . "' style='display:none;'>\n";
