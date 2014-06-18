@@ -934,6 +934,12 @@ class ajaxCRUD{
                         $submitted_value_cleansed = $_REQUEST[$field];
                     }
 
+					if ($uploads_on){
+						if ($this->fieldInArray($field, $this->file_uploads)){
+							$submitted_value_cleansed = $_FILES[$field]["name"];
+						}
+					}
+
                     $submitted_values[] = $submitted_value_cleansed;
                     //also used for callback function
                     $submitted_array[$field] = $submitted_value_cleansed;
@@ -1286,7 +1292,6 @@ class ajaxCRUD{
 		if (isset($_REQUEST['action'])){
 			$action = $_REQUEST['action'];
 		}
-        //print_r($this->exactSearchField);
         foreach ($this->fields as $field){
 			//this if condition is so MULTIPLE ajaxCRUD tables can be used on the same page.
 			if ($_REQUEST['table'] == $this->db_table){

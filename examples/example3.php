@@ -71,6 +71,7 @@
 	#allow picture to be a file upload
 	$tblFriend->setFileUpload('fldPicture','uploads/','uploads/');
 	//$tblFriend->disallowEdit("fldPicture");
+	$tblFriend->onAddExecuteCallBackFunction("myFunctionAfterAdd");
 
 	#format field output
 	$tblFriend->formatFieldWithFunction('fldOwes', 'addDollarSign');
@@ -186,6 +187,10 @@
 
 	function displayImage($val){
 		return "<img src=\"uploads/$val\" width=\"90\">";
+	}
+
+	function myFunctionAfterAdd($array){
+		//print_r($array);
 	}
 ?>
 
