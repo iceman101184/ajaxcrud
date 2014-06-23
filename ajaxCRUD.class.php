@@ -772,7 +772,7 @@ class ajaxCRUD{
 
     function insertHeader($ajax_file = "ajaxCRUD.inc.php"){
 
-        global $headerAdded;
+        global $headerAdded, $LOCAL_JS;
         $headerAdded = TRUE;
 
         if ($this->css_file == ''){
@@ -1381,6 +1381,7 @@ class ajaxCRUD{
         if (!isset($extra_query_params)) $extra_query_params = "";//this is used by certain applications which require extra query params to be passed (not typical)
 
         if (count($this->ajaxFilter_fields) > 0){
+//            $top_html .= "<form id=\"" . $this->db_table . "_filter_form\">\n";
             $top_html .= "<form id=\"" . $this->db_table . "_filter_form\" class=\"ajaxCRUD\">\n";
             $top_html .= "<table cellspacing='5' align='center'><tr><thead>";
 
