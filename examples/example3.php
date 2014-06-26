@@ -70,6 +70,8 @@
 
 	#allow picture to be a file upload
 	$tblFriend->setFileUpload('fldPicture','uploads/','uploads/');
+	//$tblFriend->disallowEdit("fldPicture");
+	$tblFriend->onAddExecuteCallBackFunction("myFunctionAfterAdd");
 
 	#format field output
 	$tblFriend->formatFieldWithFunction('fldOwes', 'addDollarSign');
@@ -80,7 +82,7 @@
 	#modify field with class
 	$tblFriend->modifyFieldWithClass("fldDateMet", "datepicker");
 	$tblFriend->modifyFieldWithClass("fldZip", "zip required");
-	$tblFriend->modifyFieldWithClass("fldPhone", "phone");
+	$tblFriend->modifyFieldWithClass("fldPhone", "phone required");
 	$tblFriend->modifyFieldWithClass("fldEmail", "email");
 
 	#set allowable values for certain fields
@@ -185,6 +187,10 @@
 
 	function displayImage($val){
 		return "<img src=\"uploads/$val\" width=\"90\">";
+	}
+
+	function myFunctionAfterAdd($array){
+		//print_r($array);
 	}
 ?>
 

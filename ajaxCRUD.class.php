@@ -6,7 +6,7 @@
 	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.92                                           */
+	/* ajaxCRUD.class.php	v8.93                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -290,7 +290,7 @@ class ajaxCRUD{
     var $emptyTableMessage;
 
 	/* these default to english words (e.g. "Add", "Delete" below); but can be
-	   changed by setting them via $obj->addText = "Añadir"
+	   changed by setting them via $obj->addText = "AÃ±adir"
 	*/
 	var $addText, $deleteText, $cancelText, $actionText, $fileDeleteText, $fileEditText; //text values for buttons and other table text
 	var $addButtonText; //if you want to replace the entire add button text with a phrase or other text. Added in 8.81
@@ -740,7 +740,7 @@ class ajaxCRUD{
 	    }
 
         //the filenames that are saved are not editable
-        $this->disallowEdit($field_name);
+        //$this->disallowEdit($field_name);
 
         //have to add the row via POST now
         $this->ajax_add = false;
@@ -933,6 +933,12 @@ class ajaxCRUD{
                     else{
                         $submitted_value_cleansed = $_REQUEST[$field];
                     }
+
+					if ($uploads_on){
+						if ($this->fieldInArray($field, $this->file_uploads)){
+							$submitted_value_cleansed = $_FILES[$field]["name"];
+						}
+					}
 
                     $submitted_values[] = $submitted_value_cleansed;
                     //also used for callback function
@@ -1286,7 +1292,6 @@ class ajaxCRUD{
 		if (isset($_REQUEST['action'])){
 			$action = $_REQUEST['action'];
 		}
-        //print_r($this->exactSearchField);
         foreach ($this->fields as $field){
 			//this if condition is so MULTIPLE ajaxCRUD tables can be used on the same page.
 			if ($_REQUEST['table'] == $this->db_table){
@@ -1381,7 +1386,6 @@ class ajaxCRUD{
         if (!isset($extra_query_params)) $extra_query_params = "";//this is used by certain applications which require extra query params to be passed (not typical)
 
         if (count($this->ajaxFilter_fields) > 0){
-//            $top_html .= "<form id=\"" . $this->db_table . "_filter_form\">\n";
             $top_html .= "<form id=\"" . $this->db_table . "_filter_form\" class=\"ajaxCRUD\">\n";
             $top_html .= "<table cellspacing='5' align='center'><tr><thead>";
 
@@ -1644,13 +1648,13 @@ class ajaxCRUD{
 					}
 
                     //don't allow uneditable fields (which usually includes the primary key) to be editable
-                    if ( !$canRowBeUpdated || ( ($this->fieldInArray($field, $this->uneditable_fields) && (!is_numeric($found_category_index))) ) ){
+                    if ( !$canRowBeUpdated || $this->fieldInArray($field, $this->file_uploads) || ( ($this->fieldInArray($field, $this->uneditable_fields) && (!is_numeric($found_category_index))) ) ){
 
                         $table_html .= "<td>";
 
                         $key = array_search($field, $this->display_fields);
 
-                        if ($this->fieldInArray($field, $this->file_uploads)){
+                        if ($this->fieldInArray($field, $this->file_uploads) && !$this->fieldInArray($field, $this->uneditable_fields)){
 
                             //a file exists for this field
                             $file_dest = "";
@@ -1664,8 +1668,7 @@ class ajaxCRUD{
                                 $table_html .= $this->showUploadForm($field, $file_dest, $id);
                                 $table_html .= "</div>\n";
                             }
-
-                            if ($cell_data == ''){
+                            else{
                                 $table_html .= "<span id='text_" . $field . $id . "'><a style=\"font-size: 9px;\" href=\"javascript:\" onClick=\"document.getElementById('file_$field$id').style.display = ''; document.getElementById('text_$field$id').style.display = 'none'; \">Add File</a></span> \n";
 
                                 $table_html .= "<div id='file_" . $field. $id . "' style='display:none;'>\n";
