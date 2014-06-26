@@ -6,7 +6,7 @@
 	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.93                                           */
+	/* ajaxCRUD.class.php	v8.94                                           */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -1386,7 +1386,7 @@ class ajaxCRUD{
         if (!isset($extra_query_params)) $extra_query_params = "";//this is used by certain applications which require extra query params to be passed (not typical)
 
         if (count($this->ajaxFilter_fields) > 0){
-            $top_html .= "<form id=\"" . $this->db_table . "_filter_form\">\n";
+            $top_html .= "<form id=\"" . $this->db_table . "_filter_form\" class=\"ajaxCRUD\">\n";
             $top_html .= "<table cellspacing='5' align='center'><tr><thead>";
 
             foreach ($this->ajaxFilter_fields as $filter_field){
