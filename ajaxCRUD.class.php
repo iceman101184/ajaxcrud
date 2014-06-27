@@ -589,11 +589,11 @@ class ajaxCRUD{
 
 		foreach($array_values as $array_value){
 			if (!is_array($array_value)){
-                //a two-dimentential array --> set both the value and dropdown text to be the same
+                //a two-dimensional array --> set both the value and dropdown text to be the same
                 $new_array[] = array(0=> urlencode($array_value), 1=>$array_value);
             }
             else{
-                //a 2-dimentential array --> value and dropdown text are different
+                //a 2-dimensional array --> value and dropdown text are different
                 $new_array[] = $array_value;
             }
 		}
@@ -606,6 +606,13 @@ class ajaxCRUD{
 		$this->setExactSearchField($field); //set search field to use exact matching (as of 7.2.1)
 	}
 
+	function defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE){
+		$values = q($sql);
+		$array_values = Array();
+		foreach ($values as $value) $array_values[] = $value[0];
+		$this->defineAllowableValues($field, $array_values, $onedit_textbox);
+	}
+	
 	function defineCheckbox($field, $value_on="1", $value_off="0"){
 		$new_array = array($value_on, $value_off);
 
