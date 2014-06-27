@@ -212,6 +212,8 @@ class ajaxCRUD{
 
 	var $showCSVExport = false;	// indicates whether to show the "Export Table to CSV" button
 
+	var $exportCSVSeparator = ','; // sets the CSV field separator
+
     //array containing values for a button next to the "go back" button at the bottom. [0] = value [1] = url [2] = extra tags/javascript
     var $bottom_button = array();
 
@@ -1135,6 +1137,11 @@ class ajaxCRUD{
 
 	}//doAction
 
+	// Set the CSV Export Field Separator value manually overriding the default comma
+	function setExportCSVSeparator($value=',') {
+		$this->exportCSVSeparator = $value;
+	}
+
 	// Cleans data up for CSV output
 	function escapeCSVValue($value) {
 		$value = str_replace('"', '&quot;', $value); // First off escape all " and make them HTML quotes
@@ -1165,7 +1172,7 @@ class ajaxCRUD{
 
 			$exportTableHeadings[] = $field;
 		}
-		$headers = join(',', $exportTableHeadings) . "\n";
+		$headers = join($this->exportCSVSeparator, $exportTableHeadings) . "\n";
 
 		$sql = "SELECT * FROM " . $this->db_table . $this->sql_where_clause . $this->sql_order_by;
 		$rows = q($sql);
@@ -1202,7 +1209,7 @@ class ajaxCRUD{
 
 				$exportTableData[] = $this->escapeCSVValue($cell_data);
 			}
-			$data .= join(',',$exportTableData) . "\n";
+			$data .= join($this->exportCSVSeparator,$exportTableData) . "\n";
 		}
 
 		// clean up
