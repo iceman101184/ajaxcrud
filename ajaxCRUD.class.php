@@ -590,7 +590,7 @@ class ajaxCRUD{
 		foreach($array_values as $array_value){
 			if (!is_array($array_value)){
                 //a two-dimentential array --> set both the value and dropdown text to be the same
-                $new_array[] = array(0=> $array_value, 1=>$array_value);
+                $new_array[] = array(0=> urlencode($array_value), 1=>$array_value);
             }
             else{
                 //a 2-dimentential array --> value and dropdown text are different
