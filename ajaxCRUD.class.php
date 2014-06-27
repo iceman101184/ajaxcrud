@@ -1884,7 +1884,7 @@ class ajaxCRUD{
 		if ($this->showCSVExport) {
 			$add_html .= "<center>\n";
 			$add_html .= "<form action=\"" . $_SERVER["SCRIPT_NAME"] . "\" name=\"CSVExport\" method=\"POST\" >\n";
-			$add_html .= "  <input type=\"hidden\" name=\"fileName\" value=\"tableoutput.csv\" />\n";
+			$add_html .= "  <input type=\"hidden\" name=\"fileName\" value=\"tableoutput_" . $this->db_table . ".csv\" />\n";
 			$add_html .= "  <input type=\"hidden\" name=\"customAction\" value=\"exportToCSV\" />\n";
 			$add_html .= "	<input type=\"hidden\" name=\"tableData\" value=\"" . $this->createCSVOutput() . "\" />\n";
 			$add_html .= "  <input type=\"submit\" name=\"submit\" value=\"Export Table To CSV\" class=\"btn editingSize\"/>\n";
