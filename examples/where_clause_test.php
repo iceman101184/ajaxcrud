@@ -6,7 +6,7 @@
 
 	echo "<h2>Current WHERE Clauses in SESSION</h2><hr /<br /><br />\n";
 
-	if (is_array($_SESSION['ajaxcrud_where_clause']) && isset($_SESSION['ajaxcrud_where_clause'])){
+	if (isset($_SESSION['ajaxcrud_where_clause']) && is_array($_SESSION['ajaxcrud_where_clause'])){
 		$countWhereClauses = count($_SESSION['ajaxcrud_where_clause']);
 		echo "<p>Number of WHERE Clauses in session: $countWhereClauses</p>";
 		if ($countWhereClauses > 0){
