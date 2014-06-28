@@ -1933,9 +1933,10 @@ class ajaxCRUD{
 			}
 		}
 
+        //$add_html .= "  <input type=\"button\" value=\"Go Back\" class=\"btn\" onClick=\"history.back();\">\n";
+        $add_html .= "</center>\n";
+
         if ($this->add){
-            //$add_html .= "  <input type=\"button\" value=\"Go Back\" class=\"btn\" onClick=\"history.back();\">\n";
-            $add_html .= "</center>\n";
 
             $formActionURL = $_SERVER['PHP_SELF'];
             if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != ""){
