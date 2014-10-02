@@ -106,6 +106,8 @@
 
     $tblDemo->onUpdateExecuteCallBackFunction("fldCertainFields", "myCallBackFunctionForEdit");
 
+    $tblDemo->onUpdateExecuteCallBackFunction("fldCheckbox", "myCallBackFunctionForEdit");
+
 
 ?>
 	<h1>Example Using onUpdateExecuteCallBackFunction</h1>

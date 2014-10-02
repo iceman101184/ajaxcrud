@@ -6,7 +6,7 @@
 	*/
 
 	/************************************************************************/
-	/* ajaxCRUD.class.php	v8.94                                           */
+	/* ajaxCRUD.class.php	v9.0                                            */
 	/* ===========================                                          */
 	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
 	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
@@ -1057,6 +1057,7 @@ class ajaxCRUD{
             }//if POST parameter 'table' == db_table
 		}//action = add
 
+		//this code is for POST requests (i.e. non-ajax updates)
 		if ($action == 'update' && $_REQUEST['field_name'] != "" && $_REQUEST['id'] != ""){
 
 			if ($_REQUEST['table'] == $this->db_table){//added this conditional in v8.5 to account for multiple tables
@@ -1079,7 +1080,7 @@ class ajaxCRUD{
 					}
 				}
 				else{
-					$error_msg[] = "$item could not be updated (likely because no data has changed). Please try again.";
+					$error_msg[] = "$item could not be updated (likely because no data has not changed). Please try again.";
 				}
 			}
 		}
@@ -2423,6 +2424,7 @@ class ajaxCRUD{
 
 	function makeAjaxCheckbox($unique_id, $field_name, $field_value){
 		$prefield = trim($this->db_table) . trim($field_name) . trim($unique_id);
+		$input_name = "checkbox" . "_" . $prefield;
 
         $return_html = "";
 
@@ -2449,25 +2451,47 @@ class ajaxCRUD{
 			$checkboxValue = (int)$this->checkboxall[$field_name];
 		}
 
-        $return_html .= "<input type=\"checkbox\" $checked name=\"$field_name" . "_fieldckbox\" id=\"$field_name$unique_id\" onClick=\"
-			var " . $prefield . "_value = '';
+		//added in R9.0
+		$postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
+		if (isset($this->onUpdateExecuteCallBackFunction[$field_name]) && $this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+			$postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
+		}
 
-			if (this.checked){
-				" . $prefield . "_value = '$value_on';
-				if (" . $checkboxValue . ") {
-					document.getElementById('$field_name$unique_id" . "_label').innerHTML = '$value_on';
-				}
-			}
-			else{
-				". $prefield . "_value = '$value_off';
-				if (" . $checkboxValue . ") {
-					document.getElementById('$field_name$unique_id" . "_label').innerHTML = '$value_off';
-				}
-			}
-			var req = '" . $this->ajax_file . "?ajaxAction=update&id=$unique_id&field=$field_name&table=$this->db_table&pk=$this->db_table_pk&val=' + " . $prefield . "_value;
+        $return_html .= "<form style=\"display: inline;\" method=\"POST\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\">";
+        $return_html .= "<input type=\"checkbox\" $checked name=\"$input_name\" id=\"$input_name\" onClick=\"";
 
-			sndReqNoResponseChk(req);
-		\">";
+		if ($postEditForm){
+			$return_html .= "if (this.checked){this.value = '" . $value_on . "';} else{this.checked = true; this.value = '" . $value_off . "';}";
+			$return_html .= "this.form.submit();\">";
+		}
+		else{
+			$return_html .= "
+				var " . $prefield . "_value = '';
+
+				if (this.checked){
+					" . $prefield . "_value = '$value_on';
+					if (" . $checkboxValue . ") {
+						document.getElementById('$field_name$unique_id" . "_label').innerHTML = '$value_on';
+					}
+				}
+				else{
+					". $prefield . "_value = '$value_off';
+					if (" . $checkboxValue . ") {
+						document.getElementById('$field_name$unique_id" . "_label').innerHTML = '$value_off';
+					}
+				}
+				var req = '" . $this->ajax_file . "?ajaxAction=update&id=$unique_id&field=$field_name&table=$this->db_table&pk=$this->db_table_pk&val=' + " . $prefield . "_value;
+
+				sndReqNoResponseChk(req);
+			\">";
+		}
+
+		$return_html .= "<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
+			<input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
+			<input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
+			<input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
+			<input type=\"hidden\" name=\"action\" value=\"update\"></form>";
+
 
 		if (isset($this->checkboxall[$field_name]) && $this->checkboxall[$field_name] == true) {
 			$return_html .= "<label for=\"$field_name$unique_id\" id=\"" . $field_name . $unique_id . "_label\">$show_value</label>";
