@@ -331,7 +331,7 @@ class ajaxCRUD{
 
 	// Constructor
     //by default ajaxCRUD assumes all necessary files are in the same dir as the script calling it (eg $ajaxcrud_root = "")
-    function ajaxCRUD($item, $db_table, $db_table_pk, $ajaxcrud_root = "") {
+    function __construct($item, $db_table, $db_table_pk, $ajaxcrud_root = "") {
 
         //global variable - for allowing multiple ajaxCRUD tables on one page
         global $num_ajaxCRUD_tables_instantiated;
@@ -1066,6 +1066,7 @@ class ajaxCRUD{
             }//if POST parameter 'table' == db_table
 		}//action = add
 
+		//this code is for POST requests (i.e. non-ajax updates)
 		if ($action == 'update' && $_REQUEST['field_name'] != "" && $_REQUEST['id'] != ""){
 
 			if ($_REQUEST['table'] == $this->db_table){//added this conditional in v8.5 to account for multiple tables
