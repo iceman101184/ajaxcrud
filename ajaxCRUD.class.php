@@ -1313,7 +1313,7 @@ class ajaxCRUD{
 
 				if (isset($_REQUEST[$field]) && $_REQUEST[$field] != '' && ($action != 'add' && $action != 'delete' && $action != 'update' && $action != 'upload' && $action != 'delete_file')){
 					$filter_field = $field;
-					$filter_value = $_REQUEST[$field];
+					$filter_value = $_REQUEST[$field]; // URIDecoded in JS
 					if ($this->exactSearchField[$filter_field]){
 						//exact search (is set by
 						$filter_where_clause = "WHERE $filter_field = \"$filter_value\"";
@@ -1507,7 +1507,7 @@ class ajaxCRUD{
 
             $total_records = $Paging->myRecordCount($sql);//count records
             $totalpage     = $Paging->processPaging($this->limit,$pageid);
-            $rows          = $Paging->startPaging($sql);//get records in the databse
+            $rows          = $Paging->startPaging($sql);//get records in the database
             $links         = $Paging->pageLinks(basename($_SERVER['PHP_SELF']));//1234 links
             unset($Paging);
         }
@@ -1696,7 +1696,7 @@ class ajaxCRUD{
                             if (isset($this->allowed_values[$field]) && is_array($this->allowed_values[$field])){
 								foreach ($this->allowed_values[$field] as $list){
 									if (is_array($list)){
-										$list_val = $list[0];
+										$list_val = urldecode($list[0]); // manual urldecode as no js here
 										$list_option = $list[1];
 									}
 									else{
