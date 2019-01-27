@@ -2066,7 +2066,7 @@ class ajaxCRUD{
                                             	$fieldType = "password";
                                             }
 
-                                            //change the type of textbox field if a password (HTML 5 compatible)
+                                            //change the type of textbox field if an email (HTML 5 compatible)
                                             if (stristr($field, "email")){
                                             	$fieldType = "email";
                                             }
