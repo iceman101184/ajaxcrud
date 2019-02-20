@@ -54,7 +54,7 @@
     //$tblDemo->addValueOnInsert("fldField1", "NOW()");
 
     #i can use a where field to better-filter my table
-    //$tblDemo->addWhereClause("WHERE (fldField1 = 'test'");
+    //$tblDemo->addWhereClause("WHERE (fldField1 = 'test')");
 
     #i can order my table by whatever i want
     //$tblDemo->addOrderBy("ORDER BY fldField1 ASC");
@@ -95,6 +95,7 @@
 	#this is arguably one of the most important (visual) functions
 	$tblDemo->formatFieldWithFunction('fldField1', 'makeBlue');
 	$tblDemo->formatFieldWithFunction('fldField2', 'makeBold');
+	$tblDemo->formatFieldWithFunction('fldCheckbox', 'makeTick');
 
 	//$tblDemo->modifyFieldWithClass("fldField1", "zip required"); 	//for testing masked input functionality
 	//$tblDemo->modifyFieldWithClass("fldField2", "phone");			//for testing masked input functionality
@@ -127,6 +128,10 @@
 
 	function makeBlue($val){
 		return "<span style='color: blue;'>$val</span>";
+	}
+
+	function makeTick($val){
+		return ($val == 1 ? "<img src='green-tick-small.png'>" : "");
 	}
 
 	function myCallBackFunctionForAdd($array){
