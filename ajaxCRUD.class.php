@@ -489,6 +489,23 @@ class ajaxCRUD{
         }
     }
 
+    function disableAjaxFilterBox($field_name){
+		// Sequence of method usage: beware Filter fields added after this removal
+		if (in_array($field_name, $this->ajaxFilter_fields)) {
+			$key = array_search($field_name, $this->ajaxFilter_fields);
+			unset ($this->ajaxFilter_fields[$key]);
+		}
+		if (in_array($field_name, $this->ajaxFilterBoxSize)) {
+			unset ($this->ajaxFilterBoxSize[$field_name]);
+		}
+	}
+
+    function disableAjaxFilterBoxAllFields(){
+		foreach ($this->display_fields as $field){
+            $this->disableAjaxFilterBox($field);
+        }
+	}
+
     function displayAddFormTop(){
     	$this->add_form_top = TRUE;
     }
