@@ -23,6 +23,9 @@
 		<script src="includes/jquery.ui.core.js"></script>
 		<!--script src="includes/jquery.ui.widget.js"></script-->
 		<script src="includes/jquery.ui.datepicker.js"></script>
+		<!-- The following line is needed to make a number input field as a textbox instead of spinner in FF/Chrome -->
+		<!-- Ref: https://github.com/iceman101184/ajaxcrud/issues/14 -->
+		<style>	input[type=number] { -moz-appearance:textfield; } </style>
 	</head>
 
 <?php
