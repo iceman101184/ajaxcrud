@@ -97,7 +97,7 @@
 
 	$tblEventAttendee->emptyTableMessage = "No one has signed up yet! Press the '<b>Add Person</b>' button below to sign up for this event.";
 	$tblEventAttendee->addMessage = "You have been added to this event.";
-	$tblEventAttendee->setCSSFile("cuscosky.css"); //i liked this table feel; but any css can be used from http://icant.co.uk/csstablegallery
+	$tblEventAttendee->setCSSFile("cuscosky.css"); //i liked this table feel; but any css can be used from http://icant.co.uk/csstablegallery or https://github.com/codepo8
 
 	#implement a callback function on signing up to create cookie
 	$tblEventAttendee->onAddExecuteCallBackFunction("onAddCallBackFunction");

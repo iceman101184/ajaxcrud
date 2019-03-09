@@ -127,11 +127,19 @@
 	}
 
 	function makeBlue($val){
-		return "<span style='color: blue;'>$val</span>";
+		return "<span style=\"color: blue;\">$val</span>";
 	}
 
 	function makeTick($val){
-		return ($val == 1 ? "<img src='green-tick-small.png'>" : "");
+		return ($val == 1 ? "<img src=\"green-tick-small.png\">" : "");
+	}
+
+	function makeUnderline($val){
+		return "<u>$val</u>";
+	}
+
+	function makeImg($val){
+		return "<img src=\"$val\" width=\"100\" />";
 	}
 
 	function myCallBackFunctionForAdd($array){
@@ -143,4 +151,13 @@
 		echo "THE EDIT ROW CALLBACK FUNCTION WAS implemented";
 		print_r($array);
 	}
+
+	#the callback function to abbreviate the answer text
+	#abbreviate the text for the display (no impact on edit)
+	# Usage:
+	# $tblDemo->formatFieldWithFunction("fldAnswer", "abbrivText");
+	function abbrivText($text){
+		return substr($text, 0, 200) . "...";
+	}
+
 ?>
