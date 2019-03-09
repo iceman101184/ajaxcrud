@@ -1,0 +1,178 @@
+*
+{
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+table 
+{
+	text-align: left;
+	border-spacing: 0px;
+	border: 1px solid #aeb3b6;
+	border-collapse: collapse;
+	
+}
+
+
+table a, table, tbody, tfoot, tr, th, td 
+{
+   font-family: Arial, Helvetica, sans-serif;
+	line-height: 2.0em;
+	font-size: 18px;
+	color: #55595c;
+}
+tbody td{
+	line-height: 2.5em;
+}
+
+table caption
+{
+	padding: .4em 0 ;
+	font-size: 240%;
+	font-style: normal;
+	color: #FB7E00;
+}
+
+table a
+{
+	display: block;
+	text-decoration: none;
+	color: #FF8E53;
+	padding-right: 1.5em;
+	
+}
+
+table a:hover, table a:focus
+{
+text-decoration: underline;
+}
+
+table th a
+{
+	color: #FF8E53;
+	text-align: left;
+}
+table .odd th a,table .odd td a,table .odd td{
+	color: #666;
+	padding-right: 1.0 em;
+}
+
+table th a:hover, table th a:focus, tbody tr:hover th
+{   
+   background-color: #FFCC99;
+	
+}
+table .odd th,table .odd td{
+	background-color: #DDDDDD;
+}
+
+thead th
+{
+	background-image: url(verlauf_schwarz.gif);
+	text-transform: uppercase;
+	font-weight: normal;
+	letter-spacing: 1px;
+	color: #fff;
+	
+}
+
+tfoot{
+	background-image: url(verlauf_schwarz.gif);
+	border-top: 1px solid #fff;
+	
+	
+}
+tfoot th,tfoot td{
+	color: #fff;
+}
+
+tbody th
+{
+   padding: 0.5em;
+	color: #25c1e2;
+	font-style: normal;
+	background-color: #fff;
+	border-bottom: 1px dotted #aeb3b6;
+}
+
+td
+{
+   color: #FF8E1C;
+	border-bottom: 1px dotted #aeb3b6;
+	padding-right: 0.5em;
+	
+}
+
+tbody tr.odd
+{
+	border-bottom: 1px dotted #aeb3b6;
+}
+
+tbody tr:hover td
+{
+ /* background-color: #FFCC99;*/
+}
+
+tbody tr:hover td,tbody tr:hover th, tbody tr:hover a
+{
+	color: rgb(119, 119, 119) !important;
+}
+section.form-record input.btn.editingSize {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    font-weight: 500;
+    font-family: "Open Sans", sans-serif;
+    display: block;
+    width: 220px;
+    height: 50px;
+    box-shadow: #fbc5c4 3px 3px 0px 0px;
+    background: #FF8E53;
+    border-radius: 3px;
+}
+section.form-record form#tblCustomerInfo_filter_form b {
+    font-size: 20px;
+    font-weight: 500;
+}
+section.form-record form#tblCustomerInfo_filter_form input[type="text"] {
+    width: 300px;
+    height: 50px;
+    margin-left: 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    border-image: initial;
+    outline: none;
+    background: rgb(255, 255, 255);
+	    padding: 20px 0;
+}
+form#tblCustomerInfo_filter_form {
+    margin-bottom: 20px;
+}
+section.form-record .ajaxCRUD td, section.form-record .ajaxCRUD th {
+    padding: 10px 12px;
+}
+section.form-record .ajaxCRUD th {
+    font-size: 18px;
+    font-weight: 500;
+}
+section.form-record .ajaxCRUD td {
+    font-size: 18px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+}
+form#tblCustomerInfo_filter_form td, form#add_form_tblCustomerInfo td th, form#add_form_tblCustomerInfo td {
+	padding:0.5em;	
+}
+form#add_form_tblCustomerInfo input, form#add_form_tblCustomerInfo select, form#add_form_tblCustomerInfo textarea {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+	    padding: 4px;
+}
+form#add_form_tblCustomerInfo {
+padding:0;	
+}
+section.form-record form#add_form_tblCustomerInfo select{
+    margin: 0px auto;	
+}

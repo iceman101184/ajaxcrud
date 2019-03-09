@@ -1,0 +1,76 @@
+/* 
+	TagBox table styles
+	written by TagBox http://www.tagbox.de
+*/
+table {
+  border-collapse: collapse;
+  border: 1px solid #03476F;
+  font: normal 11px verdana, arial, helvetica, sans-serif;
+  color: #363636;
+  background: #92C428;
+  }
+caption {
+  text-align: center;
+  font: bold 18px arial, helvetica, sans-serif;
+  background: transparent;
+  padding:6px 4px 8px 0px;
+  color: #03476F;
+  text-transform: uppercase;
+  }
+td, th {
+  border: 1px dotted #03476F;
+  padding: .4em;
+  color: #363636;
+  }
+
+thead th, tfoot th {
+  font: bold 11px verdana, arial, helvetica, sans-serif;
+  border: 1px solid #03476F;;
+  text-align: left;
+  background: #4591AD;
+  color: #FFFFFF;
+  padding-top:3px;
+  }
+tbody td a {
+  background: transparent;
+  text-decoration: none;
+  color: #363636;
+  }
+tbody td a:hover {
+  background: #C2F64D;
+  color: #363636;
+  }
+tbody th a {
+  font: normal 11px verdana, arial, helvetica, sans-serif;
+  background: transparent;
+  text-decoration: none;
+  font-weight:normal;
+  color: #363636;
+  }
+tbody th a:hover {
+  background: transparent;
+  color: #363636;
+  }
+tbody th, tbody td {
+  vertical-align: top;
+  text-align: left;
+  }
+tfoot td {
+  border: 1px solid #03476F;
+  background: #4591AD;
+  padding-top:3px;
+  color: #FFFFFF;
+  }
+.odd {
+  background: #AEE239;
+  }
+tbody tr:hover {
+  background: #FFD800;
+  border: 1px solid #03476F;
+  color: #FFFFFF;
+  }
+tbody tr:hover th,
+tbody tr.odd:hover th {
+  background: #FFD800;
+  color: #FFFFFF;
+  }

@@ -1,0 +1,177 @@
+/* 
+	Clean and crisp table styles
+	written by Mats Lindblad http://blogs.su.se/matlin/
+*/
+
+table {
+	font: normal 75%/150% Verdana, Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	border: 3px solid #f0f8ff;
+	border-top: 5px double #87CEFA;
+	border-bottom: 5px double #87CEFA;
+}
+th {
+	font: bold 1.1em/120% Verdana, Arial, Helvetica, sans-serif;
+	padding: 5px 10px;
+	font-variant: small-caps;
+	color: #047;
+	font-weight: bold;
+	text-align: left;
+	letter-spacing: -1px;
+}
+thead th {
+	border: 1px solid #87CEFA;
+	white-space: nowrap;
+	background: #F0F8FF;
+}
+tbody td, tbody th {
+	padding: 5px 10px;
+	background: #87cefa;
+	color: #000;
+	    border: 1px solid #fff;
+}
+tbody th {
+	color: #047;
+	font-weight: normal;
+	font-variant: normal;
+	font-size: 1em;
+}
+tbody tr.odd {
+	border: 1px solid #87CEFA;
+}
+tbody tr.odd td, tbody tr.odd th {
+	background: #F0F8FF;
+}
+tfoot td, tfoot th {
+	border: none;
+	padding-top: 10px;
+}
+caption {
+	font-family: "Georgia", serif;
+	letter-spacing: 5px;
+	font-style: italic;
+	text-align: left;
+	text-indent: 2em;
+	text-transform: uppercase;
+	font-size: 150%;
+	padding: 10px 0;
+	color: #047;
+}
+table a:link {
+	color: #DC143C;
+}
+table th a:link {
+	color: #047;
+	text-decoration: none;
+}
+table a:visited{
+	color: #036;
+	text-decoration: line-through;
+}
+table a:hover{
+	color: #000;
+	text-decoration:none;
+}
+table a:active{
+	color: #000;
+}
+
+
+  section.form-record input.btn.editingSize {
+    color: rgb(113, 110, 110);
+    font-size: 18px;
+    font-weight: 500;
+    font-family: "Open Sans", sans-serif;
+    display: block;
+    width: 220px;
+    height: 50px;
+    box-shadow: rgb(174, 191, 210) 3px 3px 0px 0px;
+    background: #ebf8fe;
+    border-radius: 3px;
+}
+section.form-record form#tblCustomerInfo_filter_form b {
+    font-size: 20px;
+    font-weight: 500;
+}
+section.form-record form#tblCustomerInfo_filter_form input[type="text"] {
+width: 300px;
+    height: 50px;
+    margin-left: 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    border-image: initial;
+    outline: none;
+    background: rgb(255, 255, 255);
+    padding: 20px 8px;
+    font-size: 18px;
+
+}
+form#tblCustomerInfo_filter_form {
+    margin-bottom: 20px;
+}
+section.form-record .ajaxCRUD td, section.form-record .ajaxCRUD th {
+    padding: 10px 12px;
+}
+section.form-record .ajaxCRUD th {
+    font-size: 18px;
+    font-weight: 500;
+}
+section.form-record .ajaxCRUD td {
+    font-size: 18px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+}
+form#add_form_tblCustomerInfo td{
+color:	#51152a;
+}
+form#tblCustomerInfo_filter_form td, form#add_form_tblCustomerInfo td th, form#add_form_tblCustomerInfo td {
+	padding:0.5em;	
+}
+/*form#add_form_tblCustomerInfo select, form#add_form_tblCustomerInfo textarea {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 8px;
+    color: #641b35;
+}*/
+
+form#add_form_tblCustomerInfo {
+padding:0;	
+}
+section.form-record form#add_form_tblCustomerInfo select{
+    margin: 0px auto;	
+}
+button, html input[type=button], input[type=reset], input[type=submit] {
+    -webkit-appearance: button;
+    cursor: pointer;
+    background: #ebf8fe;
+    padding: 6px 10px;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus
+input:-webkit-autofill, 
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid green;
+  -webkit-text-fill-color: green;
+  transition: background-color 5000s ease-in-out 0s;
+}
+form#add_form_tblCustomerInfo input, form#add_form_tblCustomerInfo select, form#add_form_tblCustomerInfo textarea{
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 8px;
+           color: #90b0d2;
+}
+
+tr {
+    vertical-align: middle;
+}

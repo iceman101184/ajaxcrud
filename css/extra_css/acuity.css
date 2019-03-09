@@ -1,0 +1,73 @@
+
+table {
+  border-collapse: collapse;
+  border: none;
+  font: normal 11px helvetica, verdana, arial, sans-serif;
+  background-image: url(https://web.archive.org/web/20121016124525im_/http://www.acuity.com.br/extern/icant.co.uk/bg_acuity.gif); 
+  background-repeat: repeat;
+
+border-spacing: 1px;
+  }
+caption {
+  text-align: left;
+  font: normal 11px helvetica, verdana, arial,  sans-serif;
+  background: transparent;
+  }
+td, th {
+  border: none;
+  padding: .8em;
+  color: #6E6E6E;
+  }
+thead th, tfoot th {
+  font: bold 10px helvetica, verdana, arial, sans-serif;
+  border: none;
+  text-align: left;
+  background: #000000;
+  color: #00FF0C;
+  padding-top:4px;
+  }
+tbody td a {
+  background: transparent;
+  text-decoration: none;
+  color: #9F9F9F;
+  }
+tbody td a:hover {
+  background: transparent;
+  color: #00FF0C;
+  }
+tbody th a {
+  font: bold 11px helvetica, verdana, arial, sans-serif;
+  background: transparent;
+  text-decoration: none;
+  font-weight:normal;
+  color: #9F9F9F;
+  }
+  
+  
+tbody td+td+td+td a {
+    padding-right: 14px;
+    background: url(https://web.archive.org/web/20121016124525im_/http://www.acuity.com.br/extern/icant.co.uk/arrow.gif) transparent no-repeat bottom right;
+    }
+    tbody td+td+td+td a:hover {
+        padding-right: 14px;
+    background: url(https://web.archive.org/web/20121016124525im_/http://www.acuity.com.br/extern/icant.co.uk/arrow.gif) transparent no-repeat bottom right;
+    }
+tbody th a:hover {
+  background: transparent;
+  color: #00FF0C;
+  }
+tbody th, tbody td {
+  vertical-align: top;
+  text-align: left;
+  }
+
+.odd {
+  background: #000000;
+  }
+tbody tr:hover {
+  background: #0E0E0E;
+  }
+tbody tr:hover th,
+tbody tr.odd:hover th {
+  background: #0E0E0E;
+  }

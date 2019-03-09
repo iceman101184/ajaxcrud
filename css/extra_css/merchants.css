@@ -1,0 +1,201 @@
+/*
+Table Design by Marten Willberg
+www.marvmerchants.com
+
+------------------------------------- */
+
+table {
+	border-collapse:collapse;
+	background-color:#022B59;
+	font:11px Verdana,Arial;
+	color: #90B0D2;
+	word-spacing: -1px;
+}
+
+caption {
+	padding: 10px 0 19px 0;
+	text-align: left;
+	font-size: 63px;
+	font-weight: normal;
+	text-transform: uppercase;
+	font-family: Georgia ,"Times New Roman";
+	text-transform: capitalize;
+	word-spacing: -3px;
+	letter-spacing: -3px;
+	color: #022B59;
+	background-color: transparent;
+	margin-bottom: -23px;
+	line-height: 63px;
+}
+
+/* Linkz-------------------------------------------- */
+
+table a {
+	color:#ffffff;
+	text-decoration:none;
+}
+
+table a:link {
+	font-family: Georgia ,"Times New Roman";
+	text-transform: uppercase;
+	font-weight: normal;
+	color: #90C000;
+	font-size: 12px;
+	word-spacing: 0px;
+	letter-spacing: 0px;
+}
+
+table a:visited {
+	font-weight:normal;
+	color:#666;
+	text-decoration: line-through;
+}
+
+table a:hover {
+		color: #C3E858;
+}
+
+/* Header Footer-------------------------------------- */
+thead  {
+
+	border-bottom: solid 1px #064600;
+	border-top: solid 1px #C3E858;
+}
+
+thead th, tfoot th, tfoot td {
+	background-color: #8FBF00;
+	background-image:url(http://www.marvmerchants.com/images/navi_left_verlauf.gif);
+	background-repeat:repeat-y;
+	padding: 5px 10px 5px 10px;
+	font-weight: normal;
+	text-transform: uppercase;
+	font-family:Georgia, "Times New Roman";
+	font-size: 17px;
+	letter-spacing: -1px;
+	word-spacing: 2px;
+	color: #ffffff;
+}
+
+tfoot td {
+	text-align:right
+}
+
+/* Body------------------------------------------ */
+
+tbody th, tbody td {
+	border-bottom: solid 1px #254D7A;
+
+	padding: 5px 10px 5px 10px;
+}
+
+tbody th {
+	white-space: nowrap;
+}
+
+tbody th a {
+	color:#fff;
+}
+
+.odd {}
+
+tbody tr:hover {
+	background:#0C3563;
+}
+  section.form-record input.btn.editingSize {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    font-weight: 500;
+    font-family: "Open Sans", sans-serif;
+    display: block;
+    width: 220px;
+    height: 50px;
+    box-shadow: rgb(37, 77, 122) 3px 3px 0px 0px;
+    background: #022b59;
+    border-radius: 3px;
+}
+section.form-record form#tblCustomerInfo_filter_form b {
+    font-size: 20px;
+    font-weight: 500;
+}
+section.form-record form#tblCustomerInfo_filter_form input[type="text"] {
+width: 300px;
+    height: 50px;
+    margin-left: 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    border-image: initial;
+    outline: none;
+    background: rgb(255, 255, 255);
+    padding: 20px 8px;
+    font-size: 18px;
+
+}
+form#tblCustomerInfo_filter_form {
+    margin-bottom: 20px;
+}
+section.form-record .ajaxCRUD td, section.form-record .ajaxCRUD th {
+    padding: 10px 12px;
+}
+section.form-record .ajaxCRUD th {
+    font-size: 18px;
+    font-weight: 500;
+}
+section.form-record .ajaxCRUD td {
+    font-size: 18px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+}
+form#add_form_tblCustomerInfo td{
+color:	#51152a;
+}
+form#tblCustomerInfo_filter_form td, form#add_form_tblCustomerInfo td th, form#add_form_tblCustomerInfo td {
+	padding:0.5em;	
+}
+/*form#add_form_tblCustomerInfo select, form#add_form_tblCustomerInfo textarea {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 8px;
+    color: #641b35;
+}*/
+
+form#add_form_tblCustomerInfo {
+padding:0;	
+}
+section.form-record form#add_form_tblCustomerInfo select{
+    margin: 0px auto;	
+}
+button, html input[type=button], input[type=reset], input[type=submit] {
+    -webkit-appearance: button;
+    cursor: pointer;
+    background: #022b59;
+    padding: 6px 10px;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus
+input:-webkit-autofill, 
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid green;
+  -webkit-text-fill-color: green;
+  transition: background-color 5000s ease-in-out 0s;
+}
+form#add_form_tblCustomerInfo input, form#add_form_tblCustomerInfo select, form#add_form_tblCustomerInfo textarea{
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 8px;
+           color: #90b0d2;
+}
+
+tr {
+    vertical-align: middle;
+}

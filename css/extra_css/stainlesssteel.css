@@ -1,0 +1,58 @@
+/*  CSS Table Design
+Author: Stanislav Filev
+Theme: Stainless Steel: Stenli Style
+URL: http://www.stenli.net
+
+----------------------------------------------- */
+
+table {
+	border: 1px solid #000; 
+	background-color: #D4D0C8; 
+	color: #000;
+}
+ 
+td, th { padding:5px;}
+
+caption {
+	text-transform: uppercase;
+	text-align:center;  
+	font: bold 12pt Verdana;
+	color: #4F4F4F;
+	margin: 3px 0;
+}
+
+/* =links
+----------------------------------------------- */
+table a { color:maroon; text-decoration: none;}
+table a:link {color:maroon;}
+table a:visited { color: maroon;}
+table a:hover {color:chocolate;}
+
+/* thead tbody tfoot
+----------------------------------------------- */
+
+thead th, tfoot th, tfoot td ,tbody th,tbody td {
+	color: #000; 
+	font: 8pt Verdana; 
+	border-right: 1px solid #aaa; 
+	border-top: 1px solid #eee; 
+	border-left:1px solid #eee; 
+	border-bottom: 1px solid #aaa; 
+}
+
+thead th, tfoot th, tfoot td { background-color: #ccc; font-weight: bold; text-align:center; }
+tfoot td { text-align:right }
+tbody th { white-space: nowrap; font-weight: bold; text-align:left; }
+
+
+/* Visual and hover effects */
+.odd td { }
+
+tbody tr:hover td{
+	background-color: silver;
+	border-right: 1px solid #eee; 
+	border-top: 1px solid #999; 
+	border-left: 1px solid #999; 
+	border-bottom: 1px solid #eee; 
+	background-color: #e4e0d8;
+}

@@ -1,0 +1,168 @@
+/* 
+	smooth taste table styles
+	written by Thomas Opp http://www.yaway.de
+*/
+table {
+  border-collapse: collapse;
+  border: 1px solid #38160C;
+  font: normal 11px verdana, arial, helvetica, sans-serif;
+  color: #F6ECF0;
+  background: #641B35;
+  }
+caption {
+  text-align: left;
+  font: normal 11px verdana, arial, helvetica, sans-serif;
+  background: transparent;
+  }
+td, th {
+border: 1px dashed #B85A7C;
+    padding: 20px;
+    color: #F6ECF0;
+    font-size: 12px;
+  }
+thead th, tfoot th {
+  font: bold 11px verdana, arial, helvetica, sans-serif;
+  border: 1px solid #A85070;;
+  text-align: left;
+  background: #38160C;
+  color: #F6ECF0;
+  padding-top:6px;
+  }
+tbody td a {
+  background: transparent;
+  text-decoration: none;
+  color: #F6ECF0;
+  }
+tbody td a:hover {
+  background: transparent;
+  color: #FFFFFF;
+  }
+tbody th a {
+  font: normal 11px verdana, arial, helvetica, sans-serif;
+  background: transparent;
+  text-decoration: none;
+  font-weight:normal;
+  color: #F6ECF0;
+  }
+tbody th a:hover {
+  background: transparent;
+  color: #FFFFFF;
+  }
+
+  }
+tfoot td {
+  border: 1px solid #38160C;
+  background: #38160C;
+  padding-top:6px;
+  }
+.odd {
+  background: #7B2342;
+  }
+tbody tr:hover {
+  background: #51152A;
+  }
+tbody tr:hover th,
+tbody tr.odd:hover th {
+  background: #51152A;
+  }
+  section.form-record input.btn.editingSize {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    font-weight: 500;
+    font-family: "Open Sans", sans-serif;
+    display: block;
+    width: 220px;
+    height: 50px;
+    box-shadow: rgb(123, 35, 66) 3px 3px 0px 0px;
+        background: #641b35;
+    border-radius: 3px;
+}
+section.form-record form#tblCustomerInfo_filter_form b {
+    font-size: 20px;
+    font-weight: 500;
+}
+section.form-record form#tblCustomerInfo_filter_form input[type="text"] {
+width: 300px;
+    height: 50px;
+    margin-left: 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    border-image: initial;
+    outline: none;
+    background: rgb(255, 255, 255);
+    padding: 20px 8px;
+    font-size: 18px;
+    color: #7b2342;
+}
+form#tblCustomerInfo_filter_form {
+    margin-bottom: 20px;
+}
+section.form-record .ajaxCRUD td, section.form-record .ajaxCRUD th {
+    padding: 10px 12px;
+}
+section.form-record .ajaxCRUD th {
+    font-size: 18px;
+    font-weight: 500;
+}
+section.form-record .ajaxCRUD td {
+    font-size: 18px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+}
+form#add_form_tblCustomerInfo td{
+color:	#51152a;
+}
+form#tblCustomerInfo_filter_form td, form#add_form_tblCustomerInfo td th, form#add_form_tblCustomerInfo td {
+	padding:0.5em;	
+}
+/*form#add_form_tblCustomerInfo select, form#add_form_tblCustomerInfo textarea {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 8px;
+    color: #641b35;
+}*/
+section.form-record form#add_form_tblCustomerInfo  select {
+    background: url(../img/background-select-smoothtaste.jpg) right center no-repeat !important;
+}
+form#add_form_tblCustomerInfo {
+padding:0;	
+}
+section.form-record form#add_form_tblCustomerInfo select{
+    margin: 0px auto;	
+}
+button, html input[type=button], input[type=reset], input[type=submit] {
+    -webkit-appearance: button;
+    cursor: pointer;
+    background: #641b35;
+    padding: 0 10px;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus
+input:-webkit-autofill, 
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid green;
+  -webkit-text-fill-color: green;
+  transition: background-color 5000s ease-in-out 0s;
+}
+form#add_form_tblCustomerInfo input, form#add_form_tblCustomerInfo select, form#add_form_tblCustomerInfo textarea{
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 8px;
+        color: #fff;
+    background: #641b35;
+}
+section.form-record form#add_form_tblCustomerInfo option {
+    background-color: #641b35;
+}
+}
