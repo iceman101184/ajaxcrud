@@ -1621,11 +1621,13 @@ class ajaxCRUD{
             $count = 0;
             $class = "odd";
 
-            $attach_params = "";
+            $attach_params = ""; // fix scope and visibility
 
 			$valign = "middle";
 
             foreach ($rows as $row){
+				$attach_params = ""; // reset parameters for each row
+
                 $id = $row[$this->db_table_pk];
 
 				if ($this->orientation == 'vertical'){
