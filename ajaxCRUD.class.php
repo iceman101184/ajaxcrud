@@ -1,121 +1,121 @@
 <?php
-	/*
-		Basic users should not need to edit this file
-		Instead - post questions or feature requests to our forum -
-		http://ajaxcrud.com/forum/viewforum.php?f=2
-	*/
+    /*
+        Basic users should not need to edit this file
+        Instead - post questions or feature requests to our forum -
+        http://ajaxcrud.com/forum/viewforum.php?f=2
+    */
 
-	/************************************************************************/
-	/* ajaxCRUD.class.php	v9.1                                            */
-	/* ===========================                                          */
-	/* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
-	/* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
-	/*                                                                      */
-	/* This program is free software. You can redistribute it and/or modify */
-	/* it under the terms of the GNU General Public License as published by */
-	/* the Free Software Foundation; either version 2 of the License.       */
-	/************************************************************************/
-	# thanks to the following for help on v6.0:
-	# Mariano Monta ez Ureta, from Argentina; twitter: @nanomo
-	# Jing Ling, New Hampshire
+    /************************************************************************/
+    /* ajaxCRUD.class.php    v9.1                                            */
+    /* ===========================                                          */
+    /* Copyright (c) 2013 by Loud Canvas Media (arts@loudcanvas.com)        */
+    /* http://www.ajaxcrud.com by http://www.loudcanvas.com                 */
+    /*                                                                      */
+    /* This program is free software. You can redistribute it and/or modify */
+    /* it under the terms of the GNU General Public License as published by */
+    /* the Free Software Foundation; either version 2 of the License.       */
+    /************************************************************************/
+    # thanks to the following for help on v6.0:
+    # Mariano Monta ez Ureta, from Argentina; twitter: @nanomo
+    # Jing Ling, New Hampshire
 
-	#thanks to Francisco Campos of WebLemurs.com for helping with other misc core updates for v7.2
+    #thanks to Francisco Campos of WebLemurs.com for helping with other misc core updates for v7.2
 
-	define('EXECUTING_SCRIPT', $_SERVER['PHP_SELF']);
+    define('EXECUTING_SCRIPT', $_SERVER['PHP_SELF']);
 
-	if (isset($_REQUEST['customAction'])){
-		$customAction = $_REQUEST['customAction'];
-		if ($customAction != ""){
-			if ($customAction == 'exportToCSV'){
-				$csvData = $_REQUEST['tableData'];
-				$fileName = $_REQUEST['fileName'];
-				header("Content-type: application/csv");
-				header("Content-Disposition: attachment; filename=$fileName");
-				header("Pragma: no-cache");
-				header("Expires: 0");
-				echo str_replace('\"','"',$csvData);
-			}
-			exit();
-		}
-	}
+    if (isset($_REQUEST['customAction'])){
+        $customAction = $_REQUEST['customAction'];
+        if ($customAction != ""){
+            if ($customAction == 'exportToCSV'){
+                $csvData = $_REQUEST['tableData'];
+                $fileName = $_REQUEST['fileName'];
+                header("Content-type: application/csv");
+                header("Content-Disposition: attachment; filename=$fileName");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                echo str_replace('\"','"',$csvData);
+            }
+            exit();
+        }
+    }
 
-	#this top part is for the ajax actions themselves. the class is below
+    #this top part is for the ajax actions themselves. the class is below
 
-	if (isset($_REQUEST['ajaxAction'])){
-		$ajaxAction = $_REQUEST['ajaxAction'];
+    if (isset($_REQUEST['ajaxAction'])){
+        $ajaxAction = $_REQUEST['ajaxAction'];
 
-		if ($ajaxAction != ""){
+        if ($ajaxAction != ""){
 
-			# these lines make sure caching do not cause ajax saving/displaying issues
-			header("Cache-Control: no-cache, must-revalidate"); //this is why ajaxCRUD.class.php must be before any other headers (html) are outputted
-			# a date in the past
-			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            # these lines make sure caching do not cause ajax saving/displaying issues
+            header("Cache-Control: no-cache, must-revalidate"); //this is why ajaxCRUD.class.php must be before any other headers (html) are outputted
+            # a date in the past
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
-			$table		= isset($_REQUEST["table"]) ? $_REQUEST["table"] : "";
-			$pk			= isset($_REQUEST["pk"]) ? trim($_REQUEST["pk"]) : "";
-			$field		= isset($_REQUEST["field"]) ? trim($_REQUEST["field"]) : "";
-			$id 		= isset($_REQUEST["id"]) ? $_REQUEST["id"] : "";
-			$val		= isset($_REQUEST["val"]) ? $_REQUEST["val"] : "";
-			$table_num	= isset($_REQUEST["table_num"]) ? $_REQUEST["table_num"] : "";
+            $table        = isset($_REQUEST["table"]) ? $_REQUEST["table"] : "";
+            $pk            = isset($_REQUEST["pk"]) ? trim($_REQUEST["pk"]) : "";
+            $field        = isset($_REQUEST["field"]) ? trim($_REQUEST["field"]) : "";
+            $id         = isset($_REQUEST["id"]) ? $_REQUEST["id"] : "";
+            $val        = isset($_REQUEST["val"]) ? $_REQUEST["val"] : "";
+            $table_num    = isset($_REQUEST["table_num"]) ? $_REQUEST["table_num"] : "";
 
-			if (!is_numeric($id)){
-				$sql_id = "\"$id\"";
-			}
-			else{
-				$sql_id = $id;
-			}
+            if (!is_numeric($id)){
+                $sql_id = "\"$id\"";
+            }
+            else{
+                $sql_id = $id;
+            }
 
-			if ($ajaxAction == 'add'){
-				echo $_SESSION[$table];
-			}
+            if ($ajaxAction == 'add'){
+                echo $_SESSION[$table];
+            }
 
-			if ($ajaxAction == 'filter'){
-				echo $_SESSION[$table];
-			}
+            if ($ajaxAction == 'filter'){
+                echo $_SESSION[$table];
+            }
 
-			if ($ajaxAction == 'sort'){
-				echo $_SESSION[$table];
-			}
+            if ($ajaxAction == 'sort'){
+                echo $_SESSION[$table];
+            }
 
-			if ($ajaxAction == 'getRowCount'){
-				echo $_SESSION[$table . '_row_count'];
-			}
+            if ($ajaxAction == 'getRowCount'){
+                echo $_SESSION[$table . '_row_count'];
+            }
 
-			if ($ajaxAction == 'update'){
-				$val = addslashes($val);
-				//check to see if  record exists
-				$row_current_value = q1("SELECT $pk FROM $table WHERE $pk = $sql_id");
-				if ($row_current_value  == ''){
-					qr("INSERT INTO $table ($pk) VALUES (\"$id\")");
-				}
+            if ($ajaxAction == 'update'){
+                $val = addslashes($val);
+                //check to see if  record exists
+                $row_current_value = q1("SELECT $pk FROM $table WHERE $pk = $sql_id");
+                if ($row_current_value  == ''){
+                    qr("INSERT INTO $table ($pk) VALUES (\"$id\")");
+                }
 
-				$success = qr("UPDATE $table SET $field = \"$val\" WHERE $pk = $sql_id");
+                $success = qr("UPDATE $table SET $field = \"$val\" WHERE $pk = $sql_id");
 
-				if ($val == '') $val = "&nbsp;&nbsp;";
+                if ($val == '') $val = "&nbsp;&nbsp;";
 
-				//when updating, we use the Table name, Field name, & the Primary Key (id) to feed back to client-side-processing
-				$prefield = trim($table . $field . $id);
+                //when updating, we use the Table name, Field name, & the Primary Key (id) to feed back to client-side-processing
+                $prefield = trim($table . $field . $id);
 
-				if (isset($_REQUEST['dropdown_tbl'])){
-					$val = "{selectbox}";
-				}
+                if (isset($_REQUEST['dropdown_tbl'])){
+                    $val = "{selectbox}";
+                }
 
-				if ($success){
-					echo $prefield . "|" . stripslashes($val);
-				}
-				else{
-					echo "error|" . $prefield . "|" . stripslashes($val);
-				}
-			}
+                if ($success){
+                    echo $prefield . "|" . stripslashes($val);
+                }
+                else{
+                    echo "error|" . $prefield . "|" . stripslashes($val);
+                }
+            }
 
-			if ($ajaxAction == 'delete'){
-				qr("DELETE FROM $table WHERE $pk = $sql_id");
-				echo $table . "|" . $id;
-			}
+            if ($ajaxAction == 'delete'){
+                qr("DELETE FROM $table WHERE $pk = $sql_id");
+                echo $table . "|" . $id;
+            }
 
-			exit();
-		}
-	}
+            exit();
+        }
+    }
 
 // THE AJAXCRUD CLASS FOLLOWS:
 
@@ -135,22 +135,22 @@ class ajaxCRUD{
     var $ajaxcrud_root;
     var $ajax_file;
     var $css_file;
-    var $css = true; 	//indicates a css spredsheet WILL be used
+    var $css = true;     //indicates a css spredsheet WILL be used
     var $add = true;    //adding is ok
 
     var $includeTableHeaders = true; //include table headers (default)
-    var $includeJQuery 	= true; //include jquery (default)
+    var $includeJQuery     = true; //include jquery (default)
 
     var $allowHeaderInsert = true; //insert the jquery/css files by default [you can insert whereever you want in your script with $yourObject->insertHeader();]
 
     var $doActionOnShowTable; //boolean var. When true and showTable() is called, doAction() is also called. turn off when you want to only have a table show in certain conditions but CRUD operations can take place on the table "behind the scenes"
 
     var $item_plural;
-	var $item;
+    var $item;
 
-	var $db_table;
-	var $db_table_pk;
-	var $db_main_field;
+    var $db_table;
+    var $db_table_pk;
+    var $db_main_field;
     var $row_count;
 
     var $table_html; //the html for the table (to be modified on ADD via ajax)
@@ -167,7 +167,7 @@ class ajaxCRUD{
 
     //all fields in the table
     var $fields = array();
-	var $field_count;
+    var $field_count;
 
     //field datatypes
     var $field_datatype = array(); //$field_datatype[field] = datatype
@@ -197,10 +197,10 @@ class ajaxCRUD{
     //the header fields which are displayed, but not sortable (i.e. click to sort)
     var $unsortable_fields = array();
 
-	var $sql_where_clause;
+    var $sql_where_clause;
     var $sql_where_clauses = array(); //array used IF there is more than one where clause
 
-	var $sql_order_by;
+    var $sql_order_by;
     var $num_where_clauses;
 
     var $on_add_specify_primary_key = false;
@@ -210,9 +210,9 @@ class ajaxCRUD{
 
     var $orientation; //orientation of table (detault is horizontal)
 
-	var $showCSVExport = false;	// indicates whether to show the "Export Table to CSV" button
+    var $showCSVExport = false;    // indicates whether to show the "Export Table to CSV" button
 
-	var $exportCSVSeparator = ','; // sets the CSV field separator
+    var $exportCSVSeparator = ','; // sets the CSV field separator
 
     //array containing values for a button next to the "go back" button at the bottom. [0] = value [1] = url [2] = extra tags/javascript
     var $bottom_button = array();
@@ -220,7 +220,7 @@ class ajaxCRUD{
     //array with value being the url for the buttom to go to (passing the id) [0] = value [1] = url
     var $row_button = array();
 
-	//array with value being "same" or "new" - specifying the target window for the opening the page. index of array is the button 'id'
+    //array with value being "same" or "new" - specifying the target window for the opening the page. index of array is the button 'id'
     var $addButtonToRowWindowOpen = "";
 
     ################################################
@@ -230,16 +230,16 @@ class ajaxCRUD{
     ################################################
 
     //values will be the name(s) of the foreign key(s) for a category table
-	var $db_table_fk_array = array();
+    var $db_table_fk_array = array();
 
     //values will be the name(s) of the category table(s)
-	var $category_table_array = array();
+    var $category_table_array = array();
 
     //values will be the name(s) of the primary key for the category table(s)
-	var $category_table_pk_array = array();
+    var $category_table_pk_array = array();
 
     //values will be the name(s) of the field to return in the category table(s)
-	var $category_field_array = array();
+    var $category_field_array = array();
 
     //values will be the (optional) name of the field to sort by in the category table(s)
     var $category_sort_field_array = array();
@@ -253,11 +253,11 @@ class ajaxCRUD{
     // allowable values for a field. the key is the name of the field
     var $allowed_values = array();
 
-	// "on" and "off" values for a checkbox. the key is the name of the field
+    // "on" and "off" values for a checkbox. the key is the name of the field
     var $checkbox = array();
 
-	// holds the field names of columns that will have a "check all" checkbox
-	var $checkboxall = array();
+    // holds the field names of columns that will have a "check all" checkbox
+    var $checkboxall = array();
 
     //values to be set to a particular field when a new row is added. the array is set as $field_name => $add_value
     var $add_values = array();
@@ -273,8 +273,8 @@ class ajaxCRUD{
 
     //array holding the (user-defined) function to format a field with on display (format: array[field] = function_name);
     //used in formatFieldWithFunction function
-    var $format_field_with_function 	= array();
-    var $validate_delete_with_function 	= ""; //used to determine if a particular row can be deleted or not (user-defined function)
+    var $format_field_with_function     = array();
+    var $validate_delete_with_function     = ""; //used to determine if a particular row can be deleted or not (user-defined function)
 
     //used in formatFieldWithFunctionAdvanced function (takes a second param - the id of the row)
     var $format_field_with_function_adv = array();
@@ -291,12 +291,12 @@ class ajaxCRUD{
 
     var $emptyTableMessage;
 
-	/* these default to english words (e.g. "Add", "Delete" below); but can be
-	   changed by setting them via $obj->addText = "Añadir"
-	*/
-	var $addText, $deleteText, $cancelText, $actionText, $fileDeleteText, $fileEditText; //text values for buttons and other table text
-	var $addButtonText; //if you want to replace the entire add button text with a phrase or other text. Added in 8.81
-	var $addMessage; //used when onAddExecuteCallBackFunction is leveraged
+    /* these default to english words (e.g. "Add", "Delete" below); but can be
+       changed by setting them via $obj->addText = "Añadir"
+    */
+    var $addText, $deleteText, $cancelText, $actionText, $fileDeleteText, $fileEditText; //text values for buttons and other table text
+    var $addButtonText; //if you want to replace the entire add button text with a phrase or other text. Added in 8.81
+    var $addMessage; //used when onAddExecuteCallBackFunction is leveraged
 
     var $sort_direction; //used when sorting the table via ajax
 
@@ -326,10 +326,10 @@ class ajaxCRUD{
     //set manually - initial value for a field (when adding a row)
     var $initialFieldValue = array();
 
-	// Array to include css style classes in specified fields
-	var $display_field_with_class_style = array();
+    // Array to include css style classes in specified fields
+    var $display_field_with_class_style = array();
 
-	// Constructor
+    // Constructor
     //by default ajaxCRUD assumes all necessary files are in the same dir as the script calling it (eg $ajaxcrud_root = "")
     function __construct($item, $db_table, $db_table_pk, $ajaxcrud_root = "") {
 
@@ -344,14 +344,14 @@ class ajaxCRUD{
         $this->ajaxcrud_root    = $ajaxcrud_root;
         $this->ajax_file        = EXECUTING_SCRIPT;
 
-		$this->item 			= $item;
-		$this->item_plural		= $item . "s";
+        $this->item             = $item;
+        $this->item_plural        = $item . "s";
 
-		$this->db_table			= $db_table;
-		$this->db_table_pk		= $db_table_pk;
+        $this->db_table            = $db_table;
+        $this->db_table_pk        = $db_table_pk;
 
-		$this->fields 			= $this->getFields($db_table);
-		$this->field_count 		= count($this->fields);
+        $this->fields             = $this->getFields($db_table);
+        $this->field_count         = count($this->fields);
 
         //by default paging is turned on; limit is 50
         $this->showPaging       = true;
@@ -367,7 +367,7 @@ class ajaxCRUD{
         $this->border           = 0;
         $this->css              = true;
         $this->ajax_add         = true;
-        $this->orientation 		= 'horizontal';
+        $this->orientation         = 'horizontal';
 
         $this->addButtonToRowWindowOpen = 'same'; //global window to open pages in - used when adding custom buttons to a row
 
@@ -375,16 +375,16 @@ class ajaxCRUD{
 
         $this->loading_image_html = "<center><br /><br  /><img src=\'" . $this->ajaxcrud_root . "css/loading.gif\'><br /><br /></center>"; //changed via setLoadingImageHTML()
 
-        $this->addText			 = "Add";
-        $this->deleteText		 = "Delete";
-        $this->cancelText		 = "Cancel";
-        $this->actionText		 = "Action";
-        $this->fileEditText	 	 = "edit"; //added in 8.81 (for file crud)
-        $this->fileDeleteText	 = "del"; //added in 8.81 (for file crud)
+        $this->addText             = "Add";
+        $this->deleteText         = "Delete";
+        $this->cancelText         = "Cancel";
+        $this->actionText         = "Action";
+        $this->fileEditText          = "edit"; //added in 8.81 (for file crud)
+        $this->fileDeleteText     = "del"; //added in 8.81 (for file crud)
 
         $this->emptyTableMessage = "No data in this table. Click add button below.";
-        $this->addButtonText	 = ""; //when blank, button text defaults to 'Add {Item}' text unless when $addText is set then defaults to '{addText} {Item}'; if set the entire button is replaced with {addButtonText}
-        $this->addMessage		 = ""; //when blank, defaults to generic '{Item} added' message
+        $this->addButtonText     = ""; //when blank, button text defaults to 'Add {Item}' text unless when $addText is set then defaults to '{addText} {Item}'; if set the entire button is replaced with {addButtonText}
+        $this->addMessage         = ""; //when blank, defaults to generic '{Item} added' message
 
         $this->onAddExecuteCallBackFunction         = '';
         $this->onFileUploadExecuteCallBackFunction  = '';
@@ -397,28 +397,28 @@ class ajaxCRUD{
         $this->add_fields       = $this->fields;
 
         //default sort direction
-        $this->sort_direction	= "desc";
+        $this->sort_direction    = "desc";
 
-		if ($this->field_count == 0){
-			$error_msg[] = "No fields in this table!";
-			echo_msg_box();
-			exit();
-		}
+        if ($this->field_count == 0){
+            $error_msg[] = "No fields in this table!";
+            echo_msg_box();
+            exit();
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	function getNumRows(){
-		$sql = "SELECT COUNT(*) FROM " . $this->db_table . $this->sql_where_clause;
-		$numRows = q1($sql);
-		return $numRows;
-	}
+    function getNumRows(){
+        $sql = "SELECT COUNT(*) FROM " . $this->db_table . $this->sql_where_clause;
+        $numRows = q1($sql);
+        return $numRows;
+    }
 
-	function setAjaxFile($ajax_file){
+    function setAjaxFile($ajax_file){
         $this->ajax_file = $ajax_file;
     }
 
-	function setOrientation($orientation){
+    function setOrientation($orientation){
         $this->orientation = $orientation;
     }
 
@@ -429,15 +429,15 @@ class ajaxCRUD{
     function turnOffAjaxEditing(){
         $this->ajax_editing = false;
         foreach ($this->fields as $field){
-			$this->disallowEdit($field);
-		}
+            $this->disallowEdit($field);
+        }
     }
 
     function turnOffSorting(){
         $this->ajax_sorting = false;
         foreach ($this->fields as $field){
-			$this->disallowSort($field);
-		}
+            $this->disallowSort($field);
+        }
     }
 
     function turnOffPaging($limit = ""){
@@ -447,13 +447,13 @@ class ajaxCRUD{
         }
     }
 
-	function disableTableHeaders() {
-		$this->includeTableHeaders = false;
-	}
+    function disableTableHeaders() {
+        $this->includeTableHeaders = false;
+    }
 
-	function disableJQuery() {
-		$this->includeJQuery = false;
-	}
+    function disableJQuery() {
+        $this->includeJQuery = false;
+    }
 
 
     function setCSSFile($css_file){
@@ -474,7 +474,7 @@ class ajaxCRUD{
         //defaults to size of "10" (unless changed via setAjaxFilterBoxSize)
         $this->setAjaxFilterBoxSize($field_name, $textboxSize);
         if ($exactSearch === TRUE){
-        	$this->setExactSearchField($field_name);
+            $this->setExactSearchField($field_name);
         }
     }
 
@@ -490,24 +490,24 @@ class ajaxCRUD{
     }
 
     function disableAjaxFilterBox($field_name){
-		// Sequence of method usage: beware Filter fields added after this removal
-		if (in_array($field_name, $this->ajaxFilter_fields)) {
-			$key = array_search($field_name, $this->ajaxFilter_fields);
-			unset ($this->ajaxFilter_fields[$key]);
-		}
-		if (in_array($field_name, $this->ajaxFilterBoxSize)) {
-			unset ($this->ajaxFilterBoxSize[$field_name]);
-		}
-	}
+        // Sequence of method usage: beware Filter fields added after this removal
+        if (in_array($field_name, $this->ajaxFilter_fields)) {
+            $key = array_search($field_name, $this->ajaxFilter_fields);
+            unset ($this->ajaxFilter_fields[$key]);
+        }
+        if (in_array($field_name, $this->ajaxFilterBoxSize)) {
+            unset ($this->ajaxFilterBoxSize[$field_name]);
+        }
+    }
 
     function disableAjaxFilterBoxAllFields(){
-		foreach ($this->display_fields as $field){
+        foreach ($this->display_fields as $field){
             $this->disableAjaxFilterBox($field);
         }
-	}
+    }
 
     function displayAddFormTop(){
-    	$this->add_form_top = TRUE;
+        $this->add_form_top = TRUE;
     }
 
     function addWhereClause($sql_where_clause){
@@ -522,40 +522,40 @@ class ajaxCRUD{
             $whereClause = ""; //start the clause now chain to it
             $count = 0;
             foreach($this->sql_where_clauses as $where_clause){
-				if ($count > 0){
-					//$where_clause = str_replace("WHERE", "AND", $where_clause);
-					$where_clause = preg_replace('/WHERE/', 'AND', $where_clause, 1); // Only replace the FIRST instance; the magic is in the optional fourth parameter [Limit] (this is important because of sub queries which uses a second WHERE statement)
-				}
-				$whereClause .= " $where_clause";
-				$count++;
+                if ($count > 0){
+                    //$where_clause = str_replace("WHERE", "AND", $where_clause);
+                    $where_clause = preg_replace('/WHERE/', 'AND', $where_clause, 1); // Only replace the FIRST instance; the magic is in the optional fourth parameter [Limit] (this is important because of sub queries which uses a second WHERE statement)
+                }
+                $whereClause .= " $where_clause";
+                $count++;
             }
 
             $this->sql_where_clause = " $whereClause";
         }
 
-		$_SESSION['ajaxcrud_where_clause'][$this->db_table] = $this->sql_where_clause;
-	}
+        $_SESSION['ajaxcrud_where_clause'][$this->db_table] = $this->sql_where_clause;
+    }
 
-	function addOrderBy($sql_order_by){
-		$this->sql_order_by = " " . $sql_order_by;
-	}
+    function addOrderBy($sql_order_by){
+        $this->sql_order_by = " " . $sql_order_by;
+    }
 
-	/* added in release 6.0 */
-	function orderFields($fieldsString){
-		/* warning - if you add a field to this list which is not in the database,
-		   you may have unintended results */
+    /* added in release 6.0 */
+    function orderFields($fieldsString){
+        /* warning - if you add a field to this list which is not in the database,
+           you may have unintended results */
 
-		//separate fieldsString with ","
-		$fieldsString = str_replace(" ", "", $fieldsString); //parse out any spaces
-		$fieldsArray = explode(",", $fieldsString);
+        //separate fieldsString with ","
+        $fieldsString = str_replace(" ", "", $fieldsString); //parse out any spaces
+        $fieldsArray = explode(",", $fieldsString);
 
-		foreach($this->display_fields as $d){
-			if(!in_array($d,$fieldsArray))
-				$fieldsArray[] = $d;
-		}
+        foreach($this->display_fields as $d){
+            if(!in_array($d,$fieldsArray))
+                $fieldsArray[] = $d;
+        }
 
-		$this->display_fields = $fieldsArray;
-	}
+        $this->display_fields = $fieldsArray;
+    }
 
     function formatFieldWithFunction($field, $function_name){
         $this->format_field_with_function[$field] = $function_name;
@@ -565,18 +565,18 @@ class ajaxCRUD{
         $this->format_field_with_function_adv[$field] = $function_name;
     }
 
-    /*	added in R8.7
-    	uses a user-defined function which will return true or false re whether THAT ROW
-    	is deletable (validateDeleteWithFunction)  or any any field in that row is editable (validateUpdateWithFunction)
-    	Example and Documentation: http://ajaxcrud.com/api/index.php?id=validateDeleteWithFunction
-    	Example and Documentation: http://ajaxcrud.com/api/index.php?id=validateUpdateWithFunction
+    /*    added in R8.7
+        uses a user-defined function which will return true or false re whether THAT ROW
+        is deletable (validateDeleteWithFunction)  or any any field in that row is editable (validateUpdateWithFunction)
+        Example and Documentation: http://ajaxcrud.com/api/index.php?id=validateDeleteWithFunction
+        Example and Documentation: http://ajaxcrud.com/api/index.php?id=validateUpdateWithFunction
     */
     function validateDeleteWithFunction($function_name){
-    	$this->validate_delete_with_function = $function_name;
+        $this->validate_delete_with_function = $function_name;
     }
 
     function validateUpdateWithFunction($function_name){
-    	$this->validate_update_with_function = $function_name;
+        $this->validate_update_with_function = $function_name;
     }
 
     function defineRelationship($field, $category_table, $category_table_pk, $category_field_name, $category_sort_field = "", $category_required = "1", $where_clause = ""){
@@ -600,12 +600,12 @@ class ajaxCRUD{
         $this->cat_field_required = FALSE;
     }
 
-	function defineAllowableValues($field, $array_values, $onedit_textbox = FALSE){
-		//array with the setup [0] = value [1] = display name (both the same)
-		$new_array = array();
+    function defineAllowableValues($field, $array_values, $onedit_textbox = FALSE){
+        //array with the setup [0] = value [1] = display name (both the same)
+        $new_array = array();
 
-		foreach($array_values as $array_value){
-			if (!is_array($array_value)){
+        foreach($array_values as $array_value){
+            if (!is_array($array_value)){
                 //a two-dimensional array --> set both the value and dropdown text to be the same
                 $new_array[] = array(0=> urlencode($array_value), 1=>$array_value);
             }
@@ -613,32 +613,32 @@ class ajaxCRUD{
                 //a 2-dimensional array --> value and dropdown text are different
                 $new_array[] = $array_value;
             }
-		}
+        }
 
-		if ($onedit_textbox != FALSE){
-			$this->field_no_dropdown[$field] = TRUE;
-		}
+        if ($onedit_textbox != FALSE){
+            $this->field_no_dropdown[$field] = TRUE;
+        }
 
-		$this->allowed_values[$field] = $new_array;
-		$this->setExactSearchField($field); //set search field to use exact matching (as of 7.2.1)
-	}
+        $this->allowed_values[$field] = $new_array;
+        $this->setExactSearchField($field); //set search field to use exact matching (as of 7.2.1)
+    }
 
-	function defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE){
-		$values = q($sql);
-		$array_values = Array();
-		foreach ($values as $value) $array_values[] = $value[0];
-		$this->defineAllowableValues($field, $array_values, $onedit_textbox);
-	}
-	
-	function defineCheckbox($field, $value_on="1", $value_off="0"){
-		$new_array = array($value_on, $value_off);
+    function defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE){
+        $values = q($sql);
+        $array_values = Array();
+        foreach ($values as $value) $array_values[] = $value[0];
+        $this->defineAllowableValues($field, $array_values, $onedit_textbox);
+    }
+    
+    function defineCheckbox($field, $value_on="1", $value_off="0"){
+        $new_array = array($value_on, $value_off);
 
-		$this->checkbox[$field] = $new_array;
-	}
+        $this->checkbox[$field] = $new_array;
+    }
 
-	function showCheckboxAll($field, $display_data) {
-		$this->checkboxall[$field] = $display_data;
-	}
+    function showCheckboxAll($field, $display_data) {
+        $this->checkboxall[$field] = $display_data;
+    }
 
     function displayAs($field, $the_field_name){
         $this->displayAs_array[$field] = $the_field_name;
@@ -661,10 +661,10 @@ class ajaxCRUD{
         $this->placeholderText[$field] = $placeholder;
     }
 
-	/* added in R7.2.1 */
-	function setExactSearchField($field) {
-		$this->exactSearchField[$field] = true;
-	}
+    /* added in R7.2.1 */
+    function setExactSearchField($field) {
+        $this->exactSearchField[$field] = true;
+    }
 
     function setInitialAddFieldValue($field, $value){
         $this->initialFieldValue[$field] = $value;
@@ -677,10 +677,10 @@ class ajaxCRUD{
     //DEPRECATED - use insertRowsReturned instead for realtime updating with ajax
     function getRowCount(){
         if ($_SESSION['row_count'] == ""){
-        	$count = $this->getNumRows();
+            $count = $this->getNumRows();
         }
         else{
-        	$count = $_SESSION['row_count'];
+            $count = $_SESSION['row_count'];
         }
         //return $count;
         return "<span id='" . $this->db_table . "_RowCount'>" . $count . "</span>";
@@ -691,7 +691,7 @@ class ajaxCRUD{
         return $count;
     }
 
-	function omitField($field_name){
+    function omitField($field_name){
         $key = array_search($field_name, $this->display_fields);
 
         if ($this->fieldInArray($field_name, $this->display_fields)){
@@ -718,11 +718,11 @@ class ajaxCRUD{
         $this->omitAddField($field_name);
     }
 
-	/* added with R6.0 */
-	function showOnly($fieldsString){
-		//separate fieldsString with ","
-		$fieldsString = str_replace(" ", "", $fieldsString); //parse out any spaces
-		$fieldsArray = explode(",", $fieldsString);
+    /* added with R6.0 */
+    function showOnly($fieldsString){
+        //separate fieldsString with ","
+        $fieldsString = str_replace(" ", "", $fieldsString); //parse out any spaces
+        $fieldsArray = explode(",", $fieldsString);
 
         $this->display_fields   = $fieldsArray;
         $this->add_fields       = $fieldsArray;
@@ -762,8 +762,8 @@ class ajaxCRUD{
 
         //added in v8.9
         if (is_array($permittedFileExts)){
-	        $this->file_upload_info[$field_name]['permittedFileExts'] = $permittedFileExts;
-	    }
+            $this->file_upload_info[$field_name]['permittedFileExts'] = $permittedFileExts;
+        }
 
         //the filenames that are saved are not editable
         //$this->disallowEdit($field_name);
@@ -783,17 +783,17 @@ class ajaxCRUD{
         unset($this->display_fields[$key]);
     }
 
-	function showCSVExportOption() {
-		$this->showCSVExport = true;
-	}
+    function showCSVExportOption() {
+        $this->showCSVExport = true;
+    }
 
-	function modifyFieldWithClass($field, $class_name){
+    function modifyFieldWithClass($field, $class_name){
         $this->display_field_with_class_style[$field] = $class_name;
     }
 
     function insertRowsReturned(){
-    	$numRows = $this->getNumRows();
-    	echo "<span class='" . $this->db_table . "_rowCount'>" . $numRows . "</span>";
+        $numRows = $this->getNumRows();
+        echo "<span class='" . $this->db_table . "_rowCount'>" . $numRows . "</span>";
     }
 
     function insertHeader($ajax_file = "ajaxCRUD.inc.php"){
@@ -805,21 +805,21 @@ class ajaxCRUD{
             $this->css_file = 'default.css';
         }
 
-		/* Load Javascript dependencies */
-		if ($this->includeJQuery){
-			//echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js\"></script>\n"; //rel 3.5 - using jquery instead of protoculous
-    		//echo "<script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>\n"; //rel 6 - using latest version of jquery from jquery site (http://docs.jquery.com/Plugins/Validation/Validator)
-			if (isset($LOCAL_JS) && $LOCAL_JS) {
-				echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.min.js\"></script>\n";          // EDITED 1/16/2012 - library on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
-				echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.validate.min.js\"></script>\n"; //rel 6 - added ability to validate forms fields
-				echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.maskedinput.js\"></script>\n";  //rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
-			} else {
-				echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>\n"; // EDITED 1/16/2012 - library on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
-				echo "<script type=\"text/javascript\" src=\"http://ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.min.js\"></script>\n"; //rel 6 - added ability to validate forms fields
-				echo "<script type=\"text/javascript\" src=\"http://ajaxcrud.com/code/jquery.maskedinput.js\"></script>\n"; //rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
-			}
-			echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/validation.js\"></script>\n";
-		}
+        /* Load Javascript dependencies */
+        if ($this->includeJQuery){
+            //echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js\"></script>\n"; //rel 3.5 - using jquery instead of protoculous
+            //echo "<script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>\n"; //rel 6 - using latest version of jquery from jquery site (http://docs.jquery.com/Plugins/Validation/Validator)
+            if (isset($LOCAL_JS) && $LOCAL_JS) {
+                echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.min.js\"></script>\n";          // EDITED 1/16/2012 - library on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
+                echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.validate.min.js\"></script>\n"; //rel 6 - added ability to validate forms fields
+                echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.maskedinput.js\"></script>\n";  //rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
+            } else {
+                echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>\n"; // EDITED 1/16/2012 - library on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
+                echo "<script type=\"text/javascript\" src=\"http://ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.min.js\"></script>\n"; //rel 6 - added ability to validate forms fields
+                echo "<script type=\"text/javascript\" src=\"http://ajaxcrud.com/code/jquery.maskedinput.js\"></script>\n"; //rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
+            }
+            echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/validation.js\"></script>\n";
+        }
         echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n";
         echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/javascript_functions.js\"></script>\n";
         echo "<link href=\"" . $this->ajaxcrud_root . "css/" . $this->css_file . "\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n";
@@ -831,51 +831,51 @@ class ajaxCRUD{
                 loading_image_html = \"$this->loading_image_html\"; \n
 
                 function validateAddForm(tableName, usePost){
-            		var validator = $('#add_form_' + tableName).validate();
-            		if (validator.form()){
-						if (!usePost){
-							setLoadingImage(tableName);
-							var fields = getFormValues(document.getElementById('add_form_' + tableName), '');
-							fields = fields + '&table=' + tableName;
-							var req = '" . $this->getThisPage() . "action=add&' + fields;
-							//validator.resetForm();
-							clearForm('add_form_' + tableName);
-							sndAddReq(req, tableName);
-							return false;
-						}
-						else{
-							//post the form normally (e.g. if using file uploads)
-							$('#add_form_' + tableName).submit();
-						}
+                    var validator = $('#add_form_' + tableName).validate();
+                    if (validator.form()){
+                        if (!usePost){
+                            setLoadingImage(tableName);
+                            var fields = getFormValues(document.getElementById('add_form_' + tableName), '');
+                            fields = fields + '&table=' + tableName;
+                            var req = '" . $this->getThisPage() . "action=add&' + fields;
+                            //validator.resetForm();
+                            clearForm('add_form_' + tableName);
+                            sndAddReq(req, tableName);
+                            return false;
+                        }
+                        else{
+                            //post the form normally (e.g. if using file uploads)
+                            $('#add_form_' + tableName).submit();
+                        }
 
                     }
                     return false;
                 }
 
-				$(document).ready(function(){
-					$(\"#add_form_{$this->db_table}\").validate();
-				});
+                $(document).ready(function(){
+                    $(\"#add_form_{$this->db_table}\").validate();
+                });
 
             </script>\n";
-		echo "
-			<style>
-				/* this will only work when your HTML doctype is in \"strict\" mode.
-					In other words - put this in your header:
-				   <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
-				*/
+        echo "
+            <style>
+                /* this will only work when your HTML doctype is in \"strict\" mode.
+                    In other words - put this in your header:
+                   <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
+                */
 
-				.hand_cursor{
-					cursor: pointer; /* hand-shaped cursor */
-					cursor: hand; /* for IE 5.x */
-				}
+                .hand_cursor{
+                    cursor: pointer; /* hand-shaped cursor */
+                    cursor: hand; /* for IE 5.x */
+                }
 
-				.editable:hover, p.editable:hover{
-					background-color: #FFFF99;
-				}
-			</style>\n";
+                .editable:hover, p.editable:hover{
+                    background-color: #FFFF99;
+                }
+            </style>\n";
 
-		return true;
-	}
+        return true;
+    }
 
     function disallowEdit($field){
         $this->uneditable_fields[] = $field;
@@ -911,26 +911,26 @@ class ajaxCRUD{
         }
     }
 
-	function doAction($action){
+    function doAction($action){
 
-		global $error_msg;
-		global $report_msg;
+        global $error_msg;
+        global $report_msg;
 
-		$item = $this->item;
+        $item = $this->item;
 
-		if ($action == 'delete' && $_REQUEST['id'] != ''){
-			$delete_id = $_REQUEST['id'];
+        if ($action == 'delete' && $_REQUEST['id'] != ''){
+            $delete_id = $_REQUEST['id'];
             $success = qr("DELETE FROM $this->db_table WHERE $this->db_table_pk = \"$delete_id\"");
-			if ($success){
-				$report_msg[] = "$item " . $this->deleteText . "d";
-			}
-			else{
-				$error_msg[] = "$item could not be deleted. Please try again.";
-			}
-		}//action = delete
+            if ($success){
+                $report_msg[] = "$item " . $this->deleteText . "d";
+            }
+            else{
+                $error_msg[] = "$item could not be deleted. Please try again.";
+            }
+        }//action = delete
 
-		#adding new item (via traditional way, non-ajax -- note: this is the ONLY way files can be uploaded with ajaxCRUD)
-		if ($action == 'add'){
+        #adding new item (via traditional way, non-ajax -- note: this is the ONLY way files can be uploaded with ajaxCRUD)
+        if ($action == 'add'){
 
             //this if condition is so MULTIPLE ajaxCRUD tables can be used on the same page.
             if ($_REQUEST['table'] == $this->db_table){
@@ -947,7 +947,7 @@ class ajaxCRUD{
                     $uploads_on = true;
                 }
 
-				$arrayKeyForFoundPK = array_search($this->db_table_pk, $this->fields);
+                $arrayKeyForFoundPK = array_search($this->db_table_pk, $this->fields);
                 foreach($this->fields as $field){
 
                     $submitted_value_cleansed = "";
@@ -960,11 +960,11 @@ class ajaxCRUD{
                         $submitted_value_cleansed = $_REQUEST[$field];
                     }
 
-					if ($uploads_on){
-						if ($this->fieldInArray($field, $this->file_uploads)){
-							$submitted_value_cleansed = $_FILES[$field]["name"];
-						}
-					}
+                    if ($uploads_on){
+                        if ($this->fieldInArray($field, $this->file_uploads)){
+                            $submitted_value_cleansed = $_FILES[$field]["name"];
+                        }
+                    }
 
                     $submitted_values[] = $submitted_value_cleansed;
                     //also used for callback function
@@ -974,8 +974,8 @@ class ajaxCRUD{
                 //for adding values to the row which were not in the ADD row table - but are specified by ADD on INSERT
                 if (count($this->add_values) > 0){
                     foreach ($this->add_values as $add_value){
-                        $field_name 	= $add_value[0];
-                        $the_add_value 	= $add_value[1];
+                        $field_name     = $add_value[0];
+                        $the_add_value     = $add_value[1];
 
                         if ($submitted_array[$field_name] == ''){
                             $submitted_array[$field_name] = $the_add_value;
@@ -985,9 +985,9 @@ class ajaxCRUD{
                         unset($submitted_values);
                         $submitted_values = array();
                         foreach($submitted_array as $field){
-							//$field = str_replace('"', "'", $field);
-							//$field = str_replace('\\', "/", $field);
-							$field = addslashes($field);
+                            //$field = str_replace('"', "'", $field);
+                            //$field = str_replace('\\', "/", $field);
+                            $field = addslashes($field);
                             $submitted_values[] = $field;
                         }
 
@@ -996,9 +996,9 @@ class ajaxCRUD{
 
                 //get rid of the primary key in the fields column
                 if (!$this->on_add_specify_primary_key){
-					if (is_numeric($arrayKeyForFoundPK)){
-	                    unset($submitted_values[$arrayKeyForFoundPK]);
-	                }
+                    if (is_numeric($arrayKeyForFoundPK)){
+                        unset($submitted_values[$arrayKeyForFoundPK]);
+                    }
                 }
 
                 //wrap each field in quotes
@@ -1013,7 +1013,7 @@ class ajaxCRUD{
                         $fields_array_without_pk = $this->fields;
 
                         if (is_numeric($arrayKeyForFoundPK)){
-                        	unset($fields_array_without_pk[$arrayKeyForFoundPK]);
+                            unset($fields_array_without_pk[$arrayKeyForFoundPK]);
                         }
 
                         $string_fields_without_pk = implode(",", $fields_array_without_pk);
@@ -1024,7 +1024,7 @@ class ajaxCRUD{
                         if (!$this->primaryKeyAutoIncrement){
                             $primary_key_value = q1("SELECT MAX($this->db_table_pk) FROM $this->db_table");
                             if ($primary_key_value > 0){
-                            	$primary_key_value++;
+                                $primary_key_value++;
                             }
                             $primary_key_value = $primary_key_value . ", ";
                         }
@@ -1037,17 +1037,17 @@ class ajaxCRUD{
                     if ($success){
                         global $mysqliConn, $useMySQLi;
                         if ($useMySQLi){
-                        	$insert_id = $mysqliConn->insert_id;
+                            $insert_id = $mysqliConn->insert_id;
                         }
                         else{
-                        	$insert_id = mysql_insert_id(); //the old, mysql way of getting it (procedurual php)
+                            $insert_id = mysql_insert_id(); //the old, mysql way of getting it (procedurual php)
                         }
 
                         if ($this->addMessage == ""){
-                        	$report_msg[] = "$item Added";
+                            $report_msg[] = "$item Added";
                         }
                         else{
-                        	$report_msg[] = $this->addMessage;
+                            $report_msg[] = $this->addMessage;
                         }
 
                         if ($uploads_on){
@@ -1056,7 +1056,7 @@ class ajaxCRUD{
 
                                 $allowedExts = "";
                                 if (isset($this->file_upload_info[$field_name]['permittedFileExts'])){
-                                	$allowedExts = $this->file_upload_info[$field_name]['permittedFileExts'];
+                                    $allowedExts = $this->file_upload_info[$field_name]['permittedFileExts'];
                                 }
 
                                 if ($_FILES[$field_name]['name'] != ''){
@@ -1081,45 +1081,45 @@ class ajaxCRUD{
                 }
 
             }//if POST parameter 'table' == db_table
-		}//action = add
+        }//action = add
 
-		//this code is for POST requests (i.e. non-ajax updates)
-		if ($action == 'update' && $_REQUEST['field_name'] != "" && $_REQUEST['id'] != ""){
+        //this code is for POST requests (i.e. non-ajax updates)
+        if ($action == 'update' && $_REQUEST['field_name'] != "" && $_REQUEST['id'] != ""){
 
-			if ($_REQUEST['table'] == $this->db_table){//added this conditional in v8.5 to account for multiple tables
-				$paramName = $_REQUEST['paramName']; //this is the param which the field update value will come by
-				$val = addslashes($_REQUEST[$paramName]);
-				$pkID = $_REQUEST['id'];
+            if ($_REQUEST['table'] == $this->db_table){//added this conditional in v8.5 to account for multiple tables
+                $paramName = $_REQUEST['paramName']; //this is the param which the field update value will come by
+                $val = addslashes($_REQUEST[$paramName]);
+                $pkID = $_REQUEST['id'];
 
-				$field_name = $_REQUEST['field_name'];
-				$success = qr("UPDATE $this->db_table SET $field_name  = \"$val\" WHERE $this->db_table_pk = $pkID");
+                $field_name = $_REQUEST['field_name'];
+                $success = qr("UPDATE $this->db_table SET $field_name  = \"$val\" WHERE $this->db_table_pk = $pkID");
 
-				if ($success){
-					$report_msg[] = "$item Updated";
-					if ($this->onUpdateExecuteCallBackFunction[$field_name] != ''){
-						$updatedRowArray = qr("SELECT * FROM $this->db_table WHERE $this->db_table_pk = $pkID");
-						$callBackSuccess = call_user_func($this->onUpdateExecuteCallBackFunction[$field_name], $updatedRowArray);
-						if (!$callBackSuccess){
-							//commented this out because not all callback functions will return true or false
-							//$error_msg[] = "Callback function could not be executed; please check the name of your callback function.";
-						}
-					}
-				}
-				else{
-					$error_msg[] = "$item could not be updated (likely because no data has changed). Please try again.";
-				}
-			}
-		}
+                if ($success){
+                    $report_msg[] = "$item Updated";
+                    if ($this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+                        $updatedRowArray = qr("SELECT * FROM $this->db_table WHERE $this->db_table_pk = $pkID");
+                        $callBackSuccess = call_user_func($this->onUpdateExecuteCallBackFunction[$field_name], $updatedRowArray);
+                        if (!$callBackSuccess){
+                            //commented this out because not all callback functions will return true or false
+                            //$error_msg[] = "Callback function could not be executed; please check the name of your callback function.";
+                        }
+                    }
+                }
+                else{
+                    $error_msg[] = "$item could not be updated (likely because no data has changed). Please try again.";
+                }
+            }
+        }
 
         if ($action == 'upload' && $_REQUEST['field_name'] && $_REQUEST['id'] != '' && is_array($this->file_uploads) && in_array($_REQUEST['field_name'],$this->file_uploads)){
             $update_id      = $_REQUEST['id'];
             $file_field     = $_REQUEST['field_name'];
             $upload_folder  = $this->file_upload_info[$file_field]['destination_folder'];
 
-			$allowedExts = "";
-			if (isset($this->file_upload_info[$file_field]['permittedFileExts'])){
-				$allowedExts = $this->file_upload_info[$file_field]['permittedFileExts'];
-			}
+            $allowedExts = "";
+            if (isset($this->file_upload_info[$file_field]['permittedFileExts'])){
+                $allowedExts = $this->file_upload_info[$file_field]['permittedFileExts'];
+            }
 
             $success = $this->uploadFile($update_id, $file_field, $upload_folder, $allowedExts);
 
@@ -1160,89 +1160,89 @@ class ajaxCRUD{
 
         }//action = delete_file
 
-	}//doAction
+    }//doAction
 
-	// Set the CSV Export Field Separator value manually overriding the default comma
-	function setExportCSVSeparator($value=',') {
-		$this->exportCSVSeparator = $value;
-	}
+    // Set the CSV Export Field Separator value manually overriding the default comma
+    function setExportCSVSeparator($value=',') {
+        $this->exportCSVSeparator = $value;
+    }
 
-	// Cleans data up for CSV output
-	function escapeCSVValue($value) {
-		$value = str_replace('"', '&quot;', $value); // First off escape all " and make them HTML quotes
-		if(preg_match('/,/', $value) or preg_match("/\n/", $value)) { // Check if I have any commas or new lines
-			return '&quot;'.$value.'&quot;'; // If I have new lines or commas escape them
-		} else {
-			return $value; // If no new lines or commas just return the value
-		}
-	}
+    // Cleans data up for CSV output
+    function escapeCSVValue($value) {
+        $value = str_replace('"', '&quot;', $value); // First off escape all " and make them HTML quotes
+        if(preg_match('/,/', $value) or preg_match("/\n/", $value)) { // Check if I have any commas or new lines
+            return '&quot;'.$value.'&quot;'; // If I have new lines or commas escape them
+        } else {
+            return $value; // If no new lines or commas just return the value
+        }
+    }
 
-	// Gathers and returns table data to create a CSV file
-	function createCSVOutput() {
+    // Gathers and returns table data to create a CSV file
+    function createCSVOutput() {
 
-		$headers = "";
-		$data = "";
-		// Gather table heading data
-		$exportTableHeadings = array();
-		foreach ($this->display_fields as $field){
-			$field_name = $field;
-			if ($this->displayAs_array[$field] != ''){
-				$field = $this->displayAs_array[$field];
-			}
-			$field = $this->escapeCSVValue($field);
+        $headers = "";
+        $data = "";
+        // Gather table heading data
+        $exportTableHeadings = array();
+        foreach ($this->display_fields as $field){
+            $field_name = $field;
+            if ($this->displayAs_array[$field] != ''){
+                $field = $this->displayAs_array[$field];
+            }
+            $field = $this->escapeCSVValue($field);
 
-			if ($field == "ID") {
-				$field = "Id";			// To prevent the SYLK error in Excel
-			}
+            if ($field == "ID") {
+                $field = "Id";            // To prevent the SYLK error in Excel
+            }
 
-			$exportTableHeadings[] = $field;
-		}
-		$headers = join($this->exportCSVSeparator, $exportTableHeadings) . "\n";
+            $exportTableHeadings[] = $field;
+        }
+        $headers = join($this->exportCSVSeparator, $exportTableHeadings) . "\n";
 
-		$sql = "SELECT * FROM " . $this->db_table . $this->sql_where_clause . $this->sql_order_by;
-		$rows = q($sql);
-		foreach($rows as $row){
-			$exportTableData = array();
-			foreach($this->display_fields as $field){
-				$cell_value = $row[$field]; 	// retain original data
-				$cell_data = $cell_value;
+        $sql = "SELECT * FROM " . $this->db_table . $this->sql_where_clause . $this->sql_order_by;
+        $rows = q($sql);
+        foreach($rows as $row){
+            $exportTableData = array();
+            foreach($this->display_fields as $field){
+                $cell_value = $row[$field];     // retain original data
+                $cell_data = $cell_value;
 
-				// Check for user defined formatting functions
-				if (isset($this->format_field_with_function[$field]) && $this->format_field_with_function[$field] != ''){
+                // Check for user defined formatting functions
+                if (isset($this->format_field_with_function[$field]) && $this->format_field_with_function[$field] != ''){
                     $cell_data = call_user_func($this->format_field_with_function[$field], $cell_data);
                 }
 
-				if (isset($this->format_field_with_function_adv[$field]) && $this->format_field_with_function_adv[$field] != ''){
-					$cell_data = call_user_func($this->format_field_with_function_adv[$field], $cell_data, $id);
-				}
+                if (isset($this->format_field_with_function_adv[$field]) && $this->format_field_with_function_adv[$field] != ''){
+                    $cell_data = call_user_func($this->format_field_with_function_adv[$field], $cell_data, $id);
+                }
 
-				// Check whether field is a foreign key linking to another table
-				$found_category_index = array_search($field, $this->db_table_fk_array);
-				if (is_numeric($found_category_index)) {
-					//this field is a reference to another table's primary key (eg it must be a foreign key)
-					$category_field_name = $this->category_field_array[$found_category_index];
-					$category_table_name = $this->category_table_array[$found_category_index];
-					$category_table_pk 	 = $this->category_table_pk_array[$found_category_index];
+                // Check whether field is a foreign key linking to another table
+                $found_category_index = array_search($field, $this->db_table_fk_array);
+                if (is_numeric($found_category_index)) {
+                    //this field is a reference to another table's primary key (eg it must be a foreign key)
+                    $category_field_name = $this->category_field_array[$found_category_index];
+                    $category_table_name = $this->category_table_array[$found_category_index];
+                    $category_table_pk      = $this->category_table_pk_array[$found_category_index];
 
-					$selected_dropdown_text = "--"; //in case value is blank
-					if ($cell_data != ""){
-						$selected_dropdown_text = q1("SELECT $category_field_name FROM $category_table_name WHERE $category_table_pk = \"" . $cell_value . "\"");
-						//echo "field: $field - $selected_dropdown_text <br />\n";
-						$cell_data = $selected_dropdown_text;
-					}
-				}
+                    $selected_dropdown_text = "--"; //in case value is blank
+                    if ($cell_data != ""){
+                        $selected_dropdown_text = q1("SELECT $category_field_name FROM $category_table_name WHERE $category_table_pk = \"" . $cell_value . "\"");
+                        //echo "field: $field - $selected_dropdown_text <br />\n";
+                        $cell_data = $selected_dropdown_text;
+                    }
+                }
 
-				$exportTableData[] = $this->escapeCSVValue($cell_data);
-			}
-			$data .= join($this->exportCSVSeparator,$exportTableData) . "\n";
-		}
+                $exportTableData[] = $this->escapeCSVValue($cell_data);
+            }
+            $data .= join($this->exportCSVSeparator,$exportTableData) . "\n";
+        }
 
-		// clean up
-		unset($exportTableHeadings);
-		unset($exportTableData);
+        // clean up
+        unset($exportTableHeadings);
+        unset($exportTableData);
 
-		return $headers.$data;
-	}
+        return $headers.$data;
+    }
 
     //a file must have been "sent"/posted for this to work
     function uploadFile($row_id, $file_field, $upload_folder, $allowedExts = ""){
@@ -1254,12 +1254,12 @@ class ajaxCRUD{
         @$fileType  = $_FILES[$file_field]['type'];
 
         if (is_array($allowedExts)){
-	        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION)); //gets file ext (lowercase)
-	        if ( !in_array($fileExt, $allowedExts)){
-	        	$error_msg[] = "Upload failed. Selected file was extention <b>.{$fileExt}</b> but this is not an permitted file extension.";
-	        	return false;
-	        }
-	    }
+            $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION)); //gets file ext (lowercase)
+            if ( !in_array($fileExt, $allowedExts)){
+                $error_msg[] = "Upload failed. Selected file was extention <b>.{$fileExt}</b> but this is not an permitted file extension.";
+                return false;
+            }
+        }
 
         $new_filename = make_filename_safe($fileName);
         if ($this->filename_append_field != ""){
@@ -1300,13 +1300,13 @@ class ajaxCRUD{
             if ($update_success) return true;
         }
         else{
-			$error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
-		}
+            $error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
+        }
 
-		return false;
+        return false;
     }
 
-	function showTable(){
+    function showTable(){
 
         global $error_msg;
         global $report_msg;
@@ -1319,33 +1319,33 @@ class ajaxCRUD{
 
         /* Filter Table (if there are request parameters)
         */
-		$count_filtered = 0;
-		$action = "";
-		if (isset($_REQUEST['action'])){
-			$action = $_REQUEST['action'];
-		}
+        $count_filtered = 0;
+        $action = "";
+        if (isset($_REQUEST['action'])){
+            $action = $_REQUEST['action'];
+        }
         foreach ($this->fields as $field){
-			//this if condition is so MULTIPLE ajaxCRUD tables can be used on the same page.
-			if ($_REQUEST['table'] == $this->db_table){
+            //this if condition is so MULTIPLE ajaxCRUD tables can be used on the same page.
+            if ($_REQUEST['table'] == $this->db_table){
 
-				if (isset($_REQUEST[$field]) && $_REQUEST[$field] != '' && ($action != 'add' && $action != 'delete' && $action != 'update' && $action != 'upload' && $action != 'delete_file')){
-					$filter_field = $field;
-					$filter_value = $_REQUEST[$field]; // URIDecoded in JS
-					if ($this->exactSearchField[$filter_field]){
-						//exact search (is set by
-						$filter_where_clause = "WHERE $filter_field = \"$filter_value\"";
-					}
-					else{
-						//approximate search (default)
-						$filter_where_clause = "WHERE $filter_field LIKE \"%" . $filter_value . "%\"";
-					}
+                if (isset($_REQUEST[$field]) && $_REQUEST[$field] != '' && ($action != 'add' && $action != 'delete' && $action != 'update' && $action != 'upload' && $action != 'delete_file')){
+                    $filter_field = $field;
+                    $filter_value = $_REQUEST[$field]; // URIDecoded in JS
+                    if ($this->exactSearchField[$filter_field]){
+                        //exact search (is set by
+                        $filter_where_clause = "WHERE $filter_field = \"$filter_value\"";
+                    }
+                    else{
+                        //approximate search (default)
+                        $filter_where_clause = "WHERE $filter_field LIKE \"%" . $filter_value . "%\"";
+                    }
 
-					$this->addWhereClause($filter_where_clause);
-					$this->filtered_table = true;
-					$count_filtered++;
-				}
-			}
-		}
+                    $this->addWhereClause($filter_where_clause);
+                    $this->filtered_table = true;
+                    $count_filtered++;
+                }
+            }
+        }
         if ($count_filtered > 0){
             $this->filtered_table;
         }
@@ -1357,21 +1357,21 @@ class ajaxCRUD{
            Note: this cancels out default sorting set by addOrderBy()
         */
         if (isset($_REQUEST['table']) && isset($_REQUEST['sort_field'])){
-			if ($this->db_table == $_REQUEST['table'] && $_REQUEST['sort_field'] != ''){
-				$sort_field = $_REQUEST['sort_field'];
-				$user_sort_order_direction = $_REQUEST['sort_direction'];
+            if ($this->db_table == $_REQUEST['table'] && $_REQUEST['sort_field'] != ''){
+                $sort_field = $_REQUEST['sort_field'];
+                $user_sort_order_direction = $_REQUEST['sort_direction'];
 
-				if ($user_sort_order_direction == 'asc'){
-					$this->sort_direction = "desc";
-				}
-				else{
-					$this->sort_direction = "asc";
-				}
-				$sort_sql = " ORDER BY $sort_field $this->sort_direction";
-				$this->addOrderBy($sort_sql);
-				$this->sorted_table = true;
-			}
-		}
+                if ($user_sort_order_direction == 'asc'){
+                    $this->sort_direction = "desc";
+                }
+                else{
+                    $this->sort_direction = "asc";
+                }
+                $sort_sql = " ORDER BY $sort_field $this->sort_direction";
+                $this->addOrderBy($sort_sql);
+                $this->sorted_table = true;
+            }
+        }
 
         //the HTML to display
         $top_html = "";     //top header stuff
@@ -1392,11 +1392,11 @@ class ajaxCRUD{
             }
         }
 
-		$item = $this->item;
+        $item = $this->item;
 
-		//this array is used to populate the dropdown boxes set by defined relationships (to other tables)
-		$dropdown_array = array();
-		foreach ($this->category_table_array as $key => $category_table){
+        //this array is used to populate the dropdown boxes set by defined relationships (to other tables)
+        $dropdown_array = array();
+        foreach ($this->category_table_array as $key => $category_table){
             $category_field_name = $this->category_field_array[$key];
             $category_table_pk   = $this->category_table_pk_array[$key];
 
@@ -1411,9 +1411,9 @@ class ajaxCRUD{
             }
 
             $dropdown_array[] = q("SELECT $category_table_pk, $category_field_name FROM $category_table $whereclause $order_by");
-		}
+        }
 
-		$top_html .= "<a name='ajaxCRUD" . $num_ajaxCRUD_tables_instantiated ."' id='ajaxCRUD" . $num_ajaxCRUD_tables_instantiated  ."'></a>\n";
+        $top_html .= "<a name='ajaxCRUD" . $num_ajaxCRUD_tables_instantiated ."' id='ajaxCRUD" . $num_ajaxCRUD_tables_instantiated  ."'></a>\n";
 
         if (!isset($extra_query_params)) $extra_query_params = "";//this is used by certain applications which require extra query params to be passed (not typical)
 
@@ -1434,67 +1434,67 @@ class ajaxCRUD{
 
                 $filter_value = "";
                 if (isset($_REQUEST[$filter_field]) && $_REQUEST[$filter_field] != ''){
-                	//$filter_value = $_REQUEST[$filter_field];
-                	$filter_value = utf8_encode($_REQUEST[$filter_field]);
+                    //$filter_value = $_REQUEST[$filter_field];
+                    $filter_value = utf8_encode($_REQUEST[$filter_field]);
                 }
 
                 $top_html .= "<th><b>$display_field</b>:";
 
-				//check for valid values (set by defineAllowableValues)
-				if (isset($this->allowed_values[$filter_field]) && is_array($this->allowed_values[$filter_field])){
-					$top_html .= "<select name=\"$filter_field\" onChange=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
-					$top_html .= "<option value=\"\">==Select==</option>\n";
-					foreach ($this->allowed_values[$filter_field] as $list){
-						if (is_array($list)){
-							$list_val = $list[0];
-							$list_option = $list[1];
-						}
-						else{
-							$list_val = $list;
-							$list_option = $list;
-						}
-						$top_html .= "<option value=\"$list_val\">$list_option</option>\n";
-					}
-					$top_html .= "</select>\n";
-				}
-				//check for defined link to another db table (pk/fk relationship) (set by defineRelationship)
-				else if (is_numeric($found_category_index)){
-					$top_html .= "<select name=\"$filter_field\" onChange=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
-					$top_html .= "<option value=\"\">==Select==</option>\n";
+                //check for valid values (set by defineAllowableValues)
+                if (isset($this->allowed_values[$filter_field]) && is_array($this->allowed_values[$filter_field])){
+                    $top_html .= "<select name=\"$filter_field\" onChange=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
+                    $top_html .= "<option value=\"\">==Select==</option>\n";
+                    foreach ($this->allowed_values[$filter_field] as $list){
+                        if (is_array($list)){
+                            $list_val = $list[0];
+                            $list_option = $list[1];
+                        }
+                        else{
+                            $list_val = $list;
+                            $list_option = $list;
+                        }
+                        $top_html .= "<option value=\"$list_val\">$list_option</option>\n";
+                    }
+                    $top_html .= "</select>\n";
+                }
+                //check for defined link to another db table (pk/fk relationship) (set by defineRelationship)
+                else if (is_numeric($found_category_index)){
+                    $top_html .= "<select name=\"$filter_field\" onChange=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
+                    $top_html .= "<option value=\"\">==Select==</option>\n";
 
-					//this field is a reference to another table's primary key (eg it must be a foreign key)
-					$category_field_name = $this->category_field_array[$found_category_index];
-					$category_table_name = $this->category_table_array[$found_category_index];
-					$category_table_pk 	 = $this->category_table_pk_array[$found_category_index];
+                    //this field is a reference to another table's primary key (eg it must be a foreign key)
+                    $category_field_name = $this->category_field_array[$found_category_index];
+                    $category_table_name = $this->category_table_array[$found_category_index];
+                    $category_table_pk      = $this->category_table_pk_array[$found_category_index];
 
-					//this array is set above (used a few places in the class) - sorry, a bit of repeating code here :-(
-					foreach ($dropdown_array[$found_category_index] as $dropdown){
-						$dropdown_value = $dropdown[$this->category_table_pk_array[$found_category_index]];
-						$dropdown_text = $dropdown[$this->category_field_array[$found_category_index]];
-						$top_html .= "<option value=\"$dropdown_value\">$dropdown_text</option>\n";
-					}
+                    //this array is set above (used a few places in the class) - sorry, a bit of repeating code here :-(
+                    foreach ($dropdown_array[$found_category_index] as $dropdown){
+                        $dropdown_value = $dropdown[$this->category_table_pk_array[$found_category_index]];
+                        $dropdown_text = $dropdown[$this->category_field_array[$found_category_index]];
+                        $top_html .= "<option value=\"$dropdown_value\">$dropdown_text</option>\n";
+                    }
 
-					$top_html .= "</select>\n";
-				}
-				//check for a checkbox for this field
-				else if (isset($this->checkbox[$filter_field]) && is_array($this->checkbox[$filter_field])){
-					$values = $this->checkbox[$filter_field];
-					$value_on = $values[0];
-					$value_off = $values[1];
+                    $top_html .= "</select>\n";
+                }
+                //check for a checkbox for this field
+                else if (isset($this->checkbox[$filter_field]) && is_array($this->checkbox[$filter_field])){
+                    $values = $this->checkbox[$filter_field];
+                    $value_on = $values[0];
+                    $value_off = $values[1];
 
-					$checked = '';
-					if (isset($field_value) && $field_value == $value_on) $checked = "checked";
+                    $checked = '';
+                    if (isset($field_value) && $field_value == $value_on) $checked = "checked";
 
-					$top_html .= "<input type=\"checkbox\" name=\"$filter_field\" $checked value=\"$value_on\" onClick=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
-				}
-				//a "regualar" textbox filter box
-				else{
-					$customClass = "";
-					if (isset($this->display_field_with_class_style[$filter_field]) && $this->display_field_with_class_style[$filter_field] != '') {
-						$customClass = $this->display_field_with_class_style[$filter_field];
-					}
+                    $top_html .= "<input type=\"checkbox\" name=\"$filter_field\" $checked value=\"$value_on\" onClick=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
+                }
+                //a "regualar" textbox filter box
+                else{
+                    $customClass = "";
+                    if (isset($this->display_field_with_class_style[$filter_field]) && $this->display_field_with_class_style[$filter_field] != '') {
+                        $customClass = $this->display_field_with_class_style[$filter_field];
+                    }
 
-                	$top_html .= "<input type=\"text\" class=\"$customClass\" size=\"$textbox_size\" name=\"$filter_field\" value=\"$filter_value\" onKeyUp=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
+                    $top_html .= "<input type=\"text\" class=\"$customClass\" size=\"$textbox_size\" name=\"$filter_field\" value=\"$filter_value\" onKeyUp=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
                 }
                 $top_html .= "&nbsp;&nbsp;</th>";
             }
@@ -1503,20 +1503,20 @@ class ajaxCRUD{
         }
 
 
-		#############################################
-		#
-		# Begin code for displaying database elements
-		#
-		#############################################
+        #############################################
+        #
+        # Begin code for displaying database elements
+        #
+        #############################################
 
-		$select_fields = implode(",", $this->fields);
+        $select_fields = implode(",", $this->fields);
 
         $sql = "SELECT * FROM " . $this->db_table . $this->sql_where_clause . $this->sql_order_by;//added name for table (t) in case where clauses want to use it (7.2.2)
 
         if ($this->showPaging){
             $pageid = "";
             if (isset($_REQUEST['pid'])){
-            	$pageid        = $_REQUEST['pid'];//Get the pid value
+                $pageid        = $_REQUEST['pid'];//Get the pid value
             }
             if(intval($pageid) == 0) $pageid  = 1;
             $Paging        = new paging();
@@ -1533,8 +1533,8 @@ class ajaxCRUD{
         }
         //echo $sql;
 
-		//$row_count = count($rows); //count should NOT consider paging
-		$row_count = $this->getNumRows();
+        //$row_count = count($rows); //count should NOT consider paging
+        $row_count = $this->getNumRows();
 
         $this->row_count = $row_count;
         $_SESSION['row_count'] = $row_count; //DEPRECATED
@@ -1563,77 +1563,77 @@ class ajaxCRUD{
 
             //for vertical display, have a little spacing in there
             if ($this->orientation == 'vertical' && $this->cellspacing == ""){
-            	$this->cellspacing = 2;
+                $this->cellspacing = 2;
             }
 
             $table_html .= "<table align='center' class='ajaxCRUD' name='table_" . $this->db_table . "' id='table_" . $this->db_table . "' cellspacing='" . $this->cellspacing . "' border=" . $this->border . ">\n";
 
-			//only show the header (field names) at top for horizontal display (default)
-			if ($this->orientation != 'vertical'){
+            //only show the header (field names) at top for horizontal display (default)
+            if ($this->orientation != 'vertical'){
 
-				if ($this->includeTableHeaders){
-					$table_html .= "<thead><tr>\n";
-					//for an (optional) checkbox
-					if ($this->showCheckbox){
-						$table_html .= "<th>&nbsp;</th>";
-					}
+                if ($this->includeTableHeaders){
+                    $table_html .= "<thead><tr>\n";
+                    //for an (optional) checkbox
+                    if ($this->showCheckbox){
+                        $table_html .= "<th>&nbsp;</th>";
+                    }
 
-					foreach ($this->display_fields as $field){
-						$field_name = $field;
-						if ($this->displayAs_array[$field] != ''){
-							$field = $this->displayAs_array[$field];
-						}
+                    foreach ($this->display_fields as $field){
+                        $field_name = $field;
+                        if ($this->displayAs_array[$field] != ''){
+                            $field = $this->displayAs_array[$field];
+                        }
 
-						if (!$this->fieldInArray($field_name, $this->unsortable_fields)){
-							$fieldHeaderHTML = "<a href='javascript:;' onClick=\"changeSort('$this->db_table', '$field_name', '$this->sort_direction');\" >" . $field . "</a>";
-						}
-						else{
-							$fieldHeaderHTML = $field;
-						}
+                        if (!$this->fieldInArray($field_name, $this->unsortable_fields)){
+                            $fieldHeaderHTML = "<a href='javascript:;' onClick=\"changeSort('$this->db_table', '$field_name', '$this->sort_direction');\" >" . $field . "</a>";
+                        }
+                        else{
+                            $fieldHeaderHTML = $field;
+                        }
 
-						if (array_key_exists($field_name, $this->checkboxall)) {
-							$table_html .= "<th><input type=\"checkbox\" name=\"$field_name" . "_checkboxall\" value=\"checkAll\" onClick=\"
-								if (this.checked) {
-									setAllCheckboxes('$field_name" . "_fieldckbox',false);
-								} else {
-									setAllCheckboxes('$field_name" . "_fieldckbox',true);
-								}
-								\">";
+                        if (array_key_exists($field_name, $this->checkboxall)) {
+                            $table_html .= "<th><input type=\"checkbox\" name=\"$field_name" . "_checkboxall\" value=\"checkAll\" onClick=\"
+                                if (this.checked) {
+                                    setAllCheckboxes('$field_name" . "_fieldckbox',false);
+                                } else {
+                                    setAllCheckboxes('$field_name" . "_fieldckbox',true);
+                                }
+                                \">";
 
-							if ($this->checkboxall[$field_name] == true) {
-								$table_html .= $fieldHeaderHTML;
-							}
-							$table_html .= "</th>";
-						}
-						else {
-							$table_html .= "<th>$fieldHeaderHTML</th>";
-						}
-					}
+                            if ($this->checkboxall[$field_name] == true) {
+                                $table_html .= $fieldHeaderHTML;
+                            }
+                            $table_html .= "</th>";
+                        }
+                        else {
+                            $table_html .= "<th>$fieldHeaderHTML</th>";
+                        }
+                    }
 
-					if ($this->delete || (count($this->row_button)) > 0){
-						$table_html .= "<th>" . $this->actionText . "</th>\n";
-					}
+                    if ($this->delete || (count($this->row_button)) > 0){
+                        $table_html .= "<th>" . $this->actionText . "</th>\n";
+                    }
 
-					$table_html .= "</tr></thead>\n";
-				}
-			}
+                    $table_html .= "</tr></thead>\n";
+                }
+            }
 
             $count = 0;
             $class = "odd";
 
             $attach_params = ""; // fix scope and visibility
 
-			$valign = "middle";
+            $valign = "middle";
 
             foreach ($rows as $row){
-				$attach_params = ""; // reset parameters for each row
+                $attach_params = ""; // reset parameters for each row
 
                 $id = $row[$this->db_table_pk];
 
-				if ($this->orientation == 'vertical'){
-					$class = "vertical" . " $class";
-					$valign = "middle";
-				}
+                if ($this->orientation == 'vertical'){
+                    $class = "vertical" . " $class";
+                    $valign = "middle";
+                }
 
                 $table_html .= "<tr class='$class' id=\"" . $this->db_table . "_row_$id\" valign='{$valign}'>\n";
 
@@ -1644,10 +1644,10 @@ class ajaxCRUD{
                     $table_html .= "<td><input type='checkbox' $checkbox_selected onClick=\"window.location ='" . $_SERVER['PHP_SELF'] . "?$this->db_table_pk=$id'\" /></td>";
                 }
 
-				$canRowBeUpdated = true;
-				if (isset($this->validate_update_with_function) && $this->validate_update_with_function != ''){
-					$canRowBeUpdated = call_user_func($this->validate_update_with_function, $id);
-				}
+                $canRowBeUpdated = true;
+                if (isset($this->validate_update_with_function) && $this->validate_update_with_function != ''){
+                    $canRowBeUpdated = call_user_func($this->validate_update_with_function, $id);
+                }
 
                 foreach($this->display_fields as $field){
                     $cell_data = $row[$field];
@@ -1670,16 +1670,16 @@ class ajaxCRUD{
                     //try to find a reference to another table relationship
                     $found_category_index = array_search($field, $this->db_table_fk_array);
 
-					//if orientation is vertical show the field name next to the field
-					if ($this->orientation == 'vertical'){
-						if ($this->displayAs_array[$field] != ''){
-							$fieldName = $this->displayAs_array[$field];
-						}
-						else{
-							$fieldName = $field;
-						}
-						$table_html .= "<th class='vertical'>$fieldName</th>";
-					}
+                    //if orientation is vertical show the field name next to the field
+                    if ($this->orientation == 'vertical'){
+                        if ($this->displayAs_array[$field] != ''){
+                            $fieldName = $this->displayAs_array[$field];
+                        }
+                        else{
+                            $fieldName = $field;
+                        }
+                        $table_html .= "<th class='vertical'>$fieldName</th>";
+                    }
 
                     //don't allow uneditable fields (which usually includes the primary key) to be editable
                     if ( !$canRowBeUpdated || $this->fieldInArray($field, $this->file_uploads) || ( ($this->fieldInArray($field, $this->uneditable_fields) && (!is_numeric($found_category_index))) ) ){
@@ -1713,22 +1713,22 @@ class ajaxCRUD{
                         else{
                             //added in 6.5. allows defineAllowableValues to work even when in readonly mode
                             if (isset($this->allowed_values[$field]) && is_array($this->allowed_values[$field])){
-								foreach ($this->allowed_values[$field] as $list){
-									if (is_array($list)){
-										$list_val = urldecode($list[0]); // manual urldecode as no js here
-										$list_option = $list[1];
-									}
-									else{
-										$list_val = $list;
-										$list_option = $list;
-									}
+                                foreach ($this->allowed_values[$field] as $list){
+                                    if (is_array($list)){
+                                        $list_val = urldecode($list[0]); // manual urldecode as no js here
+                                        $list_option = $list[1];
+                                    }
+                                    else{
+                                        $list_val = $list;
+                                        $list_option = $list;
+                                    }
 
-									//fixed bug in 8.76. cell_value ensures we're looking at original value vs value set by user-defined function
-									if ($list_val == $cell_value) $table_html .= $list_option;
-								}
+                                    //fixed bug in 8.76. cell_value ensures we're looking at original value vs value set by user-defined function
+                                    if ($list_val == $cell_value) $table_html .= $list_option;
+                                }
                             }
                             else{
-                            	$table_html .= stripslashes($cell_data);
+                                $table_html .= stripslashes($cell_data);
                             }
                         }
                     }//if field is not editable
@@ -1764,21 +1764,21 @@ class ajaxCRUD{
                                         $table_html .= $this->makeAjaxDropdown($id, $field, $cell_value, $this->db_table, $this->db_table_pk, $allowed_enum_values_array);
                                     }
                                     else{
-										//updated logic in 7.1 to enable a textarea to be 'forced' if desired [thanks to dpruitt for code revision]
-										$field_length = strlen($row[$field]);
-										if(isset($this->textarea_height[$field]) && $this->textarea_height[$field] != '' || $field_length > 51){
-											$textarea_height = '';
-											if ($this->textarea_height[$field] != '') $textarea_height = $this->textarea_height[$field];
-											$table_html .= $this->makeAjaxEditor($id, $field, $cell_value, 'textarea', $textarea_height, $cell_data, $field_onKeyPress);
-										}
-										else{
+                                        //updated logic in 7.1 to enable a textarea to be 'forced' if desired [thanks to dpruitt for code revision]
+                                        $field_length = strlen($row[$field]);
+                                        if(isset($this->textarea_height[$field]) && $this->textarea_height[$field] != '' || $field_length > 51){
+                                            $textarea_height = '';
+                                            if ($this->textarea_height[$field] != '') $textarea_height = $this->textarea_height[$field];
+                                            $table_html .= $this->makeAjaxEditor($id, $field, $cell_value, 'textarea', $textarea_height, $cell_data, $field_onKeyPress);
+                                        }
+                                        else{
                                             //if the textbox width was set manually with function setTextboxWidth
                                             if (isset($this->textboxWidth[$field]) && $this->textboxWidth[$field] != ''){
-                                            	$field_length = $this->textboxWidth[$field];
+                                                $field_length = $this->textboxWidth[$field];
                                             }
 
-											$table_html .= $this->makeAjaxEditor($id, $field, $cell_value, 'text', $field_length, $cell_data, $field_onKeyPress);
-										}
+                                            $table_html .= $this->makeAjaxEditor($id, $field, $cell_value, 'text', $field_length, $cell_data, $field_onKeyPress);
+                                        }
                                     }
                                 }
                             }
@@ -1787,7 +1787,7 @@ class ajaxCRUD{
                             //this field is a reference to another table's primary key (eg it must be a foreign key)
                             $category_field_name = $this->category_field_array[$found_category_index];
                             $category_table_name = $this->category_table_array[$found_category_index];
-                            $category_table_pk 	 = $this->category_table_pk_array[$found_category_index];
+                            $category_table_pk      = $this->category_table_pk_array[$found_category_index];
 
                             $selected_dropdown_text = "--"; //in case value is blank
                             if ($cell_data != ""){
@@ -1806,28 +1806,28 @@ class ajaxCRUD{
 
                     $table_html .= "</td>";
                     if ($this->orientation == 'vertical'){
-                    	$table_html .= "</tr><tr class='$class' id=\"" . $this->db_table . "_row_$id\" valign='middle'>\n";
+                        $table_html .= "</tr><tr class='$class' id=\"" . $this->db_table . "_row_$id\" valign='middle'>\n";
                     }
 
                 }//foreach displayFields
 
                 if ($this->delete || (count($this->row_button)) > 0){
 
-					if ($this->orientation == 'vertical'){
-						$table_html .= "<th class='vertical'>" . $this->actionText . "</th>";
-					}
+                    if ($this->orientation == 'vertical'){
+                        $table_html .= "<th class='vertical'>" . $this->actionText . "</th>";
+                    }
 
                     $table_html .= "<td>\n";
 
                     if ($this->delete){
 
-						$canRowBeDeleted = true;
-						if (isset($this->validate_delete_with_function) && $this->validate_delete_with_function != ''){
-							$canRowBeDeleted = call_user_func($this->validate_delete_with_function, $id);
-						}
+                        $canRowBeDeleted = true;
+                        if (isset($this->validate_delete_with_function) && $this->validate_delete_with_function != ''){
+                            $canRowBeDeleted = call_user_func($this->validate_delete_with_function, $id);
+                        }
 
                         if ($canRowBeDeleted){
-                        	$table_html .= "<input type=\"button\" class=\"btn editingSize\" onClick=\"confirmDelete('$id', '" . $this->db_table . "', '" . $this->db_table_pk ."');\" value=\"" . $this->deleteText . "\" />\n";
+                            $table_html .= "<input type=\"button\" class=\"btn editingSize\" onClick=\"confirmDelete('$id', '" . $this->db_table . "', '" . $this->db_table_pk ."');\" value=\"" . $this->deleteText . "\" />\n";
                         }
                     }
 
@@ -1845,17 +1845,17 @@ class ajaxCRUD{
                             else{
                                 $char = "?";
                                 if (stristr($url, "?") !== FALSE){
-                                	$char = "&"; //the url already has get parameters; attach the id with it
+                                    $char = "&"; //the url already has get parameters; attach the id with it
                                 }
 
                                 $getParam = $this->db_table_pk;
-								$valueToPass = $id;
+                                $valueToPass = $id;
                                 if ($attach_param != "all" && $attach_param != ""){
-                                	$getParam = $attach_param;
-									//check to see if the field being passed is a db column
-									if ($this->fieldInArray($attach_param, $this->fields)){
-										$valueToPass = $row[$attach_param];
-									}
+                                    $getParam = $attach_param;
+                                    //check to see if the field being passed is a db column
+                                    if ($this->fieldInArray($attach_param, $this->fields)){
+                                        $valueToPass = $row[$attach_param];
+                                    }
                                 }
                                 $valueToPass = urlencode($valueToPass);
                                 $attach = $char . $getParam . "=$valueToPass";
@@ -1868,10 +1868,10 @@ class ajaxCRUD{
                             else{
                                 //either button-specific window is 'same' or global (all buttons' window is 'same'
                                 if ($window_to_open == "same" && $this->addButtonToRowWindowOpen == "same"){
-                                	$javascript_for_button = "onClick=\"location.href='" . $url . $attach . "'\"";
+                                    $javascript_for_button = "onClick=\"location.href='" . $url . $attach . "'\"";
                                 }
                                 else{
-                                	$javascript_for_button = "onClick=\"window.open('" . $url . $attach . "')\"";
+                                    $javascript_for_button = "onClick=\"window.open('" . $url . $attach . "')\"";
                                 }
                             }
 
@@ -1885,9 +1885,9 @@ class ajaxCRUD{
 
                 $table_html .= "</tr>";
 
-				if ($this->orientation == 'vertical'){
-					$table_html .= "<tr><td colspan='2' style='border-top: 4px silver solid;' ></td></tr>\n";
-				}
+                if ($this->orientation == 'vertical'){
+                    $table_html .= "<tr><td colspan='2' style='border-top: 4px silver solid;' ></td></tr>\n";
+                }
 
 
                 if($count%2==0){
@@ -1914,44 +1914,44 @@ class ajaxCRUD{
         //closing div for paging links (if applicable)
         $bottom_html = "</div><br />\n";
 
-		// displaying the export to csv button
-		if ($this->showCSVExport) {
-			$add_html .= "<center>\n";
-			$add_html .= "<form action=\"" . $_SERVER["SCRIPT_NAME"] . "\" name=\"CSVExport\" method=\"POST\" >\n";
-			$add_html .= "  <input type=\"hidden\" name=\"fileName\" value=\"tableoutput_" . $this->db_table . ".csv\" />\n";
-			$add_html .= "  <input type=\"hidden\" name=\"customAction\" value=\"exportToCSV\" />\n";
-			$add_html .= "	<input type=\"hidden\" name=\"tableData\" value=\"" . $this->createCSVOutput() . "\" />\n";
-			$add_html .= "  <input type=\"submit\" name=\"submit\" value=\"Export Table To CSV\" class=\"btn editingSize\"/>\n";
-			$add_html .= "</form>\n";
-			$add_html .= "</center>\n";
-		}
+        // displaying the export to csv button
+        if ($this->showCSVExport) {
+            $add_html .= "<center>\n";
+            $add_html .= "<form action=\"" . $_SERVER["SCRIPT_NAME"] . "\" name=\"CSVExport\" method=\"POST\" >\n";
+            $add_html .= "  <input type=\"hidden\" name=\"fileName\" value=\"tableoutput_" . $this->db_table . ".csv\" />\n";
+            $add_html .= "  <input type=\"hidden\" name=\"customAction\" value=\"exportToCSV\" />\n";
+            $add_html .= "    <input type=\"hidden\" name=\"tableData\" value=\"" . $this->createCSVOutput() . "\" />\n";
+            $add_html .= "  <input type=\"submit\" name=\"submit\" value=\"Export Table To CSV\" class=\"btn editingSize\"/>\n";
+            $add_html .= "</form>\n";
+            $add_html .= "</center>\n";
+        }
 
         $add_html .= "<center>\n";
         //now we come to the "add" fields
         if ($this->add){
             $addButtonVal = $this->addText . " " . $item;
             if ($this->addButtonText != ""){
-            	$addButtonVal = $this->addButtonText;
+                $addButtonVal = $this->addButtonText;
             }
 
             $add_html .= "   <input type=\"button\" value=\"$addButtonVal\" class=\"btn editingSize\" onClick=\"$('#add_form_$this->db_table').slideDown('fast'); x = document.getElementById('add_form_$this->db_table'); t = setTimeout('x.scrollIntoView(false)', 200); \">\n";
         }
 
-		if (count($this->bottom_button) > 0){
-			foreach($this->bottom_button as $button){
-				$button_value = $button[0];
-				$button_url = $button[1];
-				$button_tags = $button[2];
+        if (count($this->bottom_button) > 0){
+            foreach($this->bottom_button as $button){
+                $button_value = $button[0];
+                $button_url = $button[1];
+                $button_tags = $button[2];
 
-				if ($button_tags == ''){
-					$tag_stuff = "onClick=\"location.href = '$button_url';\"";
-				}
-				else{
-					$tag_stuff = $button_tags;
-				}
-				$add_html .= "  <input type=\"button\" value=\"$button_value\" href=\"$button_url\" class=\"btn\" $tag_stuff>\n";
-			}
-		}
+                if ($button_tags == ''){
+                    $tag_stuff = "onClick=\"location.href = '$button_url';\"";
+                }
+                else{
+                    $tag_stuff = $button_tags;
+                }
+                $add_html .= "  <input type=\"button\" value=\"$button_value\" href=\"$button_url\" class=\"btn\" $tag_stuff>\n";
+            }
+        }
 
         //$add_html .= "  <input type=\"button\" value=\"Go Back\" class=\"btn\" onClick=\"history.back();\">\n";
         $add_html .= "</center>\n";
@@ -1960,8 +1960,8 @@ class ajaxCRUD{
 
             $formActionURL = $_SERVER['PHP_SELF'];
             if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != ""){
-            	//some web applications require posting to the same exact page (with parameters included); this is useful if/when onAddExecuteCallbackFunction is used
-            	$formActionURL = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+                //some web applications require posting to the same exact page (with parameters included); this is useful if/when onAddExecuteCallbackFunction is used
+                $formActionURL = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
             }
 
             $add_html .= "<form action=\"" . $formActionURL . "#ajaxCRUD\" id=\"add_form_$this->db_table\" method=\"POST\" ENCTYPE=\"multipart/form-data\" style=\"display:none;\">\n";
@@ -1971,33 +1971,33 @@ class ajaxCRUD{
 
             //for here display ALL 'addable' fields
             foreach($this->add_fields as $field){
-				$add_html .= "<tr>\n";
+                $add_html .= "<tr>\n";
                 if ($field != $this->db_table_pk || $this->on_add_specify_primary_key){
                     $field_value = "";
 
-					$hideOnClick = "";
-					$placeholder = "";
-					//if a date field, show helping text
-					if ($this->fieldIsDate($this->getFieldDataType($field))){
-						//$placeholder = "YYYY-mm-dd";
-						$placeholder = date("Y-m-d");
-						//$hideOnClick = TRUE;
-					}
+                    $hideOnClick = "";
+                    $placeholder = "";
+                    //if a date field, show helping text
+                    if ($this->fieldIsDate($this->getFieldDataType($field))){
+                        //$placeholder = "YYYY-mm-dd";
+                        $placeholder = date("Y-m-d");
+                        //$hideOnClick = TRUE;
+                    }
 
                     //if initial field value for field is set
                     if (isset($this->initialFieldValue[$field]) && $this->initialFieldValue[$field] != ""){
-                    	$field_value = $this->initialFieldValue[$field];
-                    	//$hideOnClick = TRUE;
+                        $field_value = $this->initialFieldValue[$field];
+                        //$hideOnClick = TRUE;
                     }
 
                     //the request (post/get) will overwrite any initial values though
                     if (isset($_REQUEST[$field]) && $_REQUEST[$field] != '') {
-                    	//$field_value = $_REQUEST[$field];  //note: disable because caused problems
-                    	//$hideOnClick = FALSE;
+                        //$field_value = $_REQUEST[$field];  //note: disable because caused problems
+                        //$hideOnClick = FALSE;
                     }
 
                     if ($hideOnClick){
-                    	//$hideOnClick = "onClick = \"this.value = ''\"";
+                        //$hideOnClick = "onClick = \"this.value = ''\"";
                     }
 
                     if ($this->displayAs_array[$field] != ''){
@@ -2009,11 +2009,11 @@ class ajaxCRUD{
 
                     $note = "";
                     if (isset($this->fieldNote[$field]) && $this->fieldNote[$field] != ""){
-                    	$note = "&nbsp;&nbsp;<i>" . $this->fieldNote[$field] . "</i>";
+                        $note = "&nbsp;&nbsp;<i>" . $this->fieldNote[$field] . "</i>";
                     }
 
                     if (isset($this->placeholderText[$field]) && $this->placeholderText[$field] != ""){
-                    	$placeholder = $this->placeholderText[$field];
+                        $placeholder = $this->placeholderText[$field];
                     }
 
                     //if a checkbox
@@ -2082,12 +2082,12 @@ class ajaxCRUD{
 
                                             //change the type of textbox field if a password (HTML 5 compatible)
                                             if (stristr($field, "password")){
-                                            	$fieldType = "password";
+                                                $fieldType = "password";
                                             }
 
                                             //change the type of textbox field if an email (HTML 5 compatible)
                                             if (stristr($field, "email")){
-                                            	$fieldType = "email";
+                                                $fieldType = "email";
                                             }
 
 
@@ -2098,16 +2098,16 @@ class ajaxCRUD{
 
                                             //if the textbox width was set manually with function setTextboxWidth
                                             if (isset($this->textboxWidth[$field]) && $this->textboxWidth[$field] != ''){
-                                            	$fieldSize = $this->textboxWidth[$field];
+                                                $fieldSize = $this->textboxWidth[$field];
                                             }
 
-											$customClass = "";
-											// Apply custom CSS class to field if applicable
-											if (isset($this->display_field_with_class_style[$field]) && $this->display_field_with_class_style[$field] != '') {
-												$customClass = $this->display_field_with_class_style[$field];
-											}
-											$add_html .= "<th>$display_field</th><td><input onKeyPress=\"$field_onKeyPress\" class=\"editingSize $customClass\" type=\"$fieldType\" id=\"$field\" name=\"$field\" size=\"$fieldSize\" maxlength=\"150\" value=\"$field_value\" placeholder=\"$placeholder\" >$note</td></tr>\n";
-											$placeholder = "";
+                                            $customClass = "";
+                                            // Apply custom CSS class to field if applicable
+                                            if (isset($this->display_field_with_class_style[$field]) && $this->display_field_with_class_style[$field] != '') {
+                                                $customClass = $this->display_field_with_class_style[$field];
+                                            }
+                                            $add_html .= "<th>$display_field</th><td><input onKeyPress=\"$field_onKeyPress\" class=\"editingSize $customClass\" type=\"$fieldType\" id=\"$field\" name=\"$field\" size=\"$fieldSize\" maxlength=\"150\" value=\"$field_value\" placeholder=\"$placeholder\" >$note</td></tr>\n";
+                                            $placeholder = "";
                                         }
                                     }//else not enum field
                                 }//not an uploaded file
@@ -2143,11 +2143,11 @@ class ajaxCRUD{
 
             $add_html .= "</tr><tr><td>\n";
 
-			$postForm = "false";
-			if (!$this->ajax_add){
-				$postForm = "true";
-			}
-			$add_html .= "<input class=\"editingSize\" type=\"button\" onClick=\"validateAddForm('$this->db_table', $postForm);\" value=\"Save $item\">";
+            $postForm = "false";
+            if (!$this->ajax_add){
+                $postForm = "true";
+            }
+            $add_html .= "<input class=\"editingSize\" type=\"button\" onClick=\"validateAddForm('$this->db_table', $postForm);\" value=\"Save $item\">";
 
 
             $add_html .= "</td><td><input style='float: right;' class=\"btn editingSize\" type=\"button\" onClick=\"this.form.reset();$('#add_form_$this->db_table').slideUp('slow');\" value=\"" . $this->cancelText . "\"></td></tr>\n</table>\n";
@@ -2166,35 +2166,35 @@ class ajaxCRUD{
         THIS IS IMPORTANT
         for ajax retrieval (see top of page)
         */
-		$_SESSION[$this->db_table] = $table_html;
+        $_SESSION[$this->db_table] = $table_html;
 
         $html = $top_html . $table_html . $bottom_html . $add_html;
         if ($this->add_form_top){
-        	$html = $add_html . $top_html . $table_html . $bottom_html;
+            $html = $add_html . $top_html . $table_html . $bottom_html;
         }
 
         echo $html;
 
-	}
+    }
 
-	function getFields($table){
-		$query = "SHOW COLUMNS FROM $table";
-		$rs = q($query);
+    function getFields($table){
+        $query = "SHOW COLUMNS FROM $table";
+        $rs = q($query);
 
-		//print_r($rs);
-		$fields = array();
-		foreach ($rs as $r){
-			//r sub0 is the name of the field (hey ... it works)
-			$fields[] = $r[0];
+        //print_r($rs);
+        $fields = array();
+        foreach ($rs as $r){
+            //r sub0 is the name of the field (hey ... it works)
+            $fields[] = $r[0];
             $this->field_datatype[$r[0]] = $r[1];
-		}
+        }
 
-		if (count($fields) > 0){
-			return $fields;
-		}
+        if (count($fields) > 0){
+            return $fields;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     function getFieldDataType($field_name){
         return $this->field_datatype[$field_name];
@@ -2222,12 +2222,12 @@ class ajaxCRUD{
         return  false;
     }
 
-	function fieldIsDate($datatype){
-		if (stristr($datatype, "date") !== FALSE){
-			return true;
-		}
-		return  false;
-	}
+    function fieldIsDate($datatype){
+        if (stristr($datatype, "date") !== FALSE){
+            return true;
+        }
+        return  false;
+    }
 
     function getEnumArray($datatype){
         $enum = substr($datatype, 5);
@@ -2259,92 +2259,92 @@ class ajaxCRUD{
         return false;
     }
 
-	function makeAjaxEditor($unique_id, $field_name, $field_value, $type = 'textarea', $fieldSize = "", $field_text = "", $onKeyPress_function = ""){
+    function makeAjaxEditor($unique_id, $field_name, $field_value, $type = 'textarea', $fieldSize = "", $field_text = "", $onKeyPress_function = ""){
 
         $prefield = trim($this->db_table . $field_name . $unique_id);
 
-		$input_name = $type . "_" . $prefield;
+        $input_name = $type . "_" . $prefield;
 
         $return_html = "";
 
-		if ($field_text == "") $field_text = $field_value;
+        if ($field_text == "") $field_text = $field_value;
 
-		$cell_data = "";
-		if (isset($this->format_field_with_function[$field_name]) && $this->format_field_with_function[$field_name] != ''){
-			$cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
-		}
-		if (isset($this->format_field_with_function_adv[$field_name]) && $this->format_field_with_function_adv[$field_name] != ''){
-			$cell_data = call_user_func($this->format_field_with_function_adv[$field_name], $field_value, $unique_id);
-		}
+        $cell_data = "";
+        if (isset($this->format_field_with_function[$field_name]) && $this->format_field_with_function[$field_name] != ''){
+            $cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
+        }
+        if (isset($this->format_field_with_function_adv[$field_name]) && $this->format_field_with_function_adv[$field_name] != ''){
+            $cell_data = call_user_func($this->format_field_with_function_adv[$field_name], $field_value, $unique_id);
+        }
 
-		if ( (strip_tags($cell_data) == "") && $field_value == "") $field_text = "--";
+        if ( (strip_tags($cell_data) == "") && $field_value == "") $field_text = "--";
 
-		//for getting rid of the html space, replace with actual no text
-		if ($field_value == "&nbsp;&nbsp;") $field_value = "";
+        //for getting rid of the html space, replace with actual no text
+        if ($field_value == "&nbsp;&nbsp;") $field_value = "";
 
-		$field_value = stripslashes(htmlspecialchars($field_value));
+        $field_value = stripslashes(htmlspecialchars($field_value));
 
-		$postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
-		if (isset($this->onUpdateExecuteCallBackFunction[$field_name]) && $this->onUpdateExecuteCallBackFunction[$field_name] != ''){
-			$postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
-		}
+        $postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
+        if (isset($this->onUpdateExecuteCallBackFunction[$field_name]) && $this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+            $postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
+        }
 
         $return_html .= "<span class=\"editable hand_cursor\" id=\"" . $prefield ."_show\" onClick=\"
-			document.getElementById('" . $prefield . "_edit').style.display = '';
-			document.getElementById('" . $prefield . "_show').style.display = 'none';
-			document.getElementById('" . $input_name . "').focus();
+            document.getElementById('" . $prefield . "_edit').style.display = '';
+            document.getElementById('" . $prefield . "_show').style.display = 'none';
+            document.getElementById('" . $input_name . "').focus();
             \">" . stripslashes($field_text) . "</span>
         <span id=\"" . $prefield ."_edit\" style=\"display: none;\">
             <form style=\"display: inline;\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\" method=\"POST\" onsubmit=\"";
 
-			if ($postEditForm){
-				$return_html .= "return true;\">";
-			}
-			else{
-				$return_html .= "
-					document.getElementById('" . $prefield . "_edit').style.display='none';
-					document.getElementById('" . $prefield . "_save').style.display='';
-					var sndValue = document.getElementById('" . $input_name . "').value;
-					sndValue = cleanseStrForURIEncode(sndValue);
-					var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&val=' + sndValue;
-					sndUpdateReq(req);
-					return false;
-				\">";
-			}
+            if ($postEditForm){
+                $return_html .= "return true;\">";
+            }
+            else{
+                $return_html .= "
+                    document.getElementById('" . $prefield . "_edit').style.display='none';
+                    document.getElementById('" . $prefield . "_save').style.display='';
+                    var sndValue = document.getElementById('" . $input_name . "').value;
+                    sndValue = cleanseStrForURIEncode(sndValue);
+                    var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&val=' + sndValue;
+                    sndUpdateReq(req);
+                    return false;
+                \">";
+            }
 
             if ($type == 'text'){
                 if ($fieldSize == "") $fieldSize = 15;
-				if (isset($this->display_field_with_class_style[$field_name]) && $this->display_field_with_class_style[$field_name] != '') {
-					$customClass = $this->display_field_with_class_style[$field_name];
-					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode $customClass\" size=\"$fieldSize\" value=\"$field_value\"/>\n";
-				}
-				else {
-					$return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode\" size=\"$fieldSize\" value=\"$field_value\"/>\n";
-				}
-			}
-			else{
+                if (isset($this->display_field_with_class_style[$field_name]) && $this->display_field_with_class_style[$field_name] != '') {
+                    $customClass = $this->display_field_with_class_style[$field_name];
+                    $return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode $customClass\" size=\"$fieldSize\" value=\"$field_value\"/>\n";
+                }
+                else {
+                    $return_html .= "<input ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"$input_name\" type=\"text\" class=\"editingSize editMode\" size=\"$fieldSize\" value=\"$field_value\"/>\n";
+                }
+            }
+            else{
                 if ($fieldSize == "") $fieldSize = 80;
                 $return_html .= "<textarea ONKEYPRESS=\"$onKeyPress_function\" id=\"$input_name\" name=\"textarea_$prefield\" class=\"editingSize editMode\" style=\"width: 100%; height: " . $fieldSize . "px;\">$field_value</textarea>\n";
                 $return_html .= "<br /><input type=\"submit\" class=\"editingSize\" value=\"Ok\">\n";
-			}
+            }
 
         $return_html .= "
-			<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
-			<input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
-			<input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
-			<input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
-			<input type=\"hidden\" name=\"action\" value=\"update\">
-			<input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
-				document.getElementById('" . $prefield . "_show').style.display = '';
-				document.getElementById('" . $prefield . "_edit').style.display = 'none';
-			\"/>
-			</form>
-		</span>
+            <input type=\"hidden\" name=\"id\" value=\"$unique_id\">
+            <input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
+            <input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
+            <input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
+            <input type=\"hidden\" name=\"action\" value=\"update\">
+            <input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
+                document.getElementById('" . $prefield . "_show').style.display = '';
+                document.getElementById('" . $prefield . "_edit').style.display = 'none';
+            \"/>
+            </form>
+        </span>
         <span style=\"display: none;\" id=\"" . $prefield . "_save\" class=\"savingAjaxWithBackground\">Saving...</span>";
 
         return $return_html;
 
-	}//makeAjaxEditor
+    }//makeAjaxEditor
 
     function makeAjaxDropdown($unique_id, $field_name, $field_value, $dropdown_table, $dropdown_table_pk, $array_list, $selected_dropdown_text = "NOTHING_ENTERED"){
         $return_html = "";
@@ -2352,13 +2352,13 @@ class ajaxCRUD{
         $prefield = trim($this->db_table . $field_name . $unique_id);
         $input_name = "dropdown" . "_" . $prefield;
 
-		$cell_data = $field_value;
-		if (isset($this->format_field_with_function[$field_name]) && $this->format_field_with_function[$field_name] != ''){
-			$cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
-		}
-		if (isset($this->format_field_with_function_adv[$field_name]) && $this->format_field_with_function_adv[$field_name] != ''){
-			$cell_data = call_user_func($this->format_field_with_function_adv[$field_name], $field_value, $unique_id);
-		}
+        $cell_data = $field_value;
+        if (isset($this->format_field_with_function[$field_name]) && $this->format_field_with_function[$field_name] != ''){
+            $cell_data = call_user_func($this->format_field_with_function[$field_name], $field_value);
+        }
+        if (isset($this->format_field_with_function_adv[$field_name]) && $this->format_field_with_function_adv[$field_name] != ''){
+            $cell_data = call_user_func($this->format_field_with_function_adv[$field_name], $field_value, $unique_id);
+        }
 
         if ($selected_dropdown_text == "NOTHING_ENTERED"){
 
@@ -2384,156 +2384,156 @@ class ajaxCRUD{
             $selected_dropdown_text = "&nbsp;--&nbsp;";
         }
 
-		$postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
-		if (isset($this->onUpdateExecuteCallBackFunction[$field_name]) && $this->onUpdateExecuteCallBackFunction[$field_name] != ''){
-			$postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
-		}
+        $postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
+        if (isset($this->onUpdateExecuteCallBackFunction[$field_name]) && $this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+            $postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
+        }
 
         $return_html = "<span class=\"editable hand_cursor\" id=\"" . $prefield . "_show\" onClick=\"
-			document.getElementById('" . $prefield . "_edit').style.display = '';
-			document.getElementById('" . $prefield . "_show').style.display = 'none';
-			\">" . $selected_dropdown_text . "</span>
+            document.getElementById('" . $prefield . "_edit').style.display = '';
+            document.getElementById('" . $prefield . "_show').style.display = 'none';
+            \">" . $selected_dropdown_text . "</span>
 
             <span style=\"display: none;\" id=\"" . $prefield . "_edit\">
                 <form style=\"display: inline;\" method=\"POST\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\">
                 <select class=\"editingSize editMode\" name=\"$input_name\" id=\"$input_name\" onChange=\"";
 
-			if ($postEditForm){
-				$return_html .= "this.form.submit();\">";
-			}
-			else{
-				$return_html .= "
-					var selected_index_value = document.getElementById('" . $input_name . "').value;
-					document.getElementById('" . $prefield . "_edit').style.display='none';
-					document.getElementById('" . $prefield . "_save').style.display='';
-					var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&dropdown_tbl=" . $dropdown_table . "&val=' + selected_index_value;
-					sndUpdateReq(req);
-					return false;
-				\">";
-			}
+            if ($postEditForm){
+                $return_html .= "this.form.submit();\">";
+            }
+            else{
+                $return_html .= "
+                    var selected_index_value = document.getElementById('" . $input_name . "').value;
+                    document.getElementById('" . $prefield . "_edit').style.display='none';
+                    document.getElementById('" . $prefield . "_save').style.display='';
+                    var req = '" . $this->ajax_file . "?ajaxAction=update&id=" . $unique_id . "&field=" . $field_name . "&table=" . $this->db_table . "&pk=" . $this->db_table_pk . "&dropdown_tbl=" . $dropdown_table . "&val=' + selected_index_value;
+                    sndUpdateReq(req);
+                    return false;
+                \">";
+            }
 
-		if ($no_text || (isset($this->category_required[$field_name]) && $this->category_required[$field_name] != TRUE)){
-			if ($this->fieldIsInt($this->getFieldDataType($field_name)) || $this->fieldIsDecimal($this->getFieldDataType($field_name))){
-				$return_html .= "<option value='0'>--Select--</option>\n";
-			}
-			else{
-				$return_html .= "<option value=''>--Select--</option>\n";
-			}
-		}
+        if ($no_text || (isset($this->category_required[$field_name]) && $this->category_required[$field_name] != TRUE)){
+            if ($this->fieldIsInt($this->getFieldDataType($field_name)) || $this->fieldIsDecimal($this->getFieldDataType($field_name))){
+                $return_html .= "<option value='0'>--Select--</option>\n";
+            }
+            else{
+                $return_html .= "<option value=''>--Select--</option>\n";
+            }
+        }
 
-		foreach($array_list as $list){
-			$selected = '';
-			if (is_array($list)){
-				$list_val = $list[0];
-				$list_option = $list[1];
-			}
-			else{
-				$list_val = $list;
-				$list_option = $list;
-			}
+        foreach($array_list as $list){
+            $selected = '';
+            if (is_array($list)){
+                $list_val = $list[0];
+                $list_option = $list[1];
+            }
+            else{
+                $list_val = $list;
+                $list_option = $list;
+            }
 
-			if ($list_val == $field_value) $selected = " selected";
-			$return_html .= "<option value=\"$list_val\" $selected >$list_option</option>";
-		}
-		$return_html .= "</select>";
+            if ($list_val == $field_value) $selected = " selected";
+            $return_html .= "<option value=\"$list_val\" $selected >$list_option</option>";
+        }
+        $return_html .= "</select>";
 
-		$return_html .= "<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
-			<input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
-			<input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
-			<input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
-			<input type=\"hidden\" name=\"action\" value=\"update\">
-			<input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
-				document.getElementById('" . $prefield . "_show').style.display = '';
-				document.getElementById('" . $prefield . "_edit').style.display = 'none';
-			\"/>
+        $return_html .= "<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
+            <input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
+            <input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
+            <input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
+            <input type=\"hidden\" name=\"action\" value=\"update\">
+            <input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
+                document.getElementById('" . $prefield . "_show').style.display = '';
+                document.getElementById('" . $prefield . "_edit').style.display = 'none';
+            \"/>
 
-			</form>
-			</span>
-	        <span style=\"display: none;\" id=\"" . $prefield . "_save\" class=\"savingAjaxWithBackground\">Saving...</span>\n";
+            </form>
+            </span>
+            <span style=\"display: none;\" id=\"" . $prefield . "_save\" class=\"savingAjaxWithBackground\">Saving...</span>\n";
 
         return $return_html;
 
-	}//makeAjaxDropdown
+    }//makeAjaxDropdown
 
 
-	function makeAjaxCheckbox($unique_id, $field_name, $field_value){
-		$prefield = trim($this->db_table) . trim($field_name) . trim($unique_id);
-		$input_name = "checkbox" . "_" . $prefield;
+    function makeAjaxCheckbox($unique_id, $field_name, $field_value){
+        $prefield = trim($this->db_table) . trim($field_name) . trim($unique_id);
+        $input_name = "checkbox" . "_" . $prefield;
 
         $return_html = "";
 
-		$values = $this->checkbox[$field_name];
-		$value_on = $values[0];
-		$value_off = $values[1];
+        $values = $this->checkbox[$field_name];
+        $value_on = $values[0];
+        $value_off = $values[1];
 
-		$checked = '';
-		if ($field_value == $value_on) $checked = "checked";
+        $checked = '';
+        if ($field_value == $value_on) $checked = "checked";
 
-		$show_value = '';
-		if ($checked == '') {
-			$show_value = $value_off;
-		} else {
-			$show_value = $value_on;
-		}
+        $show_value = '';
+        if ($checked == '') {
+            $show_value = $value_off;
+        } else {
+            $show_value = $value_on;
+        }
 
-		//strip quotes
-		$value_on = str_replace('"', "'", $value_on);
-		$value_off = str_replace('"', "'", $value_off);
+        //strip quotes
+        $value_on = str_replace('"', "'", $value_on);
+        $value_off = str_replace('"', "'", $value_off);
 
-		$checkboxValue = 0;
-		if (isset($this->checkboxall[$field_name])){
-			$checkboxValue = (int)$this->checkboxall[$field_name];
-		}
+        $checkboxValue = 0;
+        if (isset($this->checkboxall[$field_name])){
+            $checkboxValue = (int)$this->checkboxall[$field_name];
+        }
 
-		//added in R9.0
-		$postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
-		if (isset($this->onUpdateExecuteCallBackFunction[$field_name]) && $this->onUpdateExecuteCallBackFunction[$field_name] != ''){
-			$postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
-		}
+        //added in R9.0
+        $postEditForm = false; //default action is for form NOT to be submitted but processed through ajax
+        if (isset($this->onUpdateExecuteCallBackFunction[$field_name]) && $this->onUpdateExecuteCallBackFunction[$field_name] != ''){
+            $postEditForm = true; //a callback function is specified for this field; as such it cannot be edited with ajax but must be posted
+        }
 
         $return_html .= "<form style=\"display: inline;\" method=\"POST\" name=\"form_" . $prefield . "\" id=\"form_" . $prefield . "\">";
         $return_html .= "<input type=\"checkbox\" $checked name=\"$input_name\" id=\"$input_name\" onClick=\"";
 
-		if ($postEditForm){
-			$return_html .= "if (this.checked){this.value = '" . $value_on . "';} else{this.checked = true; this.value = '" . $value_off . "';}";
-			$return_html .= "this.form.submit();\">";
-		}
-		else{
-			$return_html .= "
-				var " . $prefield . "_value = '';
+        if ($postEditForm){
+            $return_html .= "if (this.checked){this.value = '" . $value_on . "';} else{this.checked = true; this.value = '" . $value_off . "';}";
+            $return_html .= "this.form.submit();\">";
+        }
+        else{
+            $return_html .= "
+                var " . $prefield . "_value = '';
 
-				if (this.checked){
-					" . $prefield . "_value = '$value_on';
-					if (" . $checkboxValue . ") {
-						document.getElementById('$field_name$unique_id" . "_label').innerHTML = '$value_on';
-					}
-				}
-				else{
-					". $prefield . "_value = '$value_off';
-					if (" . $checkboxValue . ") {
-						document.getElementById('$field_name$unique_id" . "_label').innerHTML = '$value_off';
-					}
-				}
-				var req = '" . $this->ajax_file . "?ajaxAction=update&id=$unique_id&field=$field_name&table=$this->db_table&pk=$this->db_table_pk&val=' + " . $prefield . "_value;
+                if (this.checked){
+                    " . $prefield . "_value = '$value_on';
+                    if (" . $checkboxValue . ") {
+                        document.getElementById('$field_name$unique_id" . "_label').innerHTML = '$value_on';
+                    }
+                }
+                else{
+                    ". $prefield . "_value = '$value_off';
+                    if (" . $checkboxValue . ") {
+                        document.getElementById('$field_name$unique_id" . "_label').innerHTML = '$value_off';
+                    }
+                }
+                var req = '" . $this->ajax_file . "?ajaxAction=update&id=$unique_id&field=$field_name&table=$this->db_table&pk=$this->db_table_pk&val=' + " . $prefield . "_value;
 
-				sndReqNoResponseChk(req);
-			\">";
-		}
+                sndReqNoResponseChk(req);
+            \">";
+        }
 
-		$return_html .= "<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
-			<input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
-			<input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
-			<input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
-			<input type=\"hidden\" name=\"action\" value=\"update\"></form>";
+        $return_html .= "<input type=\"hidden\" name=\"id\" value=\"$unique_id\">
+            <input type=\"hidden\" name=\"field_name\" value=\"$field_name\">
+            <input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
+            <input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
+            <input type=\"hidden\" name=\"action\" value=\"update\"></form>";
 
 
-		if (isset($this->checkboxall[$field_name]) && $this->checkboxall[$field_name] == true) {
-			$return_html .= "<label for=\"$field_name$unique_id\" id=\"" . $field_name . $unique_id . "_label\">$show_value</label>";
-		}
+        if (isset($this->checkboxall[$field_name]) && $this->checkboxall[$field_name] == true) {
+            $return_html .= "<label for=\"$field_name$unique_id\" id=\"" . $field_name . $unique_id . "_label\">$show_value</label>";
+        }
 
         return $return_html;
 
-	}//makeAjaxCheckbox
+    }//makeAjaxCheckbox
 
     function showUploadForm($field_name, $upload_folder, $row_id){
         $return_html = "";
@@ -2550,12 +2550,12 @@ class ajaxCRUD{
         return $return_html;
     }
 
-	function getThisPage(){
-		if (stristr($_SERVER['REQUEST_URI'], "?")){
-			return $_SERVER['REQUEST_URI'] . "&";
-		}
-		return $_SERVER['REQUEST_URI'] . "?";
-	}
+    function getThisPage(){
+        if (stristr($_SERVER['REQUEST_URI'], "?")){
+            return $_SERVER['REQUEST_URI'] . "&";
+        }
+        return $_SERVER['REQUEST_URI'] . "?";
+    }
 
 }//class
 
@@ -2564,16 +2564,16 @@ class ajaxCRUD{
 
 class paging{
 
-	var $pRecordCount;
-	var $pStartFile;
-	var $pRowsPerPage;
-	var $pRecord;
-	var $pCounter;
-	var $pPageID;
-	var $pShowLinkNotice;
-	var $tableName;
+    var $pRecordCount;
+    var $pStartFile;
+    var $pRowsPerPage;
+    var $pRecord;
+    var $pCounter;
+    var $pPageID;
+    var $pShowLinkNotice;
+    var $tableName;
 
-	function processPaging($rowsPerPage,$pageID){
+    function processPaging($rowsPerPage,$pageID){
        $record = $this->pRecordCount;
        if($record >=$rowsPerPage)
             $record=ceil($record/$rowsPerPage);
@@ -2592,66 +2592,66 @@ class paging{
         $this->pPageID      = $pageID;
 
         return $record;
-	}
-	function myRecordCount($query){
-		global $mysqliConn, $useMySQLi;
+    }
+    function myRecordCount($query){
+        global $mysqliConn, $useMySQLi;
 
-		if ($useMySQLi){
-			$rs      			= $mysqliConn->query($query) or die(mysqli_error()."<br>".$query);
-			$rsCount 			= mysqli_num_rows($rs);
-		}
-		else{
-			$rs      			= mysql_query($query) or die(mysql_error()."<br>".$query);
-			$rsCount 			= mysql_num_rows($rs);
-		}
+        if ($useMySQLi){
+            $rs                  = $mysqliConn->query($query) or die(mysqli_error()."<br>".$query);
+            $rsCount             = mysqli_num_rows($rs);
+        }
+        else{
+            $rs                  = mysql_query($query) or die(mysql_error()."<br>".$query);
+            $rsCount             = mysql_num_rows($rs);
+        }
 
-		$this->pRecordCount = $rsCount;
-		unset($rs);
-		return $rsCount;
-	}
+        $this->pRecordCount = $rsCount;
+        unset($rs);
+        return $rsCount;
+    }
 
-	function startPaging($query){
-		$query    = $query." LIMIT ".$this->pStartFile.",".$this->pRowsPerPage;
-		$rs = q($query);
-		return $rs;
-	}
+    function startPaging($query){
+        $query    = $query." LIMIT ".$this->pStartFile.",".$this->pRowsPerPage;
+        $rs = q($query);
+        return $rs;
+    }
 
-	function pageLinks($url){
+    function pageLinks($url){
         $cssclass = "paging_links";
-		$this->pShowLinkNotice = "&nbsp;";
-		if($this->pRecordCount>$this->pRowsPerPage){
-			$this->pShowLinkNotice = "Page ".$this->pPageID. " of ".$this->pRecord;
-			//Previous link
-			$link = "";
-			if($this->pPageID!==1){
+        $this->pShowLinkNotice = "&nbsp;";
+        if($this->pRecordCount>$this->pRowsPerPage){
+            $this->pShowLinkNotice = "Page ".$this->pPageID. " of ".$this->pRecord;
+            //Previous link
+            $link = "";
+            if($this->pPageID!==1){
                 $prevPage = $this->pPageID - 1;
                 $link = "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=1") . "\" class=\"$cssclass\">|<<</a>\n ";
                 $link .= "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$prevPage") ."\" class=\"$cssclass\"><<</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
-			}
-			//Number links 1.2.3.4.5.
-			for($ctr=1;$ctr<=$this->pRecord;$ctr++){
-				if($this->pPageID==$ctr)
-					$link .=  "<b>$ctr</b>\n";
-				else
-					$link .= "  <a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\">$ctr</a>\n";
-			}
-			//Previous Next link
-			if($this->pPageID<($ctr-1)){
+            }
+            //Number links 1.2.3.4.5.
+            for($ctr=1;$ctr<=$this->pRecord;$ctr++){
+                if($this->pPageID==$ctr)
+                    $link .=  "<b>$ctr</b>\n";
+                else
+                    $link .= "  <a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\">$ctr</a>\n";
+            }
+            //Previous Next link
+            if($this->pPageID<($ctr-1)){
                 $nextPage = $this->pPageID + 1;
                 $link .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$nextPage") . "\" class=\"$cssclass\">>></a>\n";
                 $link .="<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=".$this->pRecord) . "\" class=\"$cssclass\">>>|</a>\n";
-			}
-			return $link;
-		}
-	}
+            }
+            return $link;
+        }
+    }
 
-	function getOnClick($paging_query_string){
-		global $db_table;
-		//if any hardcoding is needed...(advanced feature for special needs)
-		$extra_query_params = "";
-		//$extra_query_params = "&Dealer=" . htmlentities($_REQUEST['Dealer']);
-		return "pageTable('" . $extra_query_params . "$paging_query_string', '$this->tableName');";
-	}
+    function getOnClick($paging_query_string){
+        global $db_table;
+        //if any hardcoding is needed...(advanced feature for special needs)
+        $extra_query_params = "";
+        //$extra_query_params = "&Dealer=" . htmlentities($_REQUEST['Dealer']);
+        return "pageTable('" . $extra_query_params . "$paging_query_string', '$this->tableName');";
+    }
 
 }
 
