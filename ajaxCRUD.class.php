@@ -164,6 +164,7 @@ class ajaxCRUD{
     var $filtered_table = false; //the table is by default unfiltered (eg no 'where clause' on it)
     var $ajaxFilter_fields = array(); //array of fields that can be are filtered by ajax (creates a textbox at the top of the table)
     var $ajaxFilterBoxSize = array(); //array (sub fieldname) holding size of the input box
+    var $AjaxFilterBoxStyle = array(); //array (sub fieldname) holding style of select box
 
     //all fields in the table
     var $fields = array();
@@ -480,6 +481,10 @@ class ajaxCRUD{
 
     function setAjaxFilterBoxSize($field_name, $size){
         $this->ajaxFilterBoxSize[$field_name] = $size; //this function is deprecated, as of v6.0
+    }
+
+    function setAjaxFilterBoxStyle($field_name, $style){
+        $this->AjaxFilterBoxStyle[$field_name] = $style;
     }
 
     function addAjaxFilterBoxAllFields(){
@@ -1459,7 +1464,8 @@ class ajaxCRUD{
                 }
                 //check for defined link to another db table (pk/fk relationship) (set by defineRelationship)
                 else if (is_numeric($found_category_index)){
-                    $top_html .= "<select name=\"$filter_field\" onChange=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
+                    $select_width = (isset($this->AjaxFilterBoxStyle[$filter_field]) ? 'style="'.$this->AjaxFilterBoxStyle[$filter_field].'" ' : '');
+                    $top_html .= "<select $select_width name=\"$filter_field\" onChange=\"filterTable(this, '" . $this->db_table . "', '$filter_field', '$extra_query_params');\">";
                     $top_html .= "<option value=\"\">==Select==</option>\n";
 
                     //this field is a reference to another table's primary key (eg it must be a foreign key)
