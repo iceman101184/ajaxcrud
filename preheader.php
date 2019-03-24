@@ -64,7 +64,7 @@
 	# what follows are custom database handling functions - required for the ajaxCRUD class
 	# ...but these also may be helpful in your application(s) :-)
 	if (!function_exists('q')) {
-		function q($q, $debug = 0){
+		function q($q, $debug = 0, $assoc = false){
 			global $mysqliConn, $useMySQLi;
 
 			if ($useMySQLi){
@@ -109,7 +109,7 @@
 			}
 			if ($numRows > 1){
 				if ($useMySQLi){
-					while ($row = $r->fetch_array()){
+					while ($row = ($assoc) ? $r->fetch_array(MYSQLI_ASSOC) : $r->fetch_array()){
 						$results[] = $row;
 					}
 				}
@@ -122,7 +122,7 @@
 			else if ($numRows == 1){
 				$results = array();
 				if ($useMySQLi){
-					$results[] = $r->fetch_array();
+					$results[] = ($assoc) ? $r->fetch_array(MYSQLI_ASSOC) : $r->fetch_array();
 				}
 				else{
 					$results[] = mysql_fetch_array($r);
