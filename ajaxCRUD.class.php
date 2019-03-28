@@ -2544,7 +2544,7 @@ class ajaxCRUD{
     function showUploadForm($field_name, $upload_folder, $row_id){
         $return_html = "";
 
-        $return_html .= "<form action=\"" . $_SERVER['PHP_SELF'] . "#ajaxCRUD\" name=\"Uploader\" method=\"POST\" ENCTYPE=\"multipart/form-data\">\n";
+        $return_html .= "<form action=\"" . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . "#ajaxCRUD\" name=\"Uploader\" method=\"POST\" ENCTYPE=\"multipart/form-data\">\n";
         $return_html .=  "  <input type=\"file\" size=\"10\" name=\"$field_name\" />\n";
         $return_html .= "  <input type=\"hidden\" name=\"upload_folder\" value=\"$upload_folder\" />\n";
         $return_html .= "  <input type=\"hidden\" name=\"field_name\" value=\"$field_name\" />\n";
