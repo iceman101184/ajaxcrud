@@ -131,7 +131,7 @@
 	}
 
 	function makeTick($val){
-		return ($val == 1 ? "<img src=\"green-tick-small.png\">" : "");
+		return ($val == 1 ? "<center><img src=\"green-tick-small.png\"></center>" : "");
 	}
 
 	function makeUnderline($val){
