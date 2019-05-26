@@ -63,6 +63,10 @@
     #http://ajaxcrud.com/api/index.php?id=defineAllowableValues
     $allowableValues = array("Allowable Value 1", "Allowable Value2", "Dropdown Value", "CRUD");
     $tblDemo->defineAllowableValues("fldCertainFields", $allowableValues);
+    $allowableIndianStates = array("Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli", "Daman and Diu", "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand", "Karnataka", "Kerala", "Lakshadweep", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Puducherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand");
+    $tblDemo->defineAllowableValues("StateName", $allowableIndianStates);
+    $allowableTamilNaduDistricts = Array("Ariyalur", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kallakurichi", "Kanchipuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivaganga", "Thanjavur", "The Nilgiris", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar");
+    $tblDemo->defineAllowableValues("StateName", $allowableTamilNaduDistricts);
 
     //set field fldCheckbox to be a checkbox
     $tblDemo->defineCheckbox("fldCheckbox");
@@ -139,7 +143,11 @@
 	}
 
 	function makeImg($val){
-		return "<img src=\"$val\" width=\"100\" />";
+		return (!empty($val) ? "<img src=\"uploads/$val\" width=\"100\" />" : $val);
+	}
+
+	function makeIPLookup($val){
+		return "<a href=\"https://community.spiceworks.com/tools/ip-lookup/results?hostname=$val\" target=\"_blank\">$val</a>";
 	}
 
 	function myCallBackFunctionForAdd($array){
