@@ -19,7 +19,7 @@
 	####################################################################################
 
 	#a session variable is set by class for much of the CRUD functionality -- eg adding a row
-    session_start();
+    if (session_id() == "") session_start();
 
     #for pesky IIS configurations without silly notifications turned off
     error_reporting(E_ALL - E_NOTICE);
