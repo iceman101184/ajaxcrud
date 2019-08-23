@@ -245,10 +245,12 @@
 		return $content;
 	}
 
-	function showSQLRows($selectSQL, $titles=Array()) {
+	function showSQLRows($selectSQL, $titles=Array(), $caption='') {
 // Get multiple records [and titles] display code
 		$rows = q($selectSQL);
 		$content  = CHR(10) . "<table border='1' class='ajaxCRUD'>";
+		if($caption <> '')
+			$content .= CHR(10) . "<caption><b>$caption</b></caption>";
 		if (count($titles) > 0)
 			$content .= showRow($titles, true);
 		// Multiple Rows
@@ -268,8 +270,10 @@
 			$ct  = 1;
 		}
 		$content .= CHR(10) . "<tr>";
-		for ($i=0; $ct*$i < count($row); $i++)
-			$content .= "<$tag>$row[$i]</$tag>";
+		for ($i=0; $ct*$i < count($row); $i {
+			$align = (is_numeric($row[$i]) ? " align='right'" : "");
+			$content .= "<$tag{$align}>$row[$i]</$tag>";
+		}
 		$content .= CHR(10) . "</tr>";
 		return $content;
 	}
