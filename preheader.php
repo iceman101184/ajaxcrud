@@ -233,10 +233,12 @@
 // Custom Functions for displaying tables from SQL by Ap.Muthu
 // Use for static non sortable display of summary info, legends, lookup records, etc
 
-	function showSQLRecord($selectSQL, $titles=Array()) {
+	function showSQLRecord($selectSQL, $titles=Array(), $caption='') {
 // Get single record [and titles] display code
 		$row = qr($selectSQL);
-		$content  = CHR(10) . "<table border='1' class='ajaxCRUD'>";
+		$content  = CHR(10) . "<table border='1' style='border-collapse: collapse;' class='ajaxCRUD'>";
+		if($caption <> '')
+			$content .= CHR(10) . "<caption><b>$caption</b></caption>";
 		if (count($titles) > 0)
 			$content .= showRow($titles, true);
 		// Single Row
@@ -248,7 +250,7 @@
 	function showSQLRows($selectSQL, $titles=Array(), $caption='') {
 // Get multiple records [and titles] display code
 		$rows = q($selectSQL);
-		$content  = CHR(10) . "<table border='1' class='ajaxCRUD'>";
+		$content  = CHR(10) . "<table border='1' style='border-collapse: collapse;' class='ajaxCRUD'>";
 		if($caption <> '')
 			$content .= CHR(10) . "<caption><b>$caption</b></caption>";
 		if (count($titles) > 0)
