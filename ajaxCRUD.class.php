@@ -989,6 +989,10 @@ class ajaxCRUD{
                         if (is_numeric($arrayKeyForFoundPK)){
                         	unset($fields_array_without_pk[$arrayKeyForFoundPK]);
                         }
+						
+						foreach ($fields_array_without_pk as $key => $field) {
+							$fields_array_without_pk[$key]= "`".$field."`";
+						}
 
                         $string_fields_without_pk = implode(",", $fields_array_without_pk);
 
