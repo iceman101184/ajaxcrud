@@ -272,9 +272,9 @@
 			$ct  = 1;
 		}
 		$content .= CHR(10) . "<tr>";
-		for ($i=0; $ct*$i < count($row); $i {
-			$align = (is_numeric($row[$i]) ? " align='right'" : "");
-			$content .= "<$tag{$align}>$row[$i]</$tag>";
+		for ($i=0; $ct*$i < count($row); $i++) {
+			$align = (is_numeric($row[$i]) ? "align='right'" : "");
+			$content .= "<$tag $align>$row[$i]</$tag>";
 		}
 		$content .= CHR(10) . "</tr>";
 		return $content;

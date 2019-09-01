@@ -295,7 +295,7 @@ class ajaxCRUD{
     /* these default to english words (e.g. "Add", "Delete" below); but can be
        changed by setting them via $obj->addText = "Añadir"
     */
-    var $addText, $deleteText, $cancelText, $actionText, $fileDeleteText, $fileEditText; //text values for buttons and other table text
+    var $addText, $deleteText, $uploadText, $cancelText, $actionText, $fileDeleteText, $fileEditText; //text values for buttons and other table text
     var $addButtonText; //if you want to replace the entire add button text with a phrase or other text. Added in 8.81
     var $addMessage; //used when onAddExecuteCallBackFunction is leveraged
 
@@ -376,15 +376,16 @@ class ajaxCRUD{
 
         $this->loading_image_html = "<center><br /><br  /><img src=\'" . $this->ajaxcrud_root . "css/loading.gif\'><br /><br /></center>"; //changed via setLoadingImageHTML()
 
-        $this->addText             = "Add";
+        $this->addText            = "Add";
         $this->deleteText         = "Delete";
+        $this->uploadText         = "Upload";
         $this->cancelText         = "Cancel";
         $this->actionText         = "Action";
-        $this->fileEditText          = "edit"; //added in 8.81 (for file crud)
+        $this->fileEditText       = "edit"; //added in 8.81 (for file crud)
         $this->fileDeleteText     = "del"; //added in 8.81 (for file crud)
 
-        $this->emptyTableMessage = "No data in this table. Click add button below.";
-        $this->addButtonText     = ""; //when blank, button text defaults to 'Add {Item}' text unless when $addText is set then defaults to '{addText} {Item}'; if set the entire button is replaced with {addButtonText}
+        $this->emptyTableMessage  = "No data in this table. Click add button below.";
+        $this->addButtonText      = ""; //when blank, button text defaults to 'Add {Item}' text unless when $addText is set then defaults to '{addText} {Item}'; if set the entire button is replaced with {addButtonText}
         $this->addMessage         = ""; //when blank, defaults to generic '{Item} added' message
 
         $this->onAddExecuteCallBackFunction         = '';
@@ -1305,7 +1306,8 @@ class ajaxCRUD{
             if ($update_success) return true;
         }
         else{
-            $error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
+			if (isset($fileName) && $filename <> '')
+				$error_msg[] = "There was an error uploading your file. Check permissions of the destination directory (make sure is set to 777).";
         }
 
         return false;
@@ -2340,7 +2342,7 @@ class ajaxCRUD{
             <input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
             <input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
             <input type=\"hidden\" name=\"action\" value=\"update\">
-            <input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
+            <input type=\"button\" class=\"editingSize\" value=\"".$this->cancelText."\" onClick=\"
                 document.getElementById('" . $prefield . "_show').style.display = '';
                 document.getElementById('" . $prefield . "_edit').style.display = 'none';
             \"/>
@@ -2448,7 +2450,7 @@ class ajaxCRUD{
             <input type=\"hidden\" name=\"table\" value=\"$this->db_table\">
             <input type=\"hidden\" name=\"paramName\" value=\"$input_name\">
             <input type=\"hidden\" name=\"action\" value=\"update\">
-            <input type=\"button\" class=\"editingSize\" value=\"Cancel\" onClick=\"
+            <input type=\"button\" class=\"editingSize\" value=\"".$this->cancelText."\" onClick=\"
                 document.getElementById('" . $prefield . "_show').style.display = '';
                 document.getElementById('" . $prefield . "_edit').style.display = 'none';
             \"/>
@@ -2550,7 +2552,7 @@ class ajaxCRUD{
         $return_html .= "  <input type=\"hidden\" name=\"field_name\" value=\"$field_name\" />\n";
         $return_html .= "  <input type=\"hidden\" name=\"id\" value=\"$row_id\" />\n";
         $return_html .= "  <input type=\"hidden\" name=\"action\" value=\"upload\" />\n";
-        $return_html .= "  <input type=\"submit\" name=\"submit\" value=\"Upload\" />\n";
+        $return_html .= "  <input type=\"submit\" name=\"submit\" value=\"".$this->uploadText."\" />\n";
         $return_html .= "</form>\n";
 
         return $return_html;
