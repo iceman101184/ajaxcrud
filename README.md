@@ -27,6 +27,28 @@ www.loudcanvas.com
 #Caveats by Ap.Muthu
 * Do not name any field bearing the case insensitive string **email** or **password** if *jquery* is used for input masking
 * Refer the [upstream issues](https://github.com/iceman101184/ajaxcrud/issues)
+* Class constructor is now `__construct`
+* CSV export now has table name as part of file name
+* HTML5 Browser and PHP > 5.3 needed for email and other newer form field types.
+* Extra CSS included with and without Data URLs in them
+* The datepicker `calendar.gif` file must be in the same folder as the executing table script
 
 NB: Make sure you include any "header" info (e.g. any HTML, echo statements, etc) AFTER you 
-include the ajaxCRUD class. 
+include the ajaxCRUD class.
+
+## Class Properties / Variables Added
+````
+$LOCAL_JS = false; variable set to true in the preheader file for local js usage instead of from CDN
+$AjaxFilterBoxStyle = array() // array (sub fieldname) holding style of select box
+$exportCSVSeparator = ','; // sets the CSV field separator
+$uploadText // translatable value for button / text
+````
+
+## Class Methods Added
+````
+setAjaxFilterBoxStyle($field_name, $style)
+disableAjaxFilterBox($field_name) // filters must pre-exist
+disableAjaxFilterBoxAllFields() // filters must pre-exist
+defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE)
+setExportCSVSeparator($value=',')
+````

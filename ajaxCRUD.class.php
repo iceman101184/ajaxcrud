@@ -635,7 +635,7 @@ class ajaxCRUD{
         foreach ($values as $value) $array_values[] = $value[0];
         $this->defineAllowableValues($field, $array_values, $onedit_textbox);
     }
-    
+
     function defineCheckbox($field, $value_on="1", $value_off="0"){
         $new_array = array($value_on, $value_off);
 

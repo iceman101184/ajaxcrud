@@ -1,0 +1,61 @@
+/* 
+	Chrome de la chrome table styles
+	written by Chris Heilmann http://wait-till-i.com
+*/
+
+table,th,td{
+	border:1px solid #666;
+	border-collapse:collapse;
+}
+table{
+	border:none;
+	border-top:1px solid #000;
+}
+thead th{
+	background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAeCAYAAAAVdY8wAAAB4UlEQVQ4jY3U23KiUBSE4fX+Dxc2CCiiIYggOhEQOeiG5J8LDupMVSpUfdXda98j/PKTt7c3fkMMZWAYT5RCGQaGoV7uYpoK0zQxlfmSylQopTCVQikTsSwLy1pgLSwsy2JhWXOft7VAFraNbdsMuWDaDwts20Ycx8VxHRzHwXFdHGfguuN2HVzHRZbLJYPVYLXicVuyXC1ZrlaIt/bwvDWe5w3W3tzX081bI77v4/s+/mbM2Qbf99n4G/yNj2zft2y3k/e5v2+3L12CICAIPhhy9BG87iBAwjAkDHeEYcguDNmFO8JwN+f0JlG0J9pHRPsh91HEPtoTRUOPxi5xkpAkMXGcECcxSZKQxMkj45g4jpE0TTmkKenhMGSakqaHMR/kdDpxPJ44nSbHIY9TH8ifz08mnz+QLMvIsoxzdmbqz85ZRnY+I3lRUBQ5eV5Q5AV5kVMUxSwfU8qy5HK5UJbl/y6Dy6VEqqriWl2pqorqWlFV13E/XKsr0jQNdVPT1A1N3VDXNc2Tuq6pmwZp25a2bbm1N25jb9vb6PEm9/ud2W30fLvfuN3viNYa3Wk6rdG6Q+uOTnd0Ws+07pC+73nWdT193427o+86ur5Hvr6++FE/pHx/fzPhqf9LfvuT+gunilq6MV8+RQAAAABJRU5ErkJggg==') top left repeat-x #fff;
+	padding:5px 10px;
+	font-size:90%;
+	text-transform:uppercase;
+	color:#333;
+}
+tbody td,tbody th{
+	font-size:85%;
+	padding:5px 10px;
+	background:#eee;
+}
+tbody th{
+	background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAeCAYAAAAVdY8wAAABCUlEQVQ4jY3U607CQBQE4Hn/B9KoIIqo0Wg0GhIioalQS1taKPS6lHb8QbZpFfRs8mVmzgMsKHw4uZhTAqedOSVwdunwvOfwUDahc+1SAt2+y97AY7fv1noDr6Y3rm49SuDmfkEJ3D36lMDDc0AJPL0uKYGX9xUl8DYMKYHhaE0JjMYbNn1MolZqmJgxx0ZU03tixi0wpwkNM6Y5Tdjshhm34HOWUJt9pUfBdjLaTkbLTql7k2WntOyUmLsZf3IXeU1v+IGi5+f0A/WL5+c1rMItg6WizmOwiQqG6+2/EMUFJZBmO2pJunfohlyVlEBRVGxSqqRSZasrVRK7XcW/FMU+UVWkBKSf1DcDy0/uRt1U9gAAAABJRU5ErkJggg==') top left repeat-x #fff;
+	color:#333;
+}
+tbody tr.odd td{
+	background:#ddd;
+}
+tbody tr.odd th{
+	background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAeCAYAAAAVdY8wAAABC0lEQVQ4jY3U607CQBQE4Hn/J1IjggSNRqMhGhIiKRQopbTceqPssh1/kCWtgp5NvszMeYAFhQ8N74oSuPOuKYHm7Ib3/i3PZRXafoMS6Myb7MxbPKbVqjhuPAZtSuB58UAJvIZPlMB79EIJdJdvlMDnqksJ9NYflEB/06MEBts+q5z4q5YWRolDJx6c2D1KnBpMUpduMuQkdVntbjKswTQd05pl04sQ5D6D3KefebS9ys88+plHLPI5fwp3wYndWBYRoyLksoh+iYrwBJv9muv9ijYvQaJixmr7L2Q6pQSKw45WrjPmOuO5G4pDQQloo1mljKIyqtaVUYQpDf+ijaYpDVGWJSUg/aS+AeYUUS56CqbXAAAAAElFTkSuQmCC') top left repeat-x #fff;
+	color:#333;
+}
+tfoot td,tfoot th{
+	border:none;
+	padding-top:10px;
+}
+caption{
+	font-family:Tahoma;
+	text-align:left;
+	text-transform:uppercase;
+	font-size:130%;
+	padding:10px 0;
+	color:#036;
+}
+table a:link{
+	color:#369;
+}
+table a:visited{
+	color:#036;
+}
+table a:hover{
+	color:#000;
+	text-decoration:none;
+}
+table a:active{
+	color:#000;
+}
