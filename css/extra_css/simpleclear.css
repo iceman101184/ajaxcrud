@@ -5,22 +5,22 @@ URL: http://www.leandropessoa.com.br
 Country: Brazil
 */
 table{border-spacing:1px;font:10px 'Verdana', Arial, Helvetica, sans-serif;background:#E7E7E7;color:#666666;}
-caption{border:#666666;border-bottom:2px solid #666666;text-transform:uppercase;padding:10px;background:url(http://www.leandropessoa.com.br/table/img/TableCaption.jpg);font:15px 'Verdana', Arial, Helvetica, sans-serif;font-style:italic;font-weight:bold;}
+caption{border:#666666;border-bottom:2px solid #666666;text-transform:uppercase;padding:10px;background:url(https://web.archive.org/web/20070209185733if_/http://www.leandropessoa.com.br:80/table/img/TableCaption.jpg);font:15px 'Verdana', Arial, Helvetica, sans-serif;font-style:italic;font-weight:bold;}
 td, th{padding:4px;}
 thead th{text-align:center;background:#F5F5F5;color:#666666;border:1px solid #ffffff;text-transform:uppercase;}
 tbody th{font-weight:bold;font-size: 14px;
     border: 1px solid #fff;}
 tbody tr{background:#EBF8FE;text-align:left;}
 tbody tr.odd{background:#ffffff;border-top:1px solid #ffffff;}
-tbody th a:link, tbody th a:visited{color:#666666;padding:3px 0px 0px 18px;background:url(http://www.leandropessoa.com.br/table/img/ico_novajanela.gif);background-repeat:no-repeat;}
+tbody th a:link, tbody th a:visited{color:#666666;padding:3px 0px 0px 18px;background:url(https://web.archive.org/web/20061130233333if_/http://www.leandropessoa.com.br:80/table/img/ico_novajanela.gif);background-repeat:no-repeat;}
 tbody th a:hover{color:#009900;}
 tbody tr td{height:50px;background:#EBF8FE;border:1px solid #ffffff;}
 tbody tr.odd td{background:#ffffff;border-top:1px solid #ffffff;}
 table td a:link, table td a:visited{color:#666666;text-decoration:none;font-weight: bold;}
 table td a:hover{color:#009900;text-decoration:underline;font-weight: bold;}
-table a[title^="Download"]{background:url(http://www.leandropessoa.com.br/table/img/icPADRAO.gif) no-repeat center;padding:20px 0px 0px 15px;}
-tbody td a[href="http://www.leandropessoa.com.br"]{margin:0 auto;height:15px;border-bottom:0;padding:3px 0px 0px 18px;font-weight:bold;color:#FF8601;background:url(http://www.leandropessoa.com.br/table/img/check.gif);background-repeat: no-repeat;}
-tfoot th, tfoot td{background:url(http://www.leandropessoa.com.br/table/img/TableCaption.jpg);padding:10px;text-align:center;font:15px 'Verdana', Arial, Helvetica, sans-serif;font-style:italic;font-weight:bold;border-bottom:3px solid #cccccc;border-top:1px solid #DFDFDF;}
+table a[title^="Download"]{background:url(https://web.archive.org/web/20070202011627if_/http://www.leandropessoa.com.br:80/table/img/icPADRAO.gif) no-repeat center;padding:20px 0px 0px 15px;}
+tbody td a[href="http://www.leandropessoa.com.br"]{margin:0 auto;height:15px;border-bottom:0;padding:3px 0px 0px 18px;font-weight:bold;color:#FF8601;background:url(https://web.archive.org/web/20080815142308if_/http://www.leandropessoa.com.br/table/img/check.gif);background-repeat: no-repeat;}
+tfoot th, tfoot td{background:url(https://web.archive.org/web/20070209185733if_/http://www.leandropessoa.com.br:80/table/img/TableCaption.jpg);padding:10px;text-align:center;font:15px 'Verdana', Arial, Helvetica, sans-serif;font-style:italic;font-weight:bold;border-bottom:3px solid #cccccc;border-top:1px solid #DFDFDF;}
 
   section.form-record input.btn.editingSize {
     color: rgb(113, 110, 110);

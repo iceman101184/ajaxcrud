@@ -12,7 +12,7 @@ table{
 	border-top:1px solid #000;
 }
 thead th{
-	background:url(/web/20100922102421im_/http://icant.co.uk/csstablegallery/greychrome.gif) top left repeat-x #fff;
+	background:url(https://web.archive.org/web/20160330173107if_/http://icant.co.uk/csstablegallery/greychrome.gif) top left repeat-x #fff;
 	padding:5px 10px;
 	font-size:90%;
 	text-transform:uppercase;
@@ -24,14 +24,14 @@ tbody td,tbody th{
 	background:#eee;
 }
 tbody th{
-	background:url(/web/20100922102421im_/http://icant.co.uk/csstablegallery/bluechrome.gif) top left repeat-x #fff;
+	background:url(https://web.archive.org/web/20160330173107if_/http://icant.co.uk/csstablegallery/bluechrome.gif) top left repeat-x #fff;
 	color:#333;
 }
 tbody tr.odd td{
 	background:#ddd;
 }
 tbody tr.odd th{
-	background:url(/web/20100922102421im_/http://icant.co.uk/csstablegallery/greenchrome.gif) top left repeat-x #fff;
+	background:url(https://web.archive.org/web/20160330173107if_/http://icant.co.uk/csstablegallery/greenchrome.gif) top left repeat-x #fff;
 	color:#333;
 }
 tfoot td,tfoot th{

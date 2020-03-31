@@ -3,7 +3,7 @@ table {
   border-collapse: collapse;
   border: none;
   font: normal 11px helvetica, verdana, arial, sans-serif;
-  background-image: url(https://web.archive.org/web/20121016124525im_/http://www.acuity.com.br/extern/icant.co.uk/bg_acuity.gif); 
+  background-image: url(https://web.archive.org/web/20110828203359if_/http://www.acuity.com.br/extern/icant.co.uk/bg_acuity.gif); 
   background-repeat: repeat;
 
 border-spacing: 1px;
@@ -46,11 +46,11 @@ tbody th a {
   
 tbody td+td+td+td a {
     padding-right: 14px;
-    background: url(https://web.archive.org/web/20121016124525im_/http://www.acuity.com.br/extern/icant.co.uk/arrow.gif) transparent no-repeat bottom right;
+    background: url(https://web.archive.org/web/20110227012515if_/http://www.acuity.com.br/extern/icant.co.uk/arrow.gif) transparent no-repeat bottom right;
     }
     tbody td+td+td+td a:hover {
         padding-right: 14px;
-    background: url(https://web.archive.org/web/20121016124525im_/http://www.acuity.com.br/extern/icant.co.uk/arrow.gif) transparent no-repeat bottom right;
+    background: url(https://web.archive.org/web/20110227012515if_/http://www.acuity.com.br/extern/icant.co.uk/arrow.gif) transparent no-repeat bottom right;
     }
 tbody th a:hover {
   background: transparent;
