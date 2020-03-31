@@ -22,7 +22,9 @@ td, th {
   padding: .4em;
   color: #363636;
   }
-
+thead th a {
+  color: #FFFFFF;
+  }
 thead th, tfoot th {
   font: bold 11px verdana, arial, helvetica, sans-serif;
   border: 1px solid #03476F;;

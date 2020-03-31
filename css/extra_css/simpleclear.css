@@ -14,7 +14,7 @@ tbody tr{background:#EBF8FE;text-align:left;}
 tbody tr.odd{background:#ffffff;border-top:1px solid #ffffff;}
 tbody th a:link, tbody th a:visited{color:#666666;padding:3px 0px 0px 18px;background:url(https://web.archive.org/web/20061130233333if_/http://www.leandropessoa.com.br:80/table/img/ico_novajanela.gif);background-repeat:no-repeat;}
 tbody th a:hover{color:#009900;}
-tbody tr td{height:50px;background:#EBF8FE;border:1px solid #ffffff;}
+tbody tr td{height:30px;background:#EBF8FE;border:1px solid #ffffff;}
 tbody tr.odd td{background:#ffffff;border-top:1px solid #ffffff;}
 table td a:link, table td a:visited{color:#666666;text-decoration:none;font-weight: bold;}
 table td a:hover{color:#009900;text-decoration:underline;font-weight: bold;}

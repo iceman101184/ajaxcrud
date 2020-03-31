@@ -18,6 +18,9 @@ td, th {
   padding: .8em;
   color: #6E6E6E;
   }
+thead th a {
+	color: #00FF0C;
+  }
 thead th, tfoot th {
   font: bold 10px helvetica, verdana, arial, sans-serif;
   border: none;

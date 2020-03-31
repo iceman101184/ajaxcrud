@@ -20,6 +20,9 @@ border: 1px dashed #B85A7C;
     color: #F6ECF0;
     font-size: 12px;
   }
+thead th a {
+	color: #ffffff;
+  }
 thead th, tfoot th {
   font: bold 11px verdana, arial, helvetica, sans-serif;
   border: 1px solid #A85070;;
@@ -138,6 +141,7 @@ button, html input[type=button], input[type=reset], input[type=submit] {
     cursor: pointer;
     background: #641b35;
     padding: 0 10px;
+	color: #ffffff;
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
