@@ -5,12 +5,12 @@
 	#this is the info for your database connection
     ####################################################################################
     ##
-	$MYSQL_HOST  = "localhost";
-	$MYSQL_LOGIN = "root";
-	$MYSQL_PASS  = "";
-	$MYSQL_DB    = "ajaxcrud_demos";
+	if (!isset($MYSQL_HOST))  $MYSQL_HOST  = "localhost";
+	if (!isset($MYSQL_LOGIN)) $MYSQL_LOGIN = "root";
+	if (!isset($MYSQL_PASS))  $MYSQL_PASS  = "";
+	if (!isset($MYSQL_DB))    $MYSQL_DB    = "ajaxcrud_demos";
 	##
-	$LOCAL_JS    = FALSE; // FALSE for inclusion of remote js files
+	if (!isset($LOCAL_JS))    $LOCAL_JS    = FALSE; // FALSE for inclusion of remote js files
     ##
     ####################################################################################
 
