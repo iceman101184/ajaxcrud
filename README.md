@@ -52,3 +52,14 @@ disableAjaxFilterBoxAllFields() // filters must pre-exist
 defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE)
 setExportCSVSeparator($value=',')
 ````
+
+# Linux installation (change PHPLIBDIR as needed)
+````
+PHPLIBDIR=/var/www/libraries
+mkdir -p ${PHPLIBDIR}
+cd ${PHPLIBDIR}
+wget -c --no-check-certificate https://github.com/apmuthu/ajaxcrud/archive/master.zip -O ajaxcrud.zip
+unzip ajaxcrud.zip
+rm ajaxcrud.zip
+mv ajaxcrud-master ajaxcrud
+````
