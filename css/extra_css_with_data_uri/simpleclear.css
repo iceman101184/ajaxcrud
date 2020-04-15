@@ -4,7 +4,7 @@ Author: Simple and Clean
 URL: http://www.leandropessoa.com.br
 Country: Brazil
 */
-table{border-spacing:1px;font:10px 'Verdana', Arial, Helvetica, sans-serif;background:#E7E7E7;color:#666666;}
+table{border-spacing:1px;font:12px 'Verdana', Arial, Helvetica, sans-serif;background:#E7E7E7;color:#666666;}
 caption{border:#666666;border-bottom:2px solid #666666;text-transform:uppercase;padding:10px;background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABGCAYAAAANSP5dAAAAkUlEQVQYlaXENw6EQAADQP//b+TMgkgiZxC1r/EPboqBZVmEbdvKcRzCdV3C8zzl+z4RBAERhqGKooiI45hIkkSlaUpkWabyPFfGGKIoCqIsS1VVlarrWjVNQ7RtS3Rdp/q+V8MwqHEciWmaiHme1bIsal1XYts2te87cRyHOs+TuK5L3fdNPM+j3vdV3/f93w/CwAFxciEmuQAAAABJRU5ErkJggg==');font:15px 'Verdana', Arial, Helvetica, sans-serif;font-style:italic;font-weight:bold;}
 td, th{padding:4px;}
 thead th{text-align:center;background:#F5F5F5;color:#666666;border:1px solid #ffffff;text-transform:uppercase;}
@@ -14,7 +14,7 @@ tbody tr{background:#EBF8FE;text-align:left;}
 tbody tr.odd{background:#ffffff;border-top:1px solid #ffffff;}
 tbody th a:link, tbody th a:visited{color:#666666;padding:3px 0px 0px 18px;background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAUUlEQVQ4jWNgGLSAr/zAf0KYoAH4ANEGYLOZJAOQbcRrAC6bsLkCpwHoNuKymSgDsGkmyQBsmvHGAi4/44oJosMAp42Eoo2gk2liAEVpn1wAAHvMnZQV3NI1AAAAAElFTkSuQmCC');background-repeat:no-repeat;}
 tbody th a:hover{color:#009900;}
-tbody tr td{height:30px;background:#EBF8FE;border:1px solid #ffffff;}
+tbody tr td{height:25px;background:#EBF8FE;border:1px solid #ffffff;}
 tbody tr.odd td{background:#ffffff;border-top:1px solid #ffffff;}
 table td a:link, table td a:visited{color:#666666;text-decoration:none;font-weight: bold;}
 table td a:hover{color:#009900;text-decoration:underline;font-weight: bold;}
