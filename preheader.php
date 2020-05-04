@@ -280,4 +280,11 @@
 		return $content;
 	}
 
+	function get_field_names($result) {
+		$x = $result->fetch_fields();
+		foreach($x as $fieldinfo)
+			$y[] = $fieldinfo->name;
+		return $y;
+	}
+
 ?>

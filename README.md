@@ -53,6 +53,13 @@ defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE)
 setExportCSVSeparator($value=',')
 ````
 
+## Generic SQL to HTML Table functions added to preheader.php
+* `showSQLRecord($selectSQL, $titles=Array(), $caption='')`
+* `showSQLRows($selectSQL, $titles=Array(), $caption='')
+* `showRow($row, $isHead=false)`
+* `get_field_names($result)`
+* Override MySQL connection parameters
+
 # Linux installation (change PHPLIBDIR as needed)
 ````
 PHPLIBDIR=/var/www/libraries
