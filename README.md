@@ -60,6 +60,10 @@ setExportCSVSeparator($value=',')
 * `get_field_names($result)`
 * Override MySQL connection parameters
 
+## General purpose functions added
+* `get_field_names($mysql_result)` to serve as default headings for columns displayed
+* `get_select_options($options_array)` converts an array to a set of html select box options
+
 # Linux installation (change PHPLIBDIR as needed)
 ````
 PHPLIBDIR=/var/www/libraries
