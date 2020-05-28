@@ -290,7 +290,7 @@
 	function get_select_options($options) {
 		$RetOptions = '';
 		foreach ($options as $v) {
-			if (is_array($v)
+			if (is_array($v))
 				$RetOptions .= "\n<option value='$v[0]'>$v[1]</option>";
 			else
 				$RetOptions .= "\n<option>$v</option>";
