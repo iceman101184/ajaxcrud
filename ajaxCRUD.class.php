@@ -606,7 +606,7 @@ class ajaxCRUD{
         $this->cat_field_required = FALSE;
     }
 
-    function defineAllowableValues($field, $array_values, $onedit_textbox = FALSE){
+    function defineAllowableValues($field, $array_values, $onedit_textbox = FALSE, $exactSearch = TRUE){
         //array with the setup [0] = value [1] = display name (both the same)
         $new_array = array();
 
@@ -626,14 +626,15 @@ class ajaxCRUD{
         }
 
         $this->allowed_values[$field] = $new_array;
-        $this->setExactSearchField($field); //set search field to use exact matching (as of 7.2.1)
+        if ($exactSearch === TRUE) $this->setExactSearchField($field); //set search field to use exact matching (as of 7.2.1)
+        else $this->resetExactSearchField($field);
     }
 
-    function defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE){
+    function defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE, $exactSearch = TRUE){
         $values = q($sql);
         $array_values = Array();
         foreach ($values as $value) $array_values[] = $value[0];
-        $this->defineAllowableValues($field, $array_values, $onedit_textbox);
+        $this->defineAllowableValues($field, $array_values, $onedit_textbox, $exactSearch);
     }
 
     function defineCheckbox($field, $value_on="1", $value_off="0"){
@@ -670,6 +671,11 @@ class ajaxCRUD{
     /* added in R7.2.1 */
     function setExactSearchField($field) {
         $this->exactSearchField[$field] = true;
+    }
+
+    function resetExactSearchField($field) {
+		if(array_key_exists($field, $this->exactSearchField))
+			unset($this->exactSearchField[$field]);
     }
 
     function setInitialAddFieldValue($field, $value){

@@ -49,7 +49,8 @@ $uploadText // translatable value for button / text
 setAjaxFilterBoxStyle($field_name, $style)
 disableAjaxFilterBox($field_name) // filters must pre-exist
 disableAjaxFilterBoxAllFields() // filters must pre-exist
-defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE)
+defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE, $exactSearch = TRUE)
+resetExactSearchField($field)
 setExportCSVSeparator($value=',')
 ````
 
