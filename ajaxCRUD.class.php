@@ -1726,7 +1726,8 @@ class ajaxCRUD{
                         }
                         else{
                             //added in 6.5. allows defineAllowableValues to work even when in readonly mode
-                            if (isset($this->allowed_values[$field]) && is_array($this->allowed_values[$field])){
+							// but only if it is an exactsearch - Added on 2020-05-31
+                            if (isset($this->exactSearchField[$field]) && isset($this->allowed_values[$field]) && is_array($this->allowed_values[$field])){
                                 foreach ($this->allowed_values[$field] as $list){
                                     if (is_array($list)){
                                         $list_val = urldecode($list[0]); // manual urldecode as no js here
