@@ -27,15 +27,14 @@
 			header("Location: events.php");
 		}
 	}
+	else {
+		header("Location: events.php");
+	}
 
 	$page_title = "Signup for Event: $fldTitle @ $fldLocation";
 
 	#the code for the class
 	include ('../../ajaxCRUD.class.php');
-
-	if (!$eventID){
-		header("Location: events.php");
-	}
 
     #Create an instance of the class
     $tblEventAttendee = new ajaxCRUD("Person", "tblEventAttendee","pkAttendeeID", "../ajaxcrud/");
