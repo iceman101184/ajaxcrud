@@ -339,7 +339,7 @@ class ajaxCRUD{
         if ($num_ajaxCRUD_tables_instantiated === "") $num_ajaxCRUD_tables_instantiated = 0;
 
         global $headerAdded;
-        if ($headerAdded === "") $$headerAdded = FALSE;
+        if ($headerAdded === "") $headerAdded = FALSE;
 
         $this->showCheckbox     = false;
         $this->ajaxcrud_root    = $ajaxcrud_root;

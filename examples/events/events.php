@@ -125,7 +125,7 @@
 
 	function showImage($image){
 		if ($image){
-			return "<img src=\"uploads/$image\" width=\"100\" \>\n";
+			return "<img src=\"uploads/$image\" width=\"100\" />\n";
 		}
 		return "";
 	}
