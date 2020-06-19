@@ -7,7 +7,7 @@
 	include ('../../ajaxCRUD.class.php');
 
     #Create an instance of the class
-    $tblEvent = new ajaxCRUD("Event", "tblEvent","pkEventID", "../");
+    $tblEvent = new ajaxCRUD("Event", "tblEvent","pkEventID", "../../");
     $tblEvent->setCSSFile("cuscosky.css");
 
     $viewPastEvents = FALSE;

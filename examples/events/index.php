@@ -37,7 +37,7 @@
 	include ('../../ajaxCRUD.class.php');
 
     #Create an instance of the class
-    $tblEventAttendee = new ajaxCRUD("Person", "tblEventAttendee","pkAttendeeID", "../ajaxcrud/");
+    $tblEventAttendee = new ajaxCRUD("Person", "tblEventAttendee","pkAttendeeID", "../../");
     $tblEventAttendee->doActionOnShowTable = false; //this ensures showTable() does not call doAction; i do not want to do this because my onAdd callback function creates a cookie
     $tblEventAttendee->omitPrimaryKey();
 
