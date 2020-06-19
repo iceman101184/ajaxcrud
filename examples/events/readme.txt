@@ -2,7 +2,7 @@ The example in this folder could be considered a "complete web app."
 
 ajaxCRUD was not originally intended to be a framework for creating entire web "apps" or functional sites. However, that said, it is a very powerful tool and can be employed to deploy lightweight functional tools very quickly/easliy.
 
-This app was made it in just under 2 hours to help my friends can I easily create and manage attendence of "events" taking place throughout the week/month. 
+This app was made in just under 2 hours to help my friends easily create and manage attendence of "events" taking place throughout the week/month. 
 
 Requirements:
 1) Any person can create an event (events have a date, time, image, and description)
