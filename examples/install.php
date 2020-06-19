@@ -55,5 +55,6 @@
     echo "<p><a href='example.php' target='_blank'>Try out a basic demo</a></p>\n";
     echo "<p><a href='example2.php' target='_blank'>Try out a demo with two ajaxCRUD tables.</a></p>\n";
     echo "<p><a href='example3.php' target='_blank'>Try out a demo with validation, masking, file upload, pk/fk relationship, and csv export enabled.</a></p>\n";
+    echo "<p><a href='events' target='_blank'>Try out Events Application made with AjaxCRUD</a></p>\n";
 
 ?>
