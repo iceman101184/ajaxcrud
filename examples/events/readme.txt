@@ -1,8 +1,8 @@
 The example in this folder could be considered a "complete web app." 
 
-ajaxCRUD was not originally intended to be a framework for creating entire web "apps" or functional sites. However, that said, it is a very powerful tool and can be employed to deploy lightweight functional tools very quickly/easliy.
+ajaxCRUD was not originally intended to be a framework for creating entire web "apps" or functional sites. However, that said, it is a very powerful tool and can be employed to deploy lightweight functional tools very quickly/easily.
 
-This app was made in just under 2 hours to help my friends easily create and manage attendence of "events" taking place throughout the week/month. 
+This app was made in just under 2 hours to help my friends easily create and manage attendance of "events" taking place throughout the week/month. 
 
 Requirements:
 1) Any person can create an event (events have a date, time, image, and description)
@@ -16,4 +16,4 @@ Req 2 accomplsihed by basic ajaxCRUD interface (index.php) with WHERE clause (ad
 Req 3 accomplished by checkbox (defineCheckbox) and formating the field display (formatFieldWithFunction)
 Req 4 accomplished by IP address setting/checking in database and cookie setting and using validateDeleteWithFunction, validateUpdateWithFunction, addValueOnInsert, and onAddExecuteCallBackFunction
 
-This is a fairly basic app, but shows the power of ajaxCRUD in helping make life (and coding) faster and simpler.
+This is a fairly basic app, but shows the power of ajaxCRUD in helping make life easier by coding faster and simpler.
