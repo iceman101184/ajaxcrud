@@ -2587,6 +2587,7 @@ class paging{
     var $pPageID;
     var $pShowLinkNotice;
     var $tableName;
+    var $maxPagesToShow = 10;
 
     function processPaging($rowsPerPage,$pageID){
        $record = $this->pRecordCount;
@@ -2632,9 +2633,20 @@ class paging{
     }
 
     function pageLinks($url){
+        $numAdjacents = (int) floor(($this->maxPagesToShow - 3) / 2);
+        if ($this->pPageID + $numAdjacents > $this->pRecord) {
+            $slidingStart = $this->pRecord - $this->maxPagesToShow + 2;
+        } else {
+            $slidingStart = $this->pPageID - $numAdjacents;
+        }
+        if ($slidingStart < 2) $slidingStart = 2;
+
+        $slidingEnd = $slidingStart + $this->maxPagesToShow - 3;
+        if ($slidingEnd >= $this->pRecord) $slidingEnd = $this->pRecord - 1;
+
         $cssclass = "paging_links";
         $this->pShowLinkNotice = "&nbsp;";
-        if($this->pRecordCount>$this->pRowsPerPage){
+        if($this->pRecordCount > $this->pRowsPerPage){
             $this->pShowLinkNotice = "Page ".$this->pPageID. " of ".$this->pRecord;
             //Previous link
             $link = "";
@@ -2644,11 +2656,34 @@ class paging{
                 $link .= "<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$prevPage") ."\" class=\"$cssclass\"><<</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
             }
             //Number links 1.2.3.4.5.
+            $stflag = true;
+            $ndflag = true;
             for($ctr=1;$ctr<=$this->pRecord;$ctr++){
                 if($this->pPageID==$ctr)
                     $link .=  "<b>$ctr</b>\n";
-                else
+                elseif ($this->maxPagesToShow >= $this->pRecord)
                     $link .= "  <a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\">$ctr</a>\n";
+                else {
+
+                    if ($stflag && $this->pPageID > $slidingStart+2) {
+                        $link .= " ... ";
+                        $stflag = false;
+                    }
+
+                    if ($ctr == $this->pRecord) $ndflag = false;
+
+                    if (($stflag && $this->pPageID <= 4 && $ctr <= 2) || 
+                        ($slidingStart <= $ctr && $slidingEnd >= $ctr) ||
+                        (!$ndflag && $this->pPageID+3 >= $this->pRecord)
+                        ) {
+                        $link .= "  <a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$ctr") . "\" class=\"$cssclass\">$ctr</a>\n";    
+                    }
+
+                    if ($ndflag && $ctr >= $slidingEnd && $this->pPageID+3 < $this->pRecord) {
+                        $link .= " ... ";
+                        $ndflag = false;
+                    }
+                }
             }
             //Previous Next link
             if($this->pPageID<($ctr-1)){
@@ -2656,6 +2691,8 @@ class paging{
                 $link .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=$nextPage") . "\" class=\"$cssclass\">>></a>\n";
                 $link .="<a href=\"javascript:;\" onClick=\"" . $this->getOnClick("&pid=".$this->pRecord) . "\" class=\"$cssclass\">>>|</a>\n";
             }
+            if($this->pRecord > 1)
+                $link .= "\n<br>".$this->pShowLinkNotice;
             return $link;
         }
     }
