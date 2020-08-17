@@ -1028,6 +1028,10 @@ class ajaxCRUD{
                             unset($fields_array_without_pk[$arrayKeyForFoundPK]);
                         }
 
+                        foreach ($fields_array_without_pk as $key => $field) {
+                            $fields_array_without_pk[$key]= "`".$field."`";
+                        }
+
                         $string_fields_without_pk = implode(",", $fields_array_without_pk);
 
                         $query = "INSERT INTO $this->db_table($string_fields_without_pk) VALUES ($string_submitted_values)";
