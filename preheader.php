@@ -63,7 +63,7 @@
 
 	# what follows are custom database handling functions - required for the ajaxCRUD class
 	# ...but these also may be helpful in your application(s) :-)
-	if (!function_exists('q')) {
+	if (!function_exists('q')) { // Gets all rows of the query for SELECTs and also executes other queries like UPDATE, INSERT and DELETE
 		function q($q, $debug = 0, $assoc = false){
 			global $mysqliConn, $useMySQLi;
 
@@ -136,7 +136,7 @@
 		}
 	}
 
-	if (!function_exists('q1')) {
+	if (!function_exists('q1')) { // Gets the first field of the first and sole row
 		function q1($q, $debug = 0){
 			global $mysqliConn, $useMySQLi;
 
@@ -174,7 +174,7 @@
 		}
 	}
 
-	if (!function_exists('qr')) {
+	if (!function_exists('qr')) { // Gets the first row of the sole row
 		function qr($q, $debug = 0){
 			global $mysqliConn, $useMySQLi;
 
