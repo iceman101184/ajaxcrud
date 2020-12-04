@@ -8,4 +8,5 @@
 	
 	include_once( $ACDIR . 'preheader.php' ); // Graceful Defaults, common functions
 	include_once( $ACDIR . 'ajaxCRUD.class.php' );
+	// header('Content-Type: text/html; charset=utf-8');
 // End of db_settings.php

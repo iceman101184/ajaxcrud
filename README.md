@@ -46,6 +46,7 @@ $uploadText // translatable value for button / text
 
 ## Class Methods Added
 ````
+disallowEditAllFields()
 setAjaxFilterBoxStyle($field_name, $style)
 disableAjaxFilterBox($field_name) // filters must pre-exist
 disableAjaxFilterBoxAllFields() // filters must pre-exist

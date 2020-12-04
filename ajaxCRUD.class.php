@@ -893,6 +893,12 @@ class ajaxCRUD{
         $this->uneditable_fields[] = $field;
     }
 
+	// Disallow Edit of all fields
+    function disallowEditAllFields(){
+		foreach($this->fields as $fldName)
+			$tblDemo->disallowEdit($fldName);
+    }
+
     function disallowSort($field){
         $this->unsortable_fields[] = $field;
     }
