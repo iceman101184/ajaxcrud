@@ -4,6 +4,8 @@
 * `html01.html` - Sample minimal HTML file
 * Learn PHP at sites like [PHP @ W3Schools.com](https://www.w3schools.com/php/)
 * `php01.php` - Sample PHP file with test GET parameters (in URL)
+* Learn JS at sites like [JS # W3Schools.com](https://www.w3schools.com/js/), [JS Forms](https://html.form.guide/calculation-forms/simple-html-calculation-form/)
+* `jshtml01.html` - Sample JS in HTML for smart forms
 
 ## AjaxCRUD Training Files
 

@@ -1,0 +1,31 @@
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<script language="javascript" type="text/javascript">
+    function sum(a){
+        var c = Number(a['D921'].value) + Number(a['D922'].value);
+//		alert( c );
+        a['DTotal'].value = c;
+	}
+    function female_CLK(){
+        document.getElementById("age").readOnly = true;
+        document.getElementById("age").style.backgroundColor = "#CCCCCC";
+    }
+    function male_CLK(){
+        document.getElementById("age").readOnly = false;
+        document.getElementById("age").style.backgroundColor = "#FFFFFF";
+    }
+</script>
+</head>
+<body>
+<form action="">
+D921: <input type="text" name="D921" onblur="sum(this.form);"><br>
+D922: <input type="text" name="D922" onblur="sum(this.form);"><br>
+DTotal: <input type="text" name="DTotal"><br>
+<input type="radio" name="sex" value="male" onclick="male_CLK();">Male<br>
+<input type="radio" name="sex" value="female" onclick="female_CLK();">Female<br>
+Age: <input type="text" name="age" id="age"><br>
+
+</form>
+</body>
+</html>
