@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Temple Direct Vacancies Fillable</title>
+<script type="text/javascript">
+function Validateform(theForm)
+{
+   var regexp;
+   regexp = /^[-+]?\d*\.?\d*$/;
+   if (!regexp.test(theForm.number5.value))
+   {
+      alert("Please enter only digit characters in the \"Authorised Positions\" field.");
+      theForm.number5.focus();
+      return false;
+   }
+   if (theForm.number5.value == "")
+   {
+      alert("Please enter a numeric value for the \"Authorised Positions\" field.");
+      theForm.number5.focus();
+      return false;
+   }
+   if (theForm.number5.value != "" && !(theForm.number5.value >= 0 && theForm.number5.value <= 100))
+   {
+      alert("Please enter a value greater than or equal to \"0\" and less than or equal to \"100\" in the \"Authorised Positions\" field.");
+      theForm.number5.focus();
+      return false;
+   }
+   if (theForm.number5.value != "" && !(Number(theForm.number5.value) >= (Number(theForm.number8.value) + Number(theForm.number9.value) + Number(theForm.number11.value))))
+   {
+      alert("\"Authorised Positions\" cannot be less than \"Total Vacancies\".");
+      theForm.number5.focus();
+      return false;
+   }
+   if (!regexp.test(theForm.number8.value))
+   {
+      alert("Please enter only digit characters in the \"Promotion Vacancies\" field.");
+      theForm.number8.focus();
+      return false;
+   }
+   if (theForm.number8.value == "")
+   {
+      alert("Please enter a numeric value for the \"Promotion Vacancies\" field.");
+      theForm.number8.focus();
+      return false;
+   }
+   if (theForm.number8.value != "" && !(theForm.number8.value >= 0 && theForm.number8.value <= 100))
+   {
+      alert("Please enter a value greater than or equal to \"0\" and less than or equal to \"100\" in the \"Promotion Vacancies\" field.");
+      theForm.number8.focus();
+      return false;
+   }
+   if (!regexp.test(theForm.number9.value))
+   {
+      alert("Please enter only digit characters in the \"Rule Vacancies\" field.");
+      theForm.number9.focus();
+      return false;
+   }
+   if (theForm.number9.value == "")
+   {
+      alert("Please enter a numeric value for the \"Rule Vacancies\" field.");
+      theForm.number9.focus();
+      return false;
+   }
+   if (theForm.number9.value != "" && !(theForm.number9.value >= 0 && theForm.number9.value <= 100))
+   {
+      alert("Please enter a value greater than or equal to \"0\" and less than or equal to \"100\" in the \"Rule Vacancies\" field.");
+      theForm.number9.focus();
+      return false;
+   }
+   if (!regexp.test(theForm.number11.value))
+   {
+      alert("Please enter only digit characters in the \"Direct Vacancies\" field.");
+      theForm.number11.focus();
+      return false;
+   }
+   if (theForm.number11.value == "")
+   {
+      alert("Please enter a numeric value for the \"Direct Vacancies\" field.");
+      theForm.number11.focus();
+      return false;
+   }
+   if (theForm.number11.value != "" && !(theForm.number11.value >= 0 && theForm.number11.value <= 100))
+   {
+      alert("Please enter a value greater than or equal to \"0\" and less than or equal to \"100\" in the \"Direct Vacancies\" field.");
+      theForm.number11.focus();
+      return false;
+   }
+   if (!regexp.test(theForm.number12.value))
+   {
+      alert("Please enter only digit characters in the \"Direct Fillable Vacancies\" field.");
+      theForm.number12.focus();
+      return false;
+   }
+   if (theForm.number12.value == "")
+   {
+      alert("Please enter a numeric value for the \"Direct Fillable Vacancies\" field.");
+      theForm.number12.focus();
+      return false;
+   }
+   if (theForm.number12.value != "" && !(theForm.number12.value >= 0 && theForm.number12.value <= 100))
+   {
+      alert("Please enter a value greater than or equal to \"0\" and less than or equal to \"100\" in the \"Direct Fillable Vacancies\" field.");
+      theForm.number12.focus();
+      return false;
+   }
+   if (theForm.number12.value != "" && !(Number(theForm.number12.value) <= Number(theForm.number11.value)))
+   {
+      alert("\"Direct Vacancies\" cannot be less than \"Direct Fillable Vacancies\".");
+      theForm.number12.focus();
+      return false;
+   }
+
+   return true;
+}
+</script>
+
+</head>
+<body>
+<div class="title"><h2>JS Computed Validation Form</h2></div>
+<h4>Total Vacancies = Promotion Vacancies + Rule Vacancies + Direct Vacancies</h4>
+<h5>A successful form submission results in resetting all fields to zero (0) when form <u>action</u> is suppressed</h5>
+
+<!--
+// form_process.php
+echo print_r($_POST, true);
+// if no action parameter is specified (comment line 146), then the form_process.php is not needed
+// and the submission will result in all feilds reverting to 0.
+-->
+
+
+<form id="form" name="form"
+    enctype="multipart/form-data"
+	method="post"
+	onsubmit="return Validateform(this)" 
+	action="form_process.php">
+	Authorised Positions*: <input class="small" min="0" max="100" name="number5" required="required" placeholder="Authorised Positions" value="0"><br>
+	Promotion Vacancies*: <input class="small" min="0" max="100" name="number8" required="required" placeholder="Promotion Vacancies" value="0"><br>
+	Rule Vacancies*: <input class="small" min="0" max="100" name="number9" required="required" placeholder="Rule Vacancies" value="0"><br>
+	Direct Vacancies*: <input class="small" min="0" max="100" name="number11" required="required" placeholder="Direct Vacancies" value="0"><br>
+	Direct Fillable Vacancies*: <input class="small" min="0" max="100" name="number12" required="required" placeholder="Direct Fillable Vacancies" value="0"><br>
+	<div class="submit"><input name="submit" value="Submit" type="submit"></div>
+</form>
+
+<!-- Remove the action attribute from the form tag -->
+<script>
+	document.getElementsByTagName('form')[0].removeAttribute('action');
+</script>
+
+</body>
+</html>

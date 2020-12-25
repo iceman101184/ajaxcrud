@@ -6,6 +6,7 @@
 * `php01.php` - Sample PHP file with test GET parameters (in URL)
 * Learn JS at sites like [JS # W3Schools.com](https://www.w3schools.com/js/), [JS Forms](https://html.form.guide/calculation-forms/simple-html-calculation-form/)
 * `jshtml01.html` - Sample JS in HTML for smart forms
+* `jshtml02.html` - Example of form fields in calculated validation and action attribute removal
 
 ## AjaxCRUD Training Files
 
