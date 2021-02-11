@@ -633,7 +633,10 @@ class ajaxCRUD{
     function defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE, $exactSearch = TRUE){
         $values = q($sql);
         $array_values = Array();
-        foreach ($values as $value) $array_values[] = $value[0];
+        if (isset($values[0][1]))
+            foreach ($values as $value) $array_values[] = array($value[0], $value[1]);
+        else
+            foreach ($values as $value) $array_values[] = $value[0];
         $this->defineAllowableValues($field, $array_values, $onedit_textbox, $exactSearch);
     }
 
