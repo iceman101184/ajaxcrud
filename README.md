@@ -53,6 +53,7 @@ disableAjaxFilterBoxAllFields() // filters must pre-exist
 defineAllowableValuesFromSQL($field, $sql, $onedit_textbox = FALSE, $exactSearch = TRUE)
 resetExactSearchField($field)
 setExportCSVSeparator($value=',')
+addComputedField($cFld, $cFn=false) // Add a computed field with display function name
 ````
 
 ## Generic SQL to HTML Table functions added to preheader.php

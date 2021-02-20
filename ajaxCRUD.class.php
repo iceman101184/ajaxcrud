@@ -926,6 +926,15 @@ class ajaxCRUD{
         $this->on_add_specify_primary_key = true;
     }
 
+    function addComputedField($cFld, $cFn=false) {
+        $this->fields[] = $cFld;
+        $this->display_fields[] = $cFld;
+        $this->uneditable_fields[] = $cFld;
+        $this->unsortable_fields[] = $cFld;
+        if ($cFn != false)
+            $this->formatFieldWithFunctionAdvanced($cFld, $cFn);
+    }
+
     function doCRUDAction(){
         if ($_REQUEST['action'] != ''){
             $this->doAction($_REQUEST['action']);

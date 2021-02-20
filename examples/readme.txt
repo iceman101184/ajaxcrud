@@ -19,7 +19,7 @@ USING THESE EXAMPLE SCRIPTS:
 
 5) Navigate to the file "/examples/example.php" to test out the class!!
 
-
+/*
 ADD A COMPUTED FIELD
 
 // Add a computed field
@@ -38,7 +38,8 @@ ADD A COMPUTED FIELD
 		$c_sql = "SELECT VPromotion+VSection110+VNonPromotion+VDirect AS Vacancies FROM t_vacancies WHERE ActionID = $id";
 		return q1($c_sql);
 	}
-
+*/
+This has now been added as a class method - addComputedField()
 
 
 ~Loud Canvas Media Staff

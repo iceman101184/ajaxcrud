@@ -132,6 +132,15 @@
 
 	$tblDemo->deleteText = "delete";
 
+	// Add a computed field
+	// $tblDemo->addComputedField('UnBerth_Time', 'ShowDepTime');
+	// $tblDemo->displayAs("UnBerth_Time", "UnBerth Time");
+	// function ShowDepTime($data, $id){
+	//	$c_sql = "SELECT UnBerth_Time FROM vessels_departure WHERE VCN = '$id'";
+	//	return q1($c_sql);
+	// }
+
+
 ?>
     	<h2><?php echo $doc_title; ?></h2>
 		<div style="float: left">
