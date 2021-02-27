@@ -1,0 +1,56 @@
+<table id='mytab1' style="border-collapse: collapse; width: 100%;" border="1">
+<tbody>
+<tr>
+<td style="width: 20%;">0</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">0</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">0</td>
+</tr>
+<tr>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">0</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">0</td>
+<td style="width: 20%;">&nbsp;</td>
+</tr>
+<tr>
+<td style="width: 20%;">1</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">1</td>
+</tr>
+<tr>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">4</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">4</td>
+<td style="width: 20%;">&nbsp;</td>
+</tr>
+<tr>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">5</td>
+<td style="width: 20%;">&nbsp;</td>
+<td style="width: 20%;">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+
+<script>
+
+var table = document.getElementById("mytab1");
+for (var i = 0, row; row = table.rows[i]; i++) {
+	for (var j = 0, col; col = row.cells[j]; j++) {
+	// When the developer console is open, it (debugger) breaks at that line
+	// so you can watch variables and execute code step by step if necessary
+	debugger;
+		if (col.innerText == '0') {
+			col.style.color = 'red';
+//			col.style.borderColor = "black";
+		}
+	}  
+}
+
+</script>	

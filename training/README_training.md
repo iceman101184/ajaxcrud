@@ -1,12 +1,14 @@
 # AjaxCRUD Pre-requisites
 
 * Learn HTML at sites like [HTML @ W3Schools.com](https://www.w3schools.com/html/)
-* `html01.html` - Sample minimal HTML file
+  * `html01.html` - Sample minimal HTML file
 * Learn PHP at sites like [PHP @ W3Schools.com](https://www.w3schools.com/php/)
-* `php01.php` - Sample PHP file with test GET parameters (in URL)
+  * `php01.php` - Sample PHP file with variables
+  * `php02.php` - Sample PHP file with test GET parameters (in URL)
 * Learn JS at sites like [JS # W3Schools.com](https://www.w3schools.com/js/), [JS Forms](https://html.form.guide/calculation-forms/simple-html-calculation-form/)
-* `jshtml01.html` - Sample JS in HTML for smart forms
-* `jshtml02.html` - Example of form fields in calculated validation and action attribute removal
+  * `jshtml01.html` - Sample JS in HTML for smart forms
+  * `jshtml02.html` - Example of form fields in calculated validation and action attribute removal
+  * `jshtml03.html` - Example of table elements with conditional styling
 
 ## AjaxCRUD Training Files
 

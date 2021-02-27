@@ -77,3 +77,8 @@ unzip ajaxcrud.zip
 rm ajaxcrud.zip
 mv ajaxcrud-master ajaxcrud
 ````
+
+# Training files
+ A set of HTML, PHP and JS files for teaching / reference purposes are available in the `training` folder.
+ 
+ 
