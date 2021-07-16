@@ -1,0 +1,28 @@
+/*
+<div class="devices-icon-mobile-bg"></div>
+<div class="devices-icon-desktop-bg"></div>
+<div class="devices-icon-web-bg"></div>
+*/
+.devices-icon-mobile-bg {
+    width: 108px;
+    height: 108px;
+    margin: 63px auto;
+    background-image: url("download_install_done-sprite.png");
+    background-position: 0%;
+}
+
+.devices-icon-desktop-bg {
+    width: 108px;
+    height: 108px;
+    margin: 63px auto;
+    background-image: url("download_install_done-sprite.png");
+    background-position: 50%;
+}
+
+.devices-icon-web-bg {
+    width: 108px;
+    height: 108px;
+    margin: 63px auto;
+    background-image: url("download_install_done-sprite.png");
+    background-position: 100%;
+}

@@ -899,7 +899,7 @@ class ajaxCRUD{
 	// Disallow Edit of all fields
     function disallowEditAllFields(){
 		foreach($this->fields as $fldName)
-			$tblDemo->disallowEdit($fldName);
+			$this->disallowEdit($fldName);
     }
 
     function disallowSort($field){
