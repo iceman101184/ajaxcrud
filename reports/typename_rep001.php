@@ -3,19 +3,11 @@ $repname = 'My Status Report';
 // Further DB overrides can be placed here
 require_once('./my_settings.php'); // <-- this include file MUST go first before any HTML/output
 // Object $mysqliConn now available
+
+$output = '';
+
 $caption = $repname;
-?>
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<title><?php echo $repname; ?></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body class="blurBg-false" style="background-color:#EBEBEB">
-<h2 align="center"><?php echo $repname; ?></h2>
-<center>
-<?php
+
 $rep_sections = Array(); // Array($output_title, $sql)
 
 $rep_sections[] = Array('Time Stats', 
@@ -48,7 +40,7 @@ foreach ($rep_sections as $k => $rep_section) {
 	$caption = "<h3>$rep_section[0]</h3>";
 	$sql = $rep_section[1];
 	$fields = get_field_names($r=$mysqliConn->query($sql));
-	echo showSQLRows($sql, $fields, $caption." ($r->num_rows records)");
+	$output .= showSQLRows($sql, $fields, $caption." ($r->num_rows records)");
 }
 
 /*
@@ -66,8 +58,21 @@ function get_select_options($options) {
 	return $RetOptions;
 }
 */
+
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title><?php echo $repname; ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="blurBg-false" style="background-color:#EBEBEB">
+<h2 align="center"><?php echo $repname; ?></h2>
+<center>
+<?php echo $output; ?>
 </center>
+
 <!-- Make the last row bold as it is the Totals row -->
 <script type="text/javascript">
 	var tables = document.querySelectorAll(".ajaxCRUD");

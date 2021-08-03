@@ -21,16 +21,24 @@ CREATE TABLE `phonebook` (
     $tblDemo = new ajaxCRUD("My Phone Book", "phonebook", "PersonID", $ACDIR);
 	$tblDemo->setCSSFile("extra_css/stainlesssteel.css");
     $disable_add = false;
+//	$tblDemo->disallowEditAllFields();
+//	$tblDemo->disallowAdd();
+//	$tblDemo->disallowDelete();
+//	$tblDemo->setLimit(20);
 	$tblDemo->omitPrimaryKey();
 	$tblDemo->defineCheckbox("InActive");
+	$tblDemo->formatFieldWithFunction('InActivel', 'makeTick');
 	$tblDemo->addAjaxFilterBoxAllFields();
 	$allowableValues = array("School", "College", "Engg", "ITI");
 	$tblDemo->defineAllowableValues("Qualifications", $allowableValues);
+	$tblDemo->addButtonToRow("View", "show.php", "PersonID", "", "new"); 
+
 ?>	
 		<h1>My Training Phonebook</h1>
 		<div style="float: left">
 			Total Returned Rows: <b><?=$tblDemo->insertRowsReturned();?></b><br />
 			<ul>
+				<li><a href='../reports' target='_blank'>Reports</a></li>
 				<li><a href='http://php.net' target='_blank'>PHP Home</a></li>
 				<li><a href='http://w3schools.com' target='_blank'>W3 Schools</a></li>
 			</ul>
@@ -40,4 +48,9 @@ CREATE TABLE `phonebook` (
 <?php
 	#actually show the table
 	$tblDemo->showTable();
+
+	function makeTick($val){
+		return ($val == 1 ? "<img src='images/checkicon.gif'>" : "");
+	}
+
 ?>

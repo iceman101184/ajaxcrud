@@ -3,6 +3,7 @@
 * `my_settings.php` - set the DB override here of defaults provided in `../preheader.php`
 * `index.php` - set the Reports List Title in `$rep_list_title`
 * `typename_rep001.php` - All report files must have one underscore (`_`) separating the Report Category and the report number in its file name
+* `typename_rep002.php` - All report files must have one underscore (`_`) separating the Report Category and the report number in its file name
 * Each such report file is automatically parsed from the reports folder and listed by the `index.php` file
 * The **Report Name** is set inside each report in `$repname`
 * Each section in each report is set as array elements of array `$rep_sections`

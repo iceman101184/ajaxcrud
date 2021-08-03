@@ -4,7 +4,7 @@ $rep_list_title = 'Internal Reports';
 $directory = new DirectoryIterator(__DIR__);
 $cat = '';
 $menulist = "";
-$fielset=array();
+$fileset=array();
 
 foreach ($directory as $fileinfo) {
     if ($fileinfo->isFile()) {
