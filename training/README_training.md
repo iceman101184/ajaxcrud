@@ -30,3 +30,7 @@ CREATE TABLE `phonebook` (
 ```
 * `crud01.php` - Starter basic AjaxCRUD usage file
 * AjaxCRUD Documentation available locally in the `docs` folder
+
+* `php03_with_db.zip` - MySQL to HTML table
+* `districts.php`
+* `indian_state_districts.sql`
