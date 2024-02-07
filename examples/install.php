@@ -4,14 +4,14 @@
 
 	include_once ('../ajaxCRUD.class.php');//just so i can leverage echo_msg_box();
 
-    qr("CREATE TABLE IF NOT EXISTS tblDemo(pkID INT PRIMARY KEY AUTO_INCREMENT,fldField1 VARCHAR(45),fldField2 VARCHAR(45),fldCertainFields VARCHAR(40),fldLongField TEXT, fldCheckbox TINYINT);");
+    qr("CREATE TABLE IF NOT EXISTS tblDemo(pkID INT PRIMARY KEY AUTO_INCREMENT,fldField1 VARCHAR(45),fldField2 VARCHAR(45),fldCertainFields VARCHAR(40),fldLongField TEXT, fldCheckbox TINYINT) ENGINE=MyISAM;");
     $report_msg[] = "TABLE <b>tblDemo</b> CREATED\n";
 
-	qr("CREATE TABLE IF NOT EXISTS tblDemo2(pkID INT PRIMARY KEY AUTO_INCREMENT,fldField1 VARCHAR(45),fldField2 VARCHAR(45),fldCertainFields VARCHAR(40),fldLongField TEXT);");
+	qr("CREATE TABLE IF NOT EXISTS tblDemo2(pkID INT PRIMARY KEY AUTO_INCREMENT,fldField1 VARCHAR(45),fldField2 VARCHAR(45),fldCertainFields VARCHAR(40),fldLongField TEXT) ENGINE=MyISAM;");
     $report_msg[] = "TABLE <b>tblDemo2</b> CREATED\n";
 
-	qr("CREATE TABLE IF NOT EXISTS tblFriend (pkFriendID int(11) PRIMARY KEY AUTO_INCREMENT, fldName varchar(25),fldAddress varchar(30),fldCity varchar(20),fldState char(2),fldZip varchar(5),fldPhone varchar(15),fldEmail varchar(35),fldBestFriend char(1),fldDateMet date,fldFriendRating char(1),fldOwes double(6,2),fldPicture varchar(30), fkMarriedTo TINYINT);");
-    qr("CREATE TABLE IF NOT EXISTS tblLadies (pkLadyID int(11) PRIMARY KEY AUTO_INCREMENT, fldName varchar(25), fldSort INT)");
+	qr("CREATE TABLE IF NOT EXISTS tblFriend (pkFriendID int(11) PRIMARY KEY AUTO_INCREMENT, fldName varchar(25),fldAddress varchar(30),fldCity varchar(20),fldState char(2),fldZip varchar(5),fldPhone varchar(15),fldEmail varchar(35),fldBestFriend char(1),fldDateMet date,fldFriendRating char(1),fldOwes double(6,2),fldPicture varchar(30), fkMarriedTo TINYINT) ENGINE=MyISAM;");
+    qr("CREATE TABLE IF NOT EXISTS tblLadies (pkLadyID int(11) PRIMARY KEY AUTO_INCREMENT, fldName varchar(25), fldSort INT) ENGINE=MyISAM");
 	$report_msg[] = "TABLE <b>tblFriend</b> CREATED\n";
 	$report_msg[] = "TABLE <b>tblLadies</b> CREATED\n";
 

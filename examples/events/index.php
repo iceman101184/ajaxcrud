@@ -165,10 +165,10 @@
 
 	<div style="float: right">
 		Upcoming Public Events:
-		<form name="filterForm" id="filterForm" method="get" style="display: inline;" action="<?=$_SERVER['PHP_SELF']?>">
+		<form name="filterForm" id="filterForm" method="get" style="display: inline;" action="<?php echo $_SERVER['PHP_SELF'];?>">
 			<select name="pkEventID" onchange="document.getElementById('filterForm').submit();">
 				<option value="">=======Choose Upcoming Event=======</option>
-				<?
+				<?php
 				$today = date("Y-m-d");
 				$events = q("SELECT pkEventID, fldDate, fldTitle FROM tblEvent WHERE fldDate >= \"$today\" AND fldType = \"Public\" ORDER BY fldDate ASC");
 				foreach ($events as $event){
@@ -186,7 +186,7 @@
 	<div style="clear: both;"></div><br />
 
 
-<?
+<?php
 	}//endif
 
 	echo "<p>Who's coming?? If you are, please add yourself to the list by pressing \"Add Person\" below</p>\n";

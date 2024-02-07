@@ -19,7 +19,7 @@
 <html>
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<?php echo $tblEvent->insertHeader(); ?>
+		<?php $tblEvent->insertHeader(); ?>
 
 		<!-- these js/css includes are ONLY to make the calendar widget work
 			 these includes are not necessary for the class to work!! -->
@@ -41,10 +41,10 @@
 
 	<div style="float: right">
 		Filter Events:
-		<form name="filterForm" id="filterForm" method="get" style="display: inline;" action="<?=$_SERVER['PHP_SELF']?>">
+		<form name="filterForm" id="filterForm" method="get" style="display: inline;" action="<?php echo $_SERVER['PHP_SELF'];?>">
 			<select name="eventFilter" onchange="document.getElementById('filterForm').submit();">
-				<option value="pastEvents" <? if ($viewPastEvents) echo "selected";?>>Past/Previous Events</option>
-				<option value="" <? if (!$viewPastEvents) echo "selected"?>>Upcoming Events</option>
+				<option value="pastEvents" <?php if ($viewPastEvents) echo "selected";?>>Past/Previous Events</option>
+				<option value="" <?php if (!$viewPastEvents) echo "selected"?>>Upcoming Events</option>
 			</select>
 		</form>
 	</div>
